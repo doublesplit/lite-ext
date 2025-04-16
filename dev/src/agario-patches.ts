@@ -7,7 +7,7 @@ export function coreInitPatch() {
 }
 
 export function coreUiPatch() {
-    document.querySelector('#title').innerHTML = 'Delta';
+    document.querySelector('#title').innerHTML = 'Doublesplit';
 }
 
 export function coreAdsPatch() {

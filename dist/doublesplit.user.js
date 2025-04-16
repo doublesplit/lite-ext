@@ -1,25 +1,25 @@
 // ==UserScript==
-// @name                'Delta - 999999 in 1
-// @name:ru             'Delta - 999999 в 1
-// @name:uk             'Delta - 999999 в 1
+// @name                'Doublesplit - 999999 in 1
+// @name:ru             'Doublesplit - 999999 в 1
+// @name:uk             'Doublesplit - 999999 в 1
 // @name:ja             'デルタ - 999999 イン 1
-// @name:es             'Delta - 999999 en 1
-// @name:zh-CN          'Delta - 999999 合 1
-// @name:de             'Delta - 999999 in 1
+// @name:es             'Doublesplit - 999999 en 1
+// @name:zh-CN          'Doublesplit - 999999 合 1
+// @name:de             'Doublesplit - 999999 in 1
 // @name:ar             'دلتا - 999999 في 1
-// @description         Delta - Agario extension, with zoom, minimap, helpers, adblocker
-// @description:es      Delta - extensión para Agario con zoom, minimapa, ayudas y bloqueador de anuncios
-// @description:ru      Delta — расширение для Agario с зумом, миникартой, помощниками и блокировщиком рекламы
-// @description:zh-CN   Delta - agario 的扩展，带有缩放、小地图、辅助功能和广告拦截器
-// @description:uk      Delta — розширення для Agario із зумом, мінікартою, помічниками та блокувальником реклами
-// @description:tr      Delta - Agario için yakınlaştırma, mini harita, yardımcılar ve reklam engelleyici uzantısı
-// @description:de      Delta – Erweiterung für Agario mit Zoom, Minikarte, Helfern und Werbeblocker
-// @description:ja      Delta - Agario のズーム、ミニマップ、ヘルパー、広告ブロッカー付き拡張機能
-// @description:pl      Delta - rozszerzenie do Agario z powiększeniem, minimapą, pomocnikami i blokadą reklam
-// @description:fr      Delta - extension pour Agario avec zoom, mini-carte, assistants et bloqueur de publicité
+// @description         Doublesplit - Agario extension, with zoom, minimap, helpers, adblocker
+// @description:es      Doublesplit - extensión para Agario con zoom, minimapa, ayudas y bloqueador de anuncios
+// @description:ru      Doublesplit — расширение для Agario с зумом, миникартой, помощниками и блокировщиком рекламы
+// @description:zh-CN   Doublesplit - agario 的扩展，带有缩放、小地图、辅助功能和广告拦截器
+// @description:uk      Doublesplit — розширення для Agario із зумом, мінікартою, помічниками та блокувальником реклами
+// @description:tr      Doublesplit - Agario için yakınlaştırma, mini harita, yardımcılar ve reklam engelleyici uzantısı
+// @description:de      Doublesplit – Erweiterung für Agario mit Zoom, Minikarte, Helfern und Werbeblocker
+// @description:ja      Doublesplit - Agario のズーム、ミニマップ、ヘルパー、広告ブロッカー付き拡張機能
+// @description:pl      Doublesplit - rozszerzenie do Agario z powiększeniem, minimapą, pomocnikami i blokadą reklam
+// @description:fr      Doublesplit - extension pour Agario avec zoom, mini-carte, assistants et bloqueur de publicité
 // @description:ar      دلتا - إضافة لـ Agario مع مانع إعلانات
-// @version             7.9
-// @namespace           delta.agar
+// @version             8.0
+// @namespace           doublesplit.agar
 // @author              neo
 // @icon                https://deltav4.gitlab.io/favicon.ico
 // @match               *://*.agar.io/
@@ -38,10 +38,7 @@
 
 /*
   GREASYFORK VERSION
- 
-  Sorry, Delta is no longer available for GreasyFork users.
-  Right now there is a lite version of Delta
- 
+
   en: If this user script does not start, write me a discord
   ru: Если данное расширение не запускается, напишите мне в дискорд
   https://discord.gg/HHmyKW6
@@ -1757,7 +1754,7 @@ const settingsDescriptions = {
   }),
   LeaderboardTitle: new Input({
     path: Group1.s_game,
-    value: 'Delta'
+    value: 'Doublesplit'
   }),
   MapBorder: new Option({
     path: Group1.s_game,
@@ -2295,7 +2292,7 @@ function coreInitPatch() {
   });
 }
 function coreUiPatch() {
-  document.querySelector('#title').innerHTML = 'Delta';
+  document.querySelector('#title').innerHTML = 'Doublesplit';
 }
 function coreAdsPatch() {
   var _a, _b, _c, _d, _e;
@@ -4079,7 +4076,7 @@ class App {
     ctx.font = '380px Segoe Print';
     ctx.globalAlpha = 0.5;
     ctx.fillStyle = '#808080';
-    ctx.fillText('Delta', 0, 0);
+    ctx.fillText('Doublesplit', 0, 0);
     ctx.globalAlpha = initialAlpha;
     translate(-offsetX, -offsetY);
     // ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';

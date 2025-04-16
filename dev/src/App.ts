@@ -651,7 +651,7 @@ export default class App {
         ctx.font = '380px Segoe Print';
         ctx.globalAlpha = 0.5;
         ctx.fillStyle = '#808080';
-        ctx.fillText('Delta', 0, 0);
+        ctx.fillText('Doublesplit', 0, 0);
         ctx.globalAlpha = initialAlpha;
 
         translate(-offsetX, -offsetY);
