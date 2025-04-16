@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+    <head> </head>
+    <body>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/preact/10.21.0/preact.umd.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/preact/10.21.0/hooks.umd.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/preact/10.21.0/compat.umd.min.js"></script>
+
+        <div id="root"></div>
+        <% for (key in htmlWebpackPlugin.files.js) { %>
+        <script charset="utf-8" src="<%= htmlWebpackPlugin.files.js[key] %>"></script>
+        <% } %>
+    </body>
+</html>

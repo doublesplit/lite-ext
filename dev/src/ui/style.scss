@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --bottom-banner-height: 0px !important;
+}
+
+#title {
+    margin-top: 0 !important;
+}
+#mainui-play {
+    height: 595px !important;
+}
+#mainPanel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+#socialLoginContainer {
+    position: initial !important;
+}
+#instructions {
+    position: initial !important;
+    display: none !important;
+    overflow: hidden !important;
+    flex-direction: column !important;
+    margin: 0 !important;
+}
+.play-container {
+    display: flex;
+    height: 100%;
+    padding: 0 !important;
+}
+
+#play {
+    top: initial !important;
+}
+
+#nick {
+    position: initial !important;
+    left: initial !important;
+    top: initial !important;
+    float: initial !important;
+}
+
+#skinButton {
+    position: relative !important;
+    display: block;
+    left: initial !important;
+    width: 46px;
+    height: 46px;
+}
+#playnick {
+    position: initial !important;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+#socialLoginContainer {
+    top: initial !important;
+    margin: 4px 20px 0px 20px !important;
+}
+
+.guest {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.menu-addon {
+    gap: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.menu-button {
+    color: #fff;
+    background-color: #54c800;
+    border-color: #54c800;
+    height: 34px;
+    font-size: 20px;
+    line-height: 1.5;
+    padding: 0 0.5rem;
+}
+
+.menu-button:hover {
+    filter: brightness(0.7) contrast(1);
+}
+.input-addon {
+    width: 100%;
+    height: 28px;
+}
+
+.circle.green {
+    position: absolute !important;
+}
+
+#settingsButton {
+    left: 5px;
+    position: absolute !important;
+}
+.circle {
+    display: flex;
+    justify-content: center;
+}
+
+.agario-panel {
+    margin: 0 auto;
+}

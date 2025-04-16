@@ -1,0 +1,83 @@
+{
+    "[json]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 4,
+        "editor.autoIndent": "advanced",
+        "editor.formatOnSave": false
+    },
+    "github.copilot.chat.localeOverride": "en",
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "editor.formatOnSave": true,
+    "eslint.format.enable": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "eslint.workingDirectories": [{ "mode": "auto" }],
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit",
+            "source.fixAll.eslint": "explicit"
+        }
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit",
+            "source.sortImports": "always",
+            "source.fixAll.eslint": "explicit"
+        }
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": "explicit",
+            "source.organizeImports": "never"
+        }
+    },
+    "[sass]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": "explicit",
+            "source.organizeImports": "never"
+        }
+    },
+    "eslint.validate": ["javascript", "typescript"],
+    "typescript.tsserver.experimental.enableProjectDiagnostics": false,
+    "liveServer.settings.port": 5500,
+    "tailwindCSS.classAttributes": ["class", "className", "ngClass", ".*Styles*"],
+
+    // other settings
+    "tailwindCSS.includeLanguages": {
+        "plaintext": "html",
+        "html": "html",
+        "javascript": "javascript",
+        "javascriptreact": "javascriptreact",
+        "typescript": "typescript",
+        "typescriptreact": "typescriptreact",
+        "css": "css"
+    },
+    "css.customData": [".vscode/tailwind.json"],
+    // "scss.lint.unknownAtRules": "ignore",
+    "editor.quickSuggestions": {
+        "strings": "on",
+        "comments": "on",
+        "other": "on"
+    },
+    "tailwindCSS.experimental.classRegex": [
+        ["cva\\(((?:[^()]|\\([^()]*\\))*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+        ["cx\\(((?:[^()]|\\([^()]*\\))*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+    ],
+    "scss.showErrors": true,
+    "scss.scanImportedFiles": true,
+    "scss.format.enable": true,
+    "scss.validate": true,
+    "scss.hover.references": true,
+
+    "typescript.tsserver.pluginPaths": ["typescript-plugin-css-modules"],
+    "css.validate": true,
+    "css.hover.references": true,
+    "css.format.enable": true,
+    "CSSNavigation.activeHTMLFileExtensions": ["html", "ejs", "erb", "php", "hbs", "js", "ts", "jsx", "tsx", "vue", "twig", "svelte"]
+}

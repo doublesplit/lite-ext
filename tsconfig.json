@@ -1,0 +1,54 @@
+{
+    "compilerOptions": {
+        "baseUrl": "./",
+        // "rootDir": "./",
+        "module": "ESNext",
+        "moduleResolution": "Node",
+        // "outDir": "../built",
+
+        "noEmit": true,
+        "sourceMap": true,
+        "declarationMap": false,
+        "target": "ES2015",
+        "lib": ["DOM", "ES2015", "ES2016", "ES2017", "es2021", "es2022"],
+        "skipDefaultLibCheck": true,
+        "skipLibCheck": true,
+        "downlevelIteration": true,
+        "esModuleInterop": true,
+        "strict": false,
+        "composite": false,
+        "declaration": false,
+        "forceConsistentCasingInFileNames": true,
+        "incremental": true,
+        "jsx": "preserve",
+        "resolveJsonModule": true,
+        "jsxFragmentFactory": "preact",
+        "jsxFactory": "h",
+        "jsxImportSource": "preact",
+        "emitDeclarationOnly": false,
+        // "alwaysStrict": true,
+        // "noImplicitAny": true,
+        // "strictPropertyInitialization": true,
+        // "strictNullChecks": true,
+        // "strictBindCallApply": true,
+        // "noUncheckedIndexedAccess": true,
+        // "noImplicitThis": true,
+        // "declarationDir": "./typez",
+        // "paths": {
+        //     "react": ["./node_modules/preact/compat/"],
+        //     "react/jsx-runtime": ["./node_modules/preact/jsx-runtime"],
+        //     "react-dom": ["./node_modules/preact/compat/"],
+        //     "react-dom/*": ["./node_modules/preact/compat/*"]
+        // },
+        "paths": {
+            "react": ["./node_modules/preact/compat/"], // Fix for Button.tsx
+            "react-dom": ["./node_modules/preact/compat/"] // Fix for Button.tsx
+        },
+        "plugins": []
+    },
+    "exclude": [],
+    "include": ["./dev/src/**/*", "./dev/src/**/*.json", "./dev/src/**/*.tsx"],
+    "typeAcquisition": {
+        "exclude": []
+    }
+}
