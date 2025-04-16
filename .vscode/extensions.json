@@ -1,0 +1,13 @@
+{
+    "recommendations": [
+        "dbaeumer.vscode-eslint",
+        "pranaygp.vscode-css-peek",
+        "yandeu.five-server",
+        "christian-kohler.npm-intellisense",
+        "vunguyentuan.vscode-postcss",
+        "csstools.postcss",
+        "esbenp.prettier-vscode",
+        "natqe.reload",
+        "bradlc.vscode-tailwindcss"
+    ]
+}

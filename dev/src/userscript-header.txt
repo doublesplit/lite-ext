@@ -30,6 +30,7 @@
 // @grant               unsafeWindow
 // @license             MPL-2.0
 // @antifeature         ads
+// @source              https://github.com/doublesplit/lite-ext/
 // @supportURL          https://discord.gg/HHmyKW6
 // @require             https://cdnjs.cloudflare.com/ajax/libs/preact/10.21.0/preact.umd.min.js
 // @require             https://cdnjs.cloudflare.com/ajax/libs/preact/10.21.0/hooks.umd.min.js
