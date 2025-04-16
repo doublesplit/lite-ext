@@ -11,7 +11,7 @@ const app = new App();
 makeGLobal('app', app);
 makeGLobal('find_node', find_node);
 
-if (isGM()) {
+if (isGM() && !window.GM_skipMenu) {
     registerMenuCommands();
     registerCheckUpdates();
 }

@@ -192,7 +192,7 @@ const common = {
         children: true
     },
     entry: {
-        doublesplit: path.resolve(srcDir, './src/index')
+        'doublesplit.user': path.resolve(srcDir, './src/index')
     },
     output: {
         publicPath: undefined,
@@ -375,7 +375,7 @@ const common = {
             minify: false,
             template: path.resolve(srcDir, './src/template.html'),
             filename: 'index.html', // Output file name
-            chunks: ['doublesplit'],
+            chunks: ['doublesplit.user'],
             hash: true,
             inject: false
         }),
