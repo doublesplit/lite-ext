@@ -15,9 +15,3 @@ if (isGM()) {
     registerMenuCommands();
     registerCheckUpdates();
 }
-if ('hot' in module) {
-    // @ts-ignore
-    module['hot'].decline();
-    // @ts-ignore
-    module['hot'].invalidate();
-}

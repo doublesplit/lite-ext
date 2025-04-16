@@ -2,7 +2,7 @@ import { render } from 'preact';
 import App from '../App';
 import { AppContext } from './Contexts';
 import { Menu, MenuButtons } from './Menu';
-import Minimap from './Minimap';
+import { Minimap } from './Minimap';
 import Portal from './componetns/preact-portal';
 // import './style.scss' with { type: 'cssfile' };
 export function initLiteui(app: App) {

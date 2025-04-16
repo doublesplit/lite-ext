@@ -713,9 +713,11 @@ export default class App {
     }
 }
 
-if ('hot' in module) {
-    // @ts-ignore
-    module['hot'].decline();
-    // @ts-ignore
-    module['hot'].invalidate();
-}
+// if ('hot' in module) {
+//     // @ts-ignore
+//     module['hot'].decline();
+//     // @ts-ignore
+//     module['hot'].dispose(() => {
+//         location.reload();
+//     });
+// }

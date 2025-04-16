@@ -1,12 +1,13 @@
-import { useContext, useLayoutEffect, useRef, useState } from 'react';
+import { useContext, useLayoutEffect, useRef, useState } from 'preact/hooks';
 import { settings } from '../settings';
 import { AppContext } from './Contexts';
 
-export default function Minimap() {
+export function Minimap() {
     const app = useContext(AppContext);
     const [minimapEnabled, setMinimapEnabled] = useState(settings.raw.Minimap);
     const $canvas = useRef<HTMLCanvasElement>(null);
     const $sectors = useRef<HTMLDivElement>(null);
+    const $minimap = useRef<HTMLDivElement>(null);
 
     useLayoutEffect(() => {
         const ctx = $canvas.current.getContext('2d');
@@ -29,16 +30,19 @@ export default function Minimap() {
         }
 
         if (minimapEnabled) rafId = requestAnimationFrame(render);
+        $minimap.current!.style.display = minimapEnabled ? '' : 'none';
 
-        const minimapListener = settings.on('Minimap', (value) => setMinimapEnabled(value));
+        const minimapListener = settings.on('Minimap', (value) => {
+            setMinimapEnabled(value);
+        });
         return () => {
             settings.removeListener('Minimap', minimapListener);
             cancelAnimationFrame(rafId);
         };
-    }, []);
+    }, [minimapEnabled]);
 
     return (
-        <div id="ds-minimap" style={{ zIndex: 1000 }}>
+        <div ref={$minimap} id="ds-minimap" style={{ zIndex: 1000 }}>
             <div class="background" ref={$sectors}>
                 <div class="sector">A1</div>
                 <div class="sector">A2</div>
@@ -69,4 +73,9 @@ export default function Minimap() {
             <canvas id="minimap" width="200" height="200" ref={$canvas}></canvas>
         </div>
     );
+}
+
+if ('hot' in module) {
+    // @ts-ignore
+    module['hot'].accept();
 }

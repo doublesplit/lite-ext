@@ -51,4 +51,3 @@ export const Menu = () => {
         </div>
     );
 };
-module?.['hot']?.accept();

@@ -423,7 +423,14 @@ const development = {
         historyApiFallback: true,
         compress: true,
         port: 8080,
-        watchFiles: ['./src/**/*', './dev/src/**/*', './static/**/*'],
+        /** Files for immediatly reloading */
+        watchFiles: {
+            paths: ['./dev/src/**/*'], // include all files in /src
+            options: {
+                ignored: ['**/dev/src/ui/**'] // ignore all files in /src/ui
+            }
+        },
+
         hot: true,
         liveReload: true
         // hot: "only",
