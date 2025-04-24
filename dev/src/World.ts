@@ -109,49 +109,48 @@ export class World extends Eventify {
     }
     overWriteWS = (_target: WebSocket) => {
         const target = _target as WebSocket & { _onopen: WebSocket['onopen']; _onmessage: WebSocket['onmessage'] };
-        setTimeout(() => {
-            this.ws = target;
-            target._onopen = target.onopen;
-            target._onmessage = target.onmessage;
-            target.onopen = (e) => {
-                this.reset();
-                target._onopen(e);
-            };
-            target.onmessage = (message) => {
-                target._onmessage(message);
-                let offset = 0;
-                let msg = message.data;
-                if (this.decryptionKey) msg = this.xorBuffer(msg, this.decryptionKey ^ 31122);
-                const view = new DataView(msg);
-                const opcode = view.getUint8(offset++);
-                switch (opcode) {
-                    case 17:
-                        const playerX = view.getFloat32(offset, true);
-                        offset += 4;
-                        const playerY = view.getFloat32(offset, true);
-                        offset += 4;
-                        this.targetX = this.receiveX(playerX);
-                        this.targetY = this.receiveY(playerY);
-                        break;
-                    case 32:
-                        this.myCellIds.push(view.getUint32(offset, true));
-                        break;
-                    case 69:
-                        this.ghostCells(view, offset);
-                        break;
-                    case 241:
-                        this.decryptionKey = view.getUint32(offset, true);
-                        break;
-                    case 255:
-                        this.handleMessages(
-                            this.uncompressMessage(new Uint8Array(view.buffer.slice(5)), new Uint8Array(view.getUint32(offset, true))) as Uint8Array
-                        );
-                        break;
-                    default:
-                        this.handleMessages(new Uint8Array(msg));
-                }
-            };
-        }, 0);
+
+        this.ws = target;
+        target._onopen = target.onopen;
+        target._onmessage = target.onmessage;
+        target.onopen = (e) => {
+            this.reset();
+            target._onopen(e);
+        };
+        target.onmessage = (message) => {
+            target._onmessage(message);
+            let offset = 0;
+            let msg = message.data;
+            if (this.decryptionKey) msg = this.xorBuffer(msg, this.decryptionKey ^ 31122);
+            const view = new DataView(msg);
+            const opcode = view.getUint8(offset++);
+            switch (opcode) {
+                case 17:
+                    const playerX = view.getFloat32(offset, true);
+                    offset += 4;
+                    const playerY = view.getFloat32(offset, true);
+                    offset += 4;
+                    this.targetX = this.receiveX(playerX);
+                    this.targetY = this.receiveY(playerY);
+                    break;
+                case 32:
+                    this.myCellIds.push(view.getUint32(offset, true));
+                    break;
+                case 69:
+                    this.ghostCells(view, offset);
+                    break;
+                case 241:
+                    this.decryptionKey = view.getUint32(offset, true);
+                    break;
+                case 255:
+                    this.handleMessages(
+                        this.uncompressMessage(new Uint8Array(view.buffer.slice(5)), new Uint8Array(view.getUint32(offset, true))) as Uint8Array
+                    );
+                    break;
+                default:
+                    this.handleMessages(new Uint8Array(msg));
+            }
+        };
     };
     handleMessages(message: Uint8Array) {
         let offset = 0;
@@ -396,14 +395,14 @@ export class World extends Eventify {
         class WS extends window.WebSocket {
             constructor(url: string, protocols: string | string[]) {
                 const errorStack = new Error().stack;
-                const isAgar = /wasm:\/\//.test(errorStack);
+                const isAgar = /wasm:\/\/|wasm-function|WebAssembly.instantiate/.test(errorStack);
                 const isAgarServer = url.includes('minic');
                 if (isAgar && !isAgarServer) {
                     // window['core'].disableIntegrityChecks(true);
                 }
                 if (isAgar) self.emit('beforeConnect', url, isAgarServer);
                 super(url, protocols);
-                if (isAgar) self.overWriteWS(this);
+                if (isAgar) Promise.resolve().then(() => self.overWriteWS(this));
             }
             static injectedOnce = false;
         }

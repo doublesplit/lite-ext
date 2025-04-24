@@ -1,7 +1,7 @@
 import App from './App';
 import { enableFastCanvasView, enableVueDevtools } from './dev';
-import './ui/minimap.scss';
-import './ui/style.scss';
+import './ui/minimap.css';
+import './ui/style.css';
 import { isGM, registerCheckUpdates, registerMenuCommands } from './userscripting/Tampermonkey';
 import { makeGLobal } from './utils/env';
 import { find_node } from './utils/utils';

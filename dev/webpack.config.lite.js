@@ -13,7 +13,6 @@ import TerserPlugin from 'terser-webpack-plugin';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 import postcss from 'postcss';
-import * as sass from 'sass';
 import PreactRefreshPlugin from '@prefresh/webpack';
 import fs from 'fs';
 class RemoveLicenseFilePlugin {
@@ -60,7 +59,7 @@ if (mode /* !== 'production'*/) babelPresetsProduction.length = 0;
 const rules = [
     {
         with: { type: 'cssfile' },
-        test: /\.s?[ac]ss$/i,
+        test: /\.css$/i,
         // exclude: /\.module\.scss$/,
         use: [
             // { loader: 'thread-loader' },
@@ -73,12 +72,11 @@ const rules = [
                     implementation: postcss,
                     postcssOptions: { config: path.resolve(__dirname, './postcss.config.cjs') }
                 }
-            },
-            { loader: 'sass-loader', options: { implementation: sass } }
+            }
         ]
     },
     {
-        test: /\.s?[ac]ss$/i,
+        test: /\.css$/i,
         use: [
             // { loader: 'thread-loader' },
             // MiniCssExtractPlugin.loader, //1
@@ -90,8 +88,7 @@ const rules = [
                     implementation: postcss,
                     postcssOptions: { config: path.resolve(__dirname, './postcss.config.cjs') }
                 }
-            },
-            { loader: 'sass-loader', options: { implementation: sass } }
+            }
         ]
     },
     {
@@ -106,7 +103,7 @@ const rules = [
                     importLoaders: 1, // 1 -> postcss-loader
                     modules: {
                         namedExport: true,
-                        auto: /\.scss$/,
+                        auto: /\.css$/,
                         localIdentName: '[name]__[local]--[hash:base64:5]'
                     }
                 }
@@ -117,8 +114,7 @@ const rules = [
                     implementation: postcss,
                     postcssOptions: { config: path.resolve(__dirname, './postcss.config.cjs') }
                 }
-            }, // For Tailwind CSS and other PostCSS plugins
-            { loader: 'sass-loader' } // SCSS to CSS
+            }
         ]
     },
     {
@@ -365,8 +361,7 @@ const common = {
                     to: OUTPUT_DIR,
                     noErrorOnMissing: true,
                     globOptions: {
-                        dot: false,
-                        gitignore: false
+                        dot: false
                     }
                 }
             ]

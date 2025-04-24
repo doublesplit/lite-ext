@@ -7,7 +7,9 @@ export function coreInitPatch() {
 }
 
 export function coreUiPatch() {
-    document.querySelector('#title').innerHTML = 'Doublesplit';
+    const title = document.querySelector('#title') as HTMLDivElement;
+    title.innerHTML = 'Doublesplit';
+    title.style.fontSize = '2.5em';
 }
 
 export function coreAdsPatch() {
