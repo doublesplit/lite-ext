@@ -18,7 +18,7 @@
 // @description:pl      Doublesplit - rozszerzenie do Agario z powiększeniem, minimapą, pomocnikami i blokadą reklam
 // @description:fr      Doublesplit - extension pour Agario avec zoom, mini-carte, assistants et bloqueur de publicité
 // @description:ar      دلتا - إضافة لـ Agario مع مانع إعلانات
-// @version             8.0
+// @version             {{version}}
 // @namespace           doublesplit.agar
 // @author              neo
 // @icon                https://deltav4.gitlab.io/favicon.ico

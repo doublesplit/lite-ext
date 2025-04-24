@@ -1,6 +1,6 @@
 {
   "name": "doublesplit-ext",
-  "version": "1.0.0",
+  "version": "8.0.1",
   "description": "Doublesplit development package",
   "main": "index.js",
   "type": "module",

@@ -15,6 +15,7 @@ const __dirname = dirname(__filename);
 import postcss from 'postcss';
 import PreactRefreshPlugin from '@prefresh/webpack';
 import fs from 'fs';
+import { readFileSync } from 'fs';
 class RemoveLicenseFilePlugin {
     apply(compiler) {
         compiler.hooks.emit.tap('RemoveLicenseFilePlugin', (compilation) => {
@@ -35,7 +36,8 @@ const CLIENT_DIR = srcDir;
 const OUTPUT_DIR = path.resolve(__dirname, '../dist');
 
 const userscriptHeaderSrc = path.resolve(__dirname, './src/userscript-header.txt');
-const userscriptHeaderString = fs.readFileSync(userscriptHeaderSrc, 'utf8');
+const packageJson = JSON.parse(readFileSync(path.resolve(__dirname, '../package.json'), 'utf8'));
+const userscriptHeaderString = fs.readFileSync(userscriptHeaderSrc, 'utf8').replace(/{{version}}/g, packageJson.version);
 
 const babelPluginProduction = ['@babel/plugin-transform-runtime'];
 if (mode /* !== 'production'*/) babelPluginProduction.length = 0;
