@@ -37,7 +37,8 @@ export default class App {
     state = EventObject({
         play: false,
         pause: false,
-        ws: ''
+        ws: '',
+        isLoggedIn: false
     });
     memory = EventObject({
         skinUrl: ''
@@ -260,10 +261,6 @@ export default class App {
         //     });
         // }
         // watchVue();
-        // addEventListener('free_coins_timer', async (e) => {
-        //     console.log('coins ready', e['detail'] == 0);
-        //     window['agarApp'].API.getFreeCoins();
-        // });
 
         // Object.defineProperty(window, 'mcReady', {
         //     get: () => () => {},
@@ -452,6 +449,21 @@ export default class App {
         settings.on('AcidMode', (v: boolean) => {
             window['core'].setAcid(v);
         })(settings.proxy.AcidMode);
+
+        /** COINS COLLECTION */
+        {
+            const collectCoins = () => {
+                if (this.state.isLoggedIn && settings.proxy.AutoCollectCoins) {
+                    window['agarApp'].API.getFreeCoins();
+                    window['agarApp'].API.closeTopView();
+                }
+            };
+            addEventListener('login', () => (this.state.isLoggedIn = true));
+            addEventListener('logout', () => (this.state.isLoggedIn = false));
+            addEventListener('free_coins_timer', collectCoins);
+            this.state.on('isLoggedIn', collectCoins);
+            settings.on('AutoCollectCoins', collectCoins)();
+        }
     }
     get menuShow() {
         if (!this.mainui) this.mainui = find_node(window['agarApp'].home, (child) => child.$vnode?.tag?.toLowerCase().includes('mainui'))[0];

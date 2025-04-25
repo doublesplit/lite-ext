@@ -1008,6 +1008,9 @@ input:where([type='button'], [type='reset'], [type='submit']),
 .agario-panel {
   margin: 0 auto;
 }
+.tosBox {
+  display: none !important;
+}
 @property --tw-rotate-x {
   syntax: "*";
   inherits: false;
@@ -1808,12 +1811,19 @@ const settingsDescriptions = {
   MapSectorLabels: new Option({
     path: Group1.s_game,
     value: true
+  }),
+  AutoCollectCoins: new Option({
+    path: Group1.s_game,
+    value: true
   })
   // label: new Color({ path: Group1.s_game, value: 0x1affa3ff }),
   // miniblob: new Color({ path: Group1.s_game, value: 0x0000ffff }),
   // transparent_cells: new Slider({ path: Group1.s_game, value: 1, min: 0.1, max: 1, step: 0.1 })
 };
 const settings = new Settings(settingsDescriptions);
+Object.assign(window, {
+  settings
+});
 
 /***/ }),
 
@@ -3627,7 +3637,8 @@ class App {
     this.state = (0,Eventify.EventObject)({
       play: false,
       pause: false,
-      ws: ''
+      ws: '',
+      isLoggedIn: false
     });
     this.memory = (0,Eventify.EventObject)({
       skinUrl: ''
@@ -3808,10 +3819,6 @@ class App {
       //     });
       // }
       // watchVue();
-      // addEventListener('free_coins_timer', async (e) => {
-      //     console.log('coins ready', e['detail'] == 0);
-      //     window['agarApp'].API.getFreeCoins();
-      // });
       // Object.defineProperty(window, 'mcReady', {
       //     get: () => () => {},
       //     set: () => {}
@@ -3969,6 +3976,20 @@ class App {
     settings.settings.on('AcidMode', v => {
       window['core'].setAcid(v);
     })(settings.settings.proxy.AcidMode);
+    /** COINS COLLECTION */
+    {
+      const collectCoins = () => {
+        if (this.state.isLoggedIn && settings.settings.proxy.AutoCollectCoins) {
+          window['agarApp'].API.getFreeCoins();
+          window['agarApp'].API.closeTopView();
+        }
+      };
+      addEventListener('login', () => this.state.isLoggedIn = true);
+      addEventListener('logout', () => this.state.isLoggedIn = false);
+      addEventListener('free_coins_timer', collectCoins);
+      this.state.on('isLoggedIn', collectCoins);
+      settings.settings.on('AutoCollectCoins', collectCoins)();
+    }
   }
   get menuShow() {
     if (!this.mainui) this.mainui = find_node(window['agarApp'].home, child => {

@@ -112,3 +112,7 @@
 .agario-panel {
     margin: 0 auto;
 }
+
+.tosBox {
+    display: none !important;
+}
