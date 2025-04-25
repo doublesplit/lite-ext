@@ -18,7 +18,7 @@
 // @description:pl      Doublesplit - rozszerzenie do Agario z powiększeniem, minimapą, pomocnikami i blokadą reklam
 // @description:fr      Doublesplit - extension pour Agario avec zoom, mini-carte, assistants et bloqueur de publicité
 // @description:ar      دلتا - إضافة لـ Agario مع مانع إعلانات
-// @version             8.0.1
+// @version             8.0.3
 // @namespace           doublesplit.agar
 // @author              neo
 // @icon                https://deltav4.gitlab.io/favicon.ico
@@ -2379,6 +2379,28 @@ function camelCaseToWords(s) {
 }
 ;// ./dev/src/agario-patches.ts
 
+function exposeHxClasses() {
+  let $hxClasses;
+  const targetProperty = 'ApplicationMain';
+  return new Promise(resolve => {
+    Object.defineProperty(Object.prototype, targetProperty, {
+      set: function (value) {
+        delete Object.prototype[targetProperty];
+        this.ApplicationMain = value;
+        $hxClasses = value;
+        Object.assign(window, {
+          $hxClasses: this
+        });
+        resolve(this);
+      },
+      get: function () {
+        return $hxClasses;
+      },
+      configurable: true,
+      enumerable: false
+    });
+  });
+}
 function coreInitPatch() {
   overrideMethod(window['core'], 'setFpsCap', originalMethod => {
     return originalMethod(-1);
@@ -3647,6 +3669,8 @@ class App {
     this.mainui = null;
     /** exposed emscripten module */
     this.emsc = null;
+    /** exposed $hxClasses */
+    this.hx = null;
     this.observerPatcher = e => {
       const randomKey = 'app_' + Math.random().toString(36).slice(2, 10);
       window[randomKey] = this;
@@ -3702,6 +3726,9 @@ class App {
     //             );
     //         } catch (e) {}
     // })();
+    exposeHxClasses().then(hx => {
+      this.hx = hx;
+    });
     this.initObserver().then(() => {
       this.world.initialize();
       this.waitCore().then(() => {

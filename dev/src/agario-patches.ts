@@ -1,5 +1,26 @@
 import { find_node, overrideMethod } from './utils/utils';
 
+export function exposeHxClasses() {
+    let $hxClasses: any;
+    const targetProperty = 'ApplicationMain';
+    return new Promise((resolve) => {
+        Object.defineProperty(Object.prototype, targetProperty, {
+            set: function (value) {
+                delete Object.prototype[targetProperty];
+                this.ApplicationMain = value;
+                $hxClasses = value;
+                Object.assign(window, { $hxClasses: this });
+                resolve(this);
+            },
+            get: function () {
+                return $hxClasses;
+            },
+            configurable: true,
+            enumerable: false
+        });
+    });
+}
+
 export function coreInitPatch() {
     overrideMethod(window['core'], 'setFpsCap', (originalMethod) => {
         return originalMethod(-1);

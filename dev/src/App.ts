@@ -1,5 +1,5 @@
 import { deferrify, EventObject } from '../../Shared/src/utils/Eventify';
-import { coreAdsPatch, coreInitPatch, coreUiPatch, fixNoServers } from './agario-patches';
+import { coreAdsPatch, coreInitPatch, coreUiPatch, exposeHxClasses, fixNoServers } from './agario-patches';
 import { settings } from './settings';
 import { initLiteui } from './ui';
 import { makeGLobal } from './utils/env';
@@ -47,6 +47,8 @@ export default class App {
     mainui = null as any;
     /** exposed emscripten module */
     emsc = null as any;
+    /** exposed $hxClasses */
+    hx = null as any;
     /** main game canvas */
     canvas: HTMLCanvasElement;
     display_vue() {
@@ -85,6 +87,10 @@ export default class App {
         //             );
         //         } catch (e) {}
         // })();
+
+        exposeHxClasses().then((hx) => {
+            this.hx = hx;
+        });
 
         this.initObserver().then(() => {
             this.world.initialize();
