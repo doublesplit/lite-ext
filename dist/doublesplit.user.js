@@ -18,7 +18,7 @@
 // @description:pl      Doublesplit - rozszerzenie do Agario z powiększeniem, minimapą, pomocnikami i blokadą reklam
 // @description:fr      Doublesplit - extension pour Agario avec zoom, mini-carte, assistants et bloqueur de publicité
 // @description:ar      دلتا - إضافة لـ Agario مع مانع إعلانات
-// @version             8.0.3
+// @version             8.0.4
 // @namespace           doublesplit.agar
 // @author              neo
 // @icon                https://deltav4.gitlab.io/favicon.ico
@@ -1798,7 +1798,10 @@ const settingsDescriptions = {
   }),
   LeaderboardTitle: new Input({
     path: Group1.s_game,
-    value: 'Doublesplit'
+    value: 'Doublesplit',
+    options: {
+      Leaderboard: 'Leaderboard'
+    }
   }),
   MapBorder: new Option({
     path: Group1.s_game,

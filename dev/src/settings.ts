@@ -9,7 +9,7 @@ const settingsDescriptions = {
     Minimap: new Option({ path: Group1.s_game, value: true }),
     AutoRespawn: new Option({ path: Group1.s_game, value: false }),
     AcidMode: new Option({ path: Group1.s_game, value: false }),
-    LeaderboardTitle: new Input({ path: Group1.s_game, value: 'Doublesplit' }),
+    LeaderboardTitle: new Input({ path: Group1.s_game, value: 'Doublesplit', options: { Leaderboard: 'Leaderboard' } }),
     MapBorder: new Option({ path: Group1.s_game, value: true }),
     MapSectors: new Option({ path: Group1.s_game, value: true }),
     MapSectorLabels: new Option({ path: Group1.s_game, value: true }),
