@@ -16,7 +16,7 @@ export function Minimap() {
         let rafId: number;
 
         function render() {
-            const sectorId = app.world.drawMinimap(ctx, $canvas.current, true, app.communication.stores.players);
+            const sectorId = app.world.drawMinimap(ctx, $canvas.current, true);
             setSector(sectorId);
             rafId = requestAnimationFrame(render);
         }

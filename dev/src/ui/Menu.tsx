@@ -30,7 +30,8 @@ export function MenuButtons() {
                 style={{
                     display: 'flex',
                     gap: '4px',
-                    paddingTop: '4px'
+                    paddingTop: '4px',
+                    alignItems: 'center'
                 }}
             >
                 <input class="input-addon" placeholder="server" ref={inputRef} />

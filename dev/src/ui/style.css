@@ -18,6 +18,11 @@
     flex-direction: column;
     height: 100%;
 }
+#mainPanel #nick,
+.input-addon {
+    border: 1px solid #4e4e4e !important;
+    padding-left: 10px;
+}
 #socialLoginContainer {
     position: initial !important;
 }
@@ -96,10 +101,20 @@
     height: 28px;
 }
 
-.circle.green {
+.circle {
+    display: flex !important;
+    flex-direction: column !important;
     position: absolute !important;
 }
-
+.plus-text {
+    top: 0 !important;
+    margin: auto;
+}
+.skinWrapper > img {
+    left: 0 !important;
+    top: 0 !important;
+    height: 100% !important;
+}
 #settingsButton {
     left: 5px;
     position: absolute !important;
@@ -118,4 +133,8 @@
 }
 #mcbanners {
     display: none !important;
+}
+
+.play-blocker img {
+    margin: auto;
 }

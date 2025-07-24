@@ -1,6 +1,5 @@
 import { render } from 'preact';
 import App from '../App';
-import { GunAuthUi } from './Auth';
 import { AppContext } from './Contexts';
 import { Menu, MenuButtons } from './Menu';
 import { Minimap } from './Minimap';
@@ -35,12 +34,7 @@ export function initLiteui(app: App) {
         const promoPanel = document.querySelector('#mainui-promo');
         const replacement = document.createElement('div');
         replacement.style = 'width: 100%; height: 100%; background-color: #fff';
-        render(
-            <AppContext.Provider value={app}>
-                <GunAuthUi auth={app.communication.auth} />
-            </AppContext.Provider>,
-            replacement
-        );
+        render(<AppContext.Provider value={app}></AppContext.Provider>, replacement);
         promoPanel.insertAdjacentElement('afterbegin', replacement);
     }
 

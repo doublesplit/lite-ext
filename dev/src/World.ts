@@ -1,8 +1,7 @@
 import { Eventify } from '../../Shared/src/utils/Eventify';
 import App from './App';
 import { Cell } from './Cell';
-import { ServerPlayer } from './ui/Stores';
-import TC from './utils/TC';
+// import { ServerPlayer } from './ui/Stores';
 
 export class World extends Eventify {
     static decoder = new TextDecoder('utf-8');
@@ -420,7 +419,7 @@ export class World extends Eventify {
         return y;
     }
     texts: Map<number, string> = new Map();
-    drawMinimap(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, clear = true, users: Map<any, ServerPlayer>): number {
+    drawMinimap(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, clear = true): number {
         function safe(number: number) {
             return number == 0 ? 1 : number;
         }
@@ -442,31 +441,6 @@ export class World extends Eventify {
         ctx.beginPath();
         ctx.arc(playerX, playerY, 5, 0, Math.PI * 2);
         ctx.fill();
-
-        users.forEach((player) => {
-            const spriteText = (player['spriteText'] ??= new TC()) as TC;
-            if (player.dirtyID !== spriteText.dirtyId) {
-                spriteText.setText(player.name);
-                spriteText.setDpr(devicePixelRatio);
-                spriteText.setStyle('#000000', '#ffffff', 1);
-                spriteText.setFont(13, 400, ' Arial, sans-serif');
-                spriteText.update(player.dirtyID);
-            }
-            player.animate();
-            const x = (safe(player.x + this.borderX / 2) / this.borderX) * canvas.width;
-            const y = (safe(player.y + this.borderY / 2) / this.borderY) * canvas.height;
-            const size = (200 / this.borderX) * canvas.width + 1;
-            ctx.fillStyle = '#ae00ff';
-            ctx.beginPath();
-            ctx.arc(x, y, size, 0, Math.PI * 2);
-            ctx.fill();
-
-            spriteText.x = x;
-            spriteText.y = y;
-            spriteText.originX = 0.5;
-            spriteText.originY = 1;
-            spriteText.draw(ctx);
-        });
 
         const sectorSizeX = canvas.width / 5;
         const sectorSizeY = canvas.height / 5;

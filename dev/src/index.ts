@@ -18,5 +18,5 @@ if (window.location.href.includes('agar.io')) {
         registerCheckUpdates();
     }
 } else {
-    import('./ui/backend.test');
+    console.log('This script is intended to run on agar.io only.');
 }

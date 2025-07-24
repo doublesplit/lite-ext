@@ -18,7 +18,7 @@
 // @description:pl      Doublesplit - rozszerzenie do Agario z powiększeniem, minimapą, pomocnikami i blokadą reklam
 // @description:fr      Doublesplit - extension pour Agario avec zoom, mini-carte, assistants et bloqueur de publicité
 // @description:ar      دلتا - إضافة لـ Agario مع مانع إعلانات
-// @version             8.0.4
+// @version             8.0.5
 // @namespace           doublesplit.agar
 // @author              neo
 // @icon                https://deltav4.gitlab.io/favicon.ico
@@ -298,7 +298,7 @@ module.exports = styleTagTransform;
 
 function Minimap() {
   const app = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_0__.useContext)(_Contexts__WEBPACK_IMPORTED_MODULE_2__.AppContext);
-  const [minimapEnabled, setMinimapEnabled] = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_0__.useState)(_settings__WEBPACK_IMPORTED_MODULE_1__.settings.raw.Minimap);
+  const [minimapEnabled, setMinimapEnabled] = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_0__.useState)(_settings__WEBPACK_IMPORTED_MODULE_1__.settings.raw.Minimap.value);
   const $canvas = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const $sectors = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const $minimap = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
@@ -308,7 +308,7 @@ function Minimap() {
     let sectorIndex = -1;
     let rafId;
     function render() {
-      const sectorId = app.world.drawMinimap(ctx, $canvas.current);
+      const sectorId = app.world.drawMinimap(ctx, $canvas.current, true);
       setSector(sectorId);
       rafId = requestAnimationFrame(render);
     }
@@ -684,6 +684,9 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.1.4 | MIT License |
   .inline {
     display: inline !important;
   }
+  .h-full {
+    height: 100% !important;
+  }
   .w-4 {
     width: calc(var(--spacing) * 4) !important;
   }
@@ -924,6 +927,11 @@ input:where([type='button'], [type='reset'], [type='submit']),
   flex-direction: column;
   height: 100%;
 }
+#mainPanel #nick,
+.input-addon {
+  border: 1px solid #4e4e4e !important;
+  padding-left: 10px;
+}
 #socialLoginContainer {
   position: initial !important;
 }
@@ -994,8 +1002,19 @@ input:where([type='button'], [type='reset'], [type='submit']),
   width: 100%;
   height: 28px;
 }
-.circle.green {
+.circle {
+  display: flex !important;
+  flex-direction: column !important;
   position: absolute !important;
+}
+.plus-text {
+  top: 0 !important;
+  margin: auto;
+}
+.skinWrapper > img {
+  left: 0 !important;
+  top: 0 !important;
+  height: 100% !important;
 }
 #settingsButton {
   left: 5px;
@@ -1010,6 +1029,12 @@ input:where([type='button'], [type='reset'], [type='submit']),
 }
 .tosBox {
   display: none !important;
+}
+#mcbanners {
+  display: none !important;
+}
+.play-blocker img {
+  margin: auto;
 }
 @property --tw-rotate-x {
   syntax: "*";
@@ -1792,10 +1817,6 @@ const settingsDescriptions = {
     path: Group1.s_game,
     value: false
   }),
-  AcidMode: new Option({
-    path: Group1.s_game,
-    value: false
-  }),
   LeaderboardTitle: new Input({
     path: Group1.s_game,
     value: 'Doublesplit',
@@ -1818,6 +1839,10 @@ const settingsDescriptions = {
   AutoCollectCoins: new Option({
     path: Group1.s_game,
     value: true
+  }),
+  AcidMode: new Option({
+    path: Group1.s_game,
+    value: false
   })
   // label: new Color({ path: Group1.s_game, value: 0x1affa3ff }),
   // miniblob: new Color({ path: Group1.s_game, value: 0x0000ffff }),
@@ -1854,14 +1879,14 @@ function EventMixin(Base) {
       this.blockRemovingListeners = false;
     }
     on(...rest) {
+      var _a;
+      var _b;
       if (rest.length < 2) throw new Error('Eventify.on() need at least 2 arguments');
       const length = rest.length;
       const listener = rest[length - 1];
       for (let i = 0; length - 1 > i; i++) {
         const event = rest[i];
-        if (typeof this.events[event] !== 'object') {
-          this.events[event] = [];
-        }
+        (_a = (_b = this.events)[event]) !== null && _a !== void 0 ? _a : _b[event] = [];
         this.events[event].push(listener);
       }
       return listener;
@@ -1879,7 +1904,7 @@ function EventMixin(Base) {
     }
     emit(event, ...rest) {
       // this.blockRemovingListeners = true;
-      if (typeof this.events[event] === 'object') {
+      if (this.events[event]) {
         const listeners = this.events[event].slice();
         for (const listener of listeners) {
           listener.apply(this, rest);
@@ -1995,7 +2020,6 @@ function EventMixin(Base) {
   return EventifyBase;
 }
 class Eventify extends EventMixin(class {}) {}
-
 /* LIB : EVENTIFY ANY OBJECT */
 const props = ['on', 'removeListener', 'emit', 'once', 'listenTo', 'delegateTo', 'listenSelf', 'unlisten', 'ev', 'events', 'waitfor', 'waitTimeout'];
 const eventify = function (object) {
@@ -2392,7 +2416,7 @@ function exposeHxClasses() {
         this.ApplicationMain = value;
         $hxClasses = value;
         Object.assign(window, {
-          $hxClasses: this
+          hx: this
         });
         resolve(this);
       },
@@ -2416,6 +2440,18 @@ function coreUiPatch() {
 }
 function coreAdsPatch() {
   var _a, _b, _c, _d, _e;
+  document.addEventListener('update_user_info', e => {
+    if (e.detail.isPayingUser) return;
+    const detail = Object.assign(Object.assign({}, e.detail), {
+      isPayingUser: true
+    });
+    const ev = new CustomEvent('update_user_info', {
+      detail
+    });
+    e.stopPropagation();
+    document.dispatchEvent(ev);
+  });
+  // window.hx.Core.user.userInfo.isPayingUser=true
   // Ads delete
   (_a = find_node(undefined, child => {
     var _a;
@@ -2932,7 +2968,8 @@ function MenuButtons() {
       style: {
         display: 'flex',
         gap: '4px',
-        paddingTop: '4px'
+        paddingTop: '4px',
+        alignItems: 'center'
       },
       children: [(0,jsxRuntime_module.jsx)("input", {
         class: "input-addon",
@@ -2949,6 +2986,7 @@ function MenuButtons() {
 }
 const Menu = () => {
   return (0,jsxRuntime_module.jsx)("div", {
+    className: "h-full",
     style: {
       overflowY: 'scroll'
     },
@@ -3090,24 +3128,37 @@ function initLiteui(app) {
       })
     })
   }), document.body);
-  const minimapElem = document.createElement('div');
-  (0,external_preact_.render)((0,jsxRuntime_module.jsx)(Contexts.AppContext.Provider, {
-    value: app,
-    children: (0,jsxRuntime_module.jsx)(Minimap.Minimap, {})
-  }), minimapElem);
-  document.body.insertAdjacentElement('afterbegin', minimapElem);
-  const observer = new window.MutationObserver(mtRecs => {
-    for (const mtRec of mtRecs) {
-      const elem = mtRec.target;
-      if (elem.style.display !== 'none') {
-        elem.style.display = 'flex';
-        elem.style.display = 'flex-direction:column';
+  {
+    const promoPanel = document.querySelector('#mainui-promo');
+    const replacement = document.createElement('div');
+    replacement.style = 'width: 100%; height: 100%; background-color: #fff';
+    (0,external_preact_.render)((0,jsxRuntime_module.jsx)(Contexts.AppContext.Provider, {
+      value: app
+    }), replacement);
+    promoPanel.insertAdjacentElement('afterbegin', replacement);
+  }
+  {
+    const minimapElem = document.createElement('div');
+    (0,external_preact_.render)((0,jsxRuntime_module.jsx)(Contexts.AppContext.Provider, {
+      value: app,
+      children: (0,jsxRuntime_module.jsx)(Minimap.Minimap, {})
+    }), minimapElem);
+    document.body.insertAdjacentElement('afterbegin', minimapElem);
+  }
+  {
+    const observer = new window.MutationObserver(mtRecs => {
+      for (const mtRec of mtRecs) {
+        const elem = mtRec.target;
+        if (elem.style.display !== 'none') {
+          elem.style.display = 'flex';
+          elem.style.display = 'flex-direction:column';
+        }
       }
-    }
-  });
-  observer.observe(window.document.querySelector('#mainPanel'), {
-    attributeFilter: ['style']
-  });
+    });
+    observer.observe(window.document.querySelector('#mainPanel'), {
+      attributeFilter: ['style']
+    });
+  }
 }
 ;// ./dev/src/utils/env.ts
 function makeGLobal(name, value) {
@@ -3234,8 +3285,42 @@ function concatUint8Arrays(arrays) {
   }
   return result;
 }
+;// ./dev/src/Cell.ts
+class Cell {
+  constructor() {
+    this.accountID = null;
+    this.name = null;
+  }
+  static size2squared(cell_size) {
+    return cell_size * cell_size;
+  }
+  static squared2size(squared_size) {
+    return Math.sqrt(squared_size);
+  }
+  static size2mass(cell_size) {
+    return cell_size * cell_size / 100;
+  }
+  static mass2size(cell_mass) {
+    return Math.sqrt(100 * cell_mass);
+  }
+  construct(id, colorInt, accountID) {
+    this.id = id;
+    this.colorInt = colorInt;
+    this.accountID = accountID;
+  }
+  setTarget(x, y, size) {
+    this.targetX = x;
+    this.targetY = y;
+    this.targetSize = size;
+  }
+  setName(name) {
+    if (name) this.name = name;
+  }
+}
 ;// ./dev/src/World.ts
 
+
+// import { ServerPlayer } from './ui/Stores';
 class World extends Eventify.Eventify {
   get isAgar() {
     var _a;
@@ -3243,6 +3328,9 @@ class World extends Eventify.Eventify {
   }
   constructor(app) {
     super();
+    this.myCellIds = new Set();
+    this.ownCells = new Map();
+    this.cells = new Map();
     this.xorBuffer = (buffer, key) => {
       const dataView = new DataView(buffer);
       for (let i = 0; i < dataView.byteLength; i++) {
@@ -3276,7 +3364,7 @@ class World extends Eventify.Eventify {
             this.targetY = this.receiveY(playerY);
             break;
           case 32:
-            this.myCellIds.push(view.getUint32(offset, true));
+            this.myCellIds.add(view.getUint32(offset, true));
             break;
           case 69:
             this.ghostCells(view, offset);
@@ -3292,11 +3380,15 @@ class World extends Eventify.Eventify {
         }
       };
     };
+    this.texts = new Map();
     this.websocketHooked = false;
     this.reset();
     this.app = app;
   }
   reset() {
+    this.isPlay = false;
+    this.ownCells.clear();
+    this.cells.clear();
     this.minimap = [];
     this.offsetX = 0;
     this.offsetY = 0;
@@ -3304,7 +3396,7 @@ class World extends Eventify.Eventify {
     this.borderY = 0;
     this.targetX = 0;
     this.targetY = 0;
-    this.myCellIds = [];
+    this.myCellIds.clear();
     this.decryptionKey = 0;
     this.mapOffsetFixed = false;
     this.mapShiftX = 0;
@@ -3354,6 +3446,26 @@ class World extends Eventify.Eventify {
     }
     return output;
   }
+  eatCellEvent(eater, victim) {
+    if (eater && victim) {
+      this.removeCell(victim);
+    } else {
+      this.removeCell(victim);
+    }
+  }
+  removeCell(cell) {
+    if (cell) {
+      this.cells.delete(cell.id);
+      this.ownCells.delete(cell.id);
+      const isMyCell = this.myCellIds.has(cell.id);
+      if (isMyCell) {
+        this.myCellIds.delete(cell.id);
+        if (this.isPlay && this.myCellIds.size === 0) {
+          this.isPlay = false;
+        }
+      }
+    }
+  }
   handleMessages(message) {
     let offset = 0;
     const view = new DataView(message.buffer);
@@ -3363,7 +3475,15 @@ class World extends Eventify.Eventify {
         {
           const eatRecordLength = view.getUint16(offset, true);
           offset += 2;
-          for (let i = 0; i < eatRecordLength; i++) offset += 8;
+          for (let i = 0; i < eatRecordLength; i++) {
+            const eaterID = view.getUint32(offset, true);
+            offset += 4;
+            const victimID = view.getUint32(offset, true);
+            offset += 4;
+            const eater = this.cells.get(eaterID);
+            const victim = this.cells.get(victimID);
+            this.eatCellEvent(eater, victim);
+          }
           while (true) {
             const id = view.getUint32(offset, true);
             offset += 4;
@@ -3372,28 +3492,43 @@ class World extends Eventify.Eventify {
             offset += 4;
             const targetY = this.receiveY(view.getInt32(offset, true));
             offset += 4;
+            const size = view.getUint32(offset, true);
             offset += 2;
             const flags = view.getUint8(offset++);
             const extendedFlags = flags & 128 ? view.getUint8(offset++) : 0;
-            if (flags & 2) offset += 3;
+            const color = flags & 2 ? view.getUint32(offset++, true) | view.getUint32(offset++, true) << 8 | view.getUint32(offset++, true) << 16 : null;
             if (flags & 4) while (view.getInt8(offset++) !== 0) {
               /* intentionally left empty */
             }
-            if (flags & 8) while (view.getInt8(offset++) !== 0) {
-              /* intentionally left empty */
+            const nameLength = flags & 8 ? World.strlen(view, offset) : 0;
+            const name = nameLength ? World.decoder.decode(new Uint8Array(view.buffer, offset, nameLength - 1)) : null;
+            offset += nameLength;
+            const accountID = extendedFlags & 4 ? (offset += 4, view.getUint32(offset - 4, true)) : 0;
+            const isNew = !this.cells.has(id);
+            const cell = this.cells.get(id) || this.cells.set(id, new Cell()).get(id);
+            if (isNew) {
+              cell.construct(id, color, accountID);
+              name !== null && cell.setName(name);
+              this.cells.set(id, cell);
             }
-            if (extendedFlags & 4) offset += 4;
-            if (this.myCellIds.indexOf(id) !== -1) {
+            name !== null && cell.setName(name);
+            if (accountID !== 0) cell.accountID = accountID;
+            if (this.myCellIds.has(id)) {
               this.targetX = targetX;
               this.targetY = targetY;
             }
+            if (this.myCellIds.has(id) && !this.ownCells.has(id)) {
+              this.ownCells.set(id, cell);
+              this.isPlay = true;
+            }
+            cell.setTarget(targetX, targetY, size);
           }
           const removeLength = view.getUint16(offset, true);
           offset += 2;
           for (let i = 0; i < removeLength; i++) {
             const removedID = view.getUint32(offset, true);
             offset += 4;
-            if (this.myCellIds.includes(removedID)) this.myCellIds = this.myCellIds.filter(id => id != removedID);
+            this.removeCell(this.cells.get(removedID));
           }
         }
         break;
@@ -3545,6 +3680,7 @@ class World extends Eventify.Eventify {
       return number == 0 ? 1 : number;
     }
     if (clear) ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.globalAlpha = 0.5;
     this.minimap.forEach(cell => {
       const x = safe(cell.x + this.borderX / 2) / this.borderX * canvas.width;
       const y = safe(cell.y + this.borderY / 2) / this.borderY * canvas.height;
@@ -3554,6 +3690,7 @@ class World extends Eventify.Eventify {
       ctx.arc(x, y, size, 0, Math.PI * 2);
       ctx.fill();
     });
+    ctx.globalAlpha = 1;
     const playerX = safe(this.targetX + this.borderX / 2) / this.borderX * canvas.width;
     const playerY = safe(this.targetY + this.borderY / 2) / this.borderY * canvas.height;
     ctx.fillStyle = '#00bfff';
@@ -3589,6 +3726,12 @@ class World extends Eventify.Eventify {
     window.WebSocket = WS;
   }
 }
+World.decoder = new TextDecoder('utf-8');
+World.strlen = (view, offset) => {
+  let length = 0;
+  while (view.getUint8(offset + length++) !== 0) {}
+  return length;
+};
 ;// ./dev/src/App.ts
 var __awaiter = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
   function adopt(value) {
@@ -3636,6 +3779,7 @@ class App {
     });
   }
   constructor() {
+    this.minimapPlayers = [];
     this.sampler = new Sampler();
     this.performance_now = 0; // for speedhack
     this.timer_mp = 1; // time multiplier
@@ -3674,6 +3818,7 @@ class App {
     this.emsc = null;
     /** exposed $hxClasses */
     this.hx = null;
+    this.userID = Math.random().toString(36).slice(2, 10);
     this.observerPatcher = e => {
       const randomKey = 'app_' + Math.random().toString(36).slice(2, 10);
       window[randomKey] = this;
@@ -3706,6 +3851,12 @@ class App {
     this.calls = [];
     this.world = new World(this);
     this.world.on('beforeConnect', this.beforeConnect.bind(this));
+    setInterval(() => {
+      if (!this.world.ownCells.size) return;
+      const offsetX = ~(this.camera.x + this.world.offsetX);
+      const offsetY = ~(this.camera.y + this.world.offsetY);
+      const myCell = this.world.ownCells.values().next().value;
+    }, 1000);
     const storageName = 'lite_settings';
     settings.settings.import(Object.assign(Object.assign({}, settings.settings.export()), storage.get(storageName)));
     settings.settings.on('*', _ => {
@@ -3731,6 +3882,11 @@ class App {
     // })();
     exposeHxClasses().then(hx => {
       this.hx = hx;
+      const patchHxCore = this.patchHxCore.bind(this);
+      overrideMethod(hx.Core, 'init', function (o, args) {
+        o.apply(this, args);
+        patchHxCore();
+      });
     });
     this.initObserver().then(() => {
       this.world.initialize();
@@ -3742,6 +3898,33 @@ class App {
       var _a, _b;
       if ((_b = (_a = args[0]).startsWith) === null || _b === void 0 ? void 0 : _b.call(_a, '       ,,,,,')) return window.console.log = o;
       return o.apply(this, args);
+    });
+  }
+  patchHxCore() {
+    const onDc = () => {
+      this.connect('wss://imsolo.pro:2102');
+    };
+    const core = this.hx.Core;
+    overridePrototype(core.views, 'openView', function (o) {
+      return function () {
+        const [targetView, options] = arguments;
+        targetView.allowDisableClose = false;
+        targetView.closeOnEscape = true;
+        targetView.debugui = true;
+        if (targetView.state === 'disconnected_dialog') {
+          options.allowClickClose = true;
+          setTimeout(onDc, 1000);
+        }
+        return o.apply(this, arguments);
+      };
+    });
+    /** Fix broken skin preview */
+    overridePrototype(core.services.gameui, 'setUserSkin', function (o) {
+      return function () {
+        const [targetSkin] = arguments;
+        arguments[0] = targetSkin ? targetSkin + '?' : targetSkin;
+        return o.apply(this, arguments);
+      };
     });
   }
   loadAndPatchCore(url, resolve) {
@@ -3859,7 +4042,7 @@ class App {
   handleCoreInit() {
     coreInitPatch();
     coreAdsPatch();
-    fixNoServers();
+    // fixNoServers();
     coreUiPatch();
     this.init();
     this.onCoreInit();
@@ -4041,6 +4224,39 @@ class App {
     // window['core'].setFadeout(false);
     // window['core'].setFadeout = () => {};
     this.disableMenuBackground();
+    if (this.hx) {
+      this.hx.Core.ui.network.set_connecting(false);
+      this.hx.Core.ui.network.set_connected(true);
+      this.hx.Core.disconnectDialog && this.hx.Core.closeDisconnectDialog();
+      // this.hx.Core.views.closeAllViews();
+      this.hx.Core.onConnect();
+      if (!this.world.isAgar) {
+        /** Add posibility to play custom server */
+        const detail = {
+          id: '11111111-2222-3333-4444-555555555555',
+          name: 'Guest',
+          isPayingUser: true,
+          // <-- true for no ads
+          avatarUrl: 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=',
+          level: 100,
+          currentXp: 500000,
+          totalXp: 500000,
+          realm: ['Guest', 2],
+          isNewUser: false,
+          hasLoggedIntoMobile: false
+        };
+        const ev = new CustomEvent('update_user_info', {
+          detail
+        });
+        document.dispatchEvent(ev);
+      }
+      // window['MC'].onConnect();
+    }
+    // ('login_state_update');
+    // const details = { login: 'IN', connected: true };
+    // this.hx.Core.loginState = ['IN', 1];
+    // this.hx.Core.onUserLoggedIn();
+    // Core.get_states().disable("state_main_screen");
   }
   disableMenuBackground() {
     if (!this.world.isAgar) return;
@@ -4085,7 +4301,6 @@ class App {
   }
   onPlayerSpawn(...args) {
     this.state.play = true;
-    this.reset();
   }
   onPlayerDeath(...args) {
     find_node(undefined, child => {
@@ -4118,7 +4333,6 @@ class App {
   }
   reset() {
     this.stopmovement = false;
-    this.world.myCellIds = [];
   }
   dumpMem() {
     const blob = new Blob([this['emsc'].buffer]);
@@ -4440,14 +4654,18 @@ function isGM() {
 
 
 
-enableVueDevtools();
-enableFastCanvasView();
-const app = new App();
-makeGLobal('app', app);
-makeGLobal('find_node', find_node);
-if (isGM() && !window.GM_skipMenu) {
-  registerMenuCommands();
-  registerCheckUpdates();
+if (window.location.href.includes('agar.io')) {
+  enableVueDevtools();
+  enableFastCanvasView();
+  const app = new App();
+  makeGLobal('app', app);
+  makeGLobal('find_node', find_node);
+  if (isGM() && !window.GM_skipMenu) {
+    registerMenuCommands();
+    registerCheckUpdates();
+  }
+} else {
+  console.log('This script is intended to run on agar.io only.');
 }
 })();
 

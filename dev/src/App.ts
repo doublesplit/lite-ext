@@ -1,7 +1,6 @@
 import { deferrify, EventObject } from '../../Shared/src/utils/Eventify';
 import { coreAdsPatch, coreInitPatch, coreUiPatch, exposeHxClasses } from './agario-patches';
 import { Cell } from './Cell';
-import { Communication } from './Comm';
 import { settings } from './settings';
 import { initLiteui } from './ui';
 import { makeGLobal } from './utils/env';
@@ -12,7 +11,6 @@ import { applyPatch } from './utils/wasmPatcher';
 import { World } from './World';
 
 export default class App {
-    communication: Communication;
     minimapPlayers: { x: number; y: number }[] = [];
     sampler = new Sampler();
     world: World;
@@ -65,7 +63,6 @@ export default class App {
     constructor() {
         this.world = new World(this);
         this.world.on('beforeConnect', this.beforeConnect.bind(this));
-        this.communication = new Communication();
 
         setInterval(() => {
             if (!this.world.ownCells.size) return;
@@ -73,14 +70,6 @@ export default class App {
             const offsetY = ~(this.camera.y + this.world.offsetY);
 
             const myCell: Cell = this.world.ownCells.values().next().value;
-            this.communication.map.broadcast({
-                userId: String(this.userID),
-                aid: myCell.accountID,
-                name: this.hx?.Core.ui.settings.get_lastNick() || '',
-                x: offsetX,
-                y: offsetY,
-                size: 1000
-            });
         }, 1000);
 
         const storageName = 'lite_settings';
@@ -147,6 +136,14 @@ export default class App {
                     options.allowClickClose = true;
                     setTimeout(onDc, 1000);
                 }
+                return o.apply(this, arguments);
+            };
+        });
+        /** Fix broken skin preview */
+        overridePrototype(core.services.gameui, 'setUserSkin', function (o) {
+            return function () {
+                const [targetSkin] = arguments;
+                arguments[0] = targetSkin ? targetSkin + '?' : targetSkin;
                 return o.apply(this, arguments);
             };
         });
@@ -640,7 +637,6 @@ export default class App {
             setTimeout(() => (this.timer_mp = prev), 800);
         }
         // window.setTimeout(MC.showNickDialog, 500);
-        this.communication.map.removeMinimapObject(this.userID);
     }
     onPacket(packet: any) {
         return packet;
