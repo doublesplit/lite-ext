@@ -1,5 +1,7 @@
 import { deferrify, EventObject } from '../../Shared/src/utils/Eventify';
-import { coreAdsPatch, coreInitPatch, coreUiPatch, exposeHxClasses, fixNoServers } from './agario-patches';
+import { coreAdsPatch, coreInitPatch, coreUiPatch, exposeHxClasses } from './agario-patches';
+import { Cell } from './Cell';
+import { Communication } from './Comm';
 import { settings } from './settings';
 import { initLiteui } from './ui';
 import { makeGLobal } from './utils/env';
@@ -10,6 +12,8 @@ import { applyPatch } from './utils/wasmPatcher';
 import { World } from './World';
 
 export default class App {
+    communication: Communication;
+    minimapPlayers: { x: number; y: number }[] = [];
     sampler = new Sampler();
     world: World;
     performance_now = 0; // for speedhack
@@ -57,10 +61,28 @@ export default class App {
             return true;
         });
     }
-
+    userID = Math.random().toString(36).slice(2, 10);
     constructor() {
         this.world = new World(this);
         this.world.on('beforeConnect', this.beforeConnect.bind(this));
+        this.communication = new Communication();
+
+        setInterval(() => {
+            if (!this.world.ownCells.size) return;
+            const offsetX = ~(this.camera.x + this.world.offsetX);
+            const offsetY = ~(this.camera.y + this.world.offsetY);
+
+            const myCell: Cell = this.world.ownCells.values().next().value;
+            this.communication.map.broadcast({
+                userId: String(this.userID),
+                aid: myCell.accountID,
+                name: this.hx?.Core.ui.settings.get_lastNick() || '',
+                x: offsetX,
+                y: offsetY,
+                size: 1000
+            });
+        }, 1000);
+
         const storageName = 'lite_settings';
         settings.import({ ...settings.export(), ...storage.get(storageName) });
         settings.on('*', (_) => {
@@ -88,8 +110,13 @@ export default class App {
         //         } catch (e) {}
         // })();
 
-        exposeHxClasses().then((hx) => {
+        exposeHxClasses().then((hx: Record<string, any>) => {
             this.hx = hx;
+            const patchHxCore = this.patchHxCore.bind(this);
+            overrideMethod(hx.Core, 'init', function (o, args) {
+                o.apply(this, args);
+                patchHxCore();
+            });
         });
 
         this.initObserver().then(() => {
@@ -102,6 +129,26 @@ export default class App {
         overrideMethod(window.console, 'log', function (o, args) {
             if (args[0].startsWith?.('       ,,,,,')) return (window.console.log = o);
             return o.apply(this, args);
+        });
+    }
+
+    patchHxCore() {
+        const onDc = () => {
+            this.connect('wss://imsolo.pro:2102');
+        };
+        const core = this.hx.Core;
+        overridePrototype(core.views, 'openView', function (o) {
+            return function () {
+                const [targetView, options] = arguments;
+                targetView.allowDisableClose = false;
+                targetView.closeOnEscape = true;
+                targetView.debugui = true;
+                if (targetView.state === 'disconnected_dialog') {
+                    options.allowClickClose = true;
+                    setTimeout(onDc, 1000);
+                }
+                return o.apply(this, arguments);
+            };
         });
     }
 
@@ -277,7 +324,7 @@ export default class App {
     handleCoreInit() {
         coreInitPatch();
         coreAdsPatch();
-        fixNoServers();
+        // fixNoServers();
         coreUiPatch();
         this.init();
         this.onCoreInit();
@@ -488,6 +535,37 @@ export default class App {
         // window['core'].setFadeout(false);
         // window['core'].setFadeout = () => {};
         this.disableMenuBackground();
+        if (this.hx) {
+            this.hx.Core.ui.network.set_connecting(false);
+            this.hx.Core.ui.network.set_connected(true);
+            this.hx.Core.disconnectDialog && this.hx.Core.closeDisconnectDialog();
+            // this.hx.Core.views.closeAllViews();
+            this.hx.Core.onConnect();
+            if (!this.world.isAgar) {
+                /** Add posibility to play custom server */
+                const detail = {
+                    id: '11111111-2222-3333-4444-555555555555',
+                    name: 'Guest',
+                    isPayingUser: true, // <-- true for no ads
+                    avatarUrl: 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=',
+                    level: 100,
+                    currentXp: 500000,
+                    totalXp: 500000,
+                    realm: ['Guest', 2],
+                    isNewUser: false,
+                    hasLoggedIntoMobile: false
+                };
+                const ev = new CustomEvent('update_user_info', { detail });
+                document.dispatchEvent(ev);
+            }
+            // window['MC'].onConnect();
+        }
+        // ('login_state_update');
+        // const details = { login: 'IN', connected: true };
+        // this.hx.Core.loginState = ['IN', 1];
+        // this.hx.Core.onUserLoggedIn();
+
+        // Core.get_states().disable("state_main_screen");
     }
     disableMenuBackground() {
         if (!this.world.isAgar) return;
@@ -532,7 +610,6 @@ export default class App {
     }
     onPlayerSpawn(...args: any[]) {
         this.state.play = true;
-        this.reset();
     }
     onPlayerDeath(...args: any[]) {
         find_node(undefined, (child) => {
@@ -563,13 +640,13 @@ export default class App {
             setTimeout(() => (this.timer_mp = prev), 800);
         }
         // window.setTimeout(MC.showNickDialog, 500);
+        this.communication.map.removeMinimapObject(this.userID);
     }
     onPacket(packet: any) {
         return packet;
     }
     reset() {
         this.stopmovement = false;
-        this.world.myCellIds = [];
     }
     dumpMem() {
         const blob = new Blob([this['emsc'].buffer]);

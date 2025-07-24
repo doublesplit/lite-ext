@@ -16,6 +16,7 @@ import postcss from 'postcss';
 import PreactRefreshPlugin from '@prefresh/webpack';
 import fs from 'fs';
 import { readFileSync } from 'fs';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 class RemoveLicenseFilePlugin {
     apply(compiler) {
         compiler.hooks.emit.tap('RemoveLicenseFilePlugin', (compilation) => {
@@ -331,6 +332,7 @@ const common = {
     },
     // @ts-ignore
     plugins: [
+        new ForkTsCheckerWebpackPlugin({}),
         mode == 'development' && new webpack.HotModuleReplacementPlugin(), // @ts-ignore
         mode == 'development' && new PreactRefreshPlugin(),
         new webpack.optimize.ModuleConcatenationPlugin(),

@@ -1,9 +1,11 @@
 import { render } from 'preact';
 import App from '../App';
+import { GunAuthUi } from './Auth';
 import { AppContext } from './Contexts';
 import { Menu, MenuButtons } from './Menu';
 import { Minimap } from './Minimap';
 import Portal from './componetns/preact-portal';
+
 // import './style.scss' with { type: 'cssfile' };
 export function initLiteui(app: App) {
     // import('./style.scss', { type: 'cssfile' }).then((module) => {});
@@ -29,26 +31,42 @@ export function initLiteui(app: App) {
         document.body
     );
 
-    const minimapElem = document.createElement('div');
+    {
+        const promoPanel = document.querySelector('#mainui-promo');
+        const replacement = document.createElement('div');
+        replacement.style = 'width: 100%; height: 100%; background-color: #fff';
+        render(
+            <AppContext.Provider value={app}>
+                <GunAuthUi auth={app.communication.auth} />
+            </AppContext.Provider>,
+            replacement
+        );
+        promoPanel.insertAdjacentElement('afterbegin', replacement);
+    }
 
-    render(
-        <AppContext.Provider value={app}>
-            <Minimap />
-        </AppContext.Provider>,
-        minimapElem
-    );
-    document.body.insertAdjacentElement('afterbegin', minimapElem);
+    {
+        const minimapElem = document.createElement('div');
+        render(
+            <AppContext.Provider value={app}>
+                <Minimap />
+            </AppContext.Provider>,
+            minimapElem
+        );
+        document.body.insertAdjacentElement('afterbegin', minimapElem);
+    }
 
-    const observer = new window.MutationObserver((mtRecs) => {
-        for (const mtRec of mtRecs) {
-            const elem = mtRec.target as HTMLElement;
-            if (elem.style.display !== 'none') {
-                elem.style.display = 'flex';
-                elem.style.display = 'flex-direction:column';
+    {
+        const observer = new window.MutationObserver((mtRecs) => {
+            for (const mtRec of mtRecs) {
+                const elem = mtRec.target as HTMLElement;
+                if (elem.style.display !== 'none') {
+                    elem.style.display = 'flex';
+                    elem.style.display = 'flex-direction:column';
+                }
             }
-        }
-    });
-    observer.observe(window.document.querySelector('#mainPanel'), {
-        attributeFilter: ['style']
-    });
+        });
+        observer.observe(window.document.querySelector('#mainPanel'), {
+            attributeFilter: ['style']
+        });
+    }
 }

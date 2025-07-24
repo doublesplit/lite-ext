@@ -1,7 +1,16 @@
 import { Eventify } from '../../Shared/src/utils/Eventify';
 import App from './App';
+import { Cell } from './Cell';
+import { ServerPlayer } from './ui/Stores';
+import TC from './utils/TC';
 
 export class World extends Eventify {
+    static decoder = new TextDecoder('utf-8');
+    static strlen = (view: DataView, offset: number) => {
+        let length = 0;
+        while (view.getUint8(offset + length++) !== 0) {}
+        return length;
+    };
     private app: App;
     private minimap: Array<{ x: number; y: number; size: number; mass: number }>;
     offsetX: number;
@@ -10,7 +19,7 @@ export class World extends Eventify {
     private borderY: number;
     private targetX: number;
     private targetY: number;
-    myCellIds: number[];
+    myCellIds: Set<number> = new Set();
     private decryptionKey: number;
     private mapOffsetFixed: boolean;
     private ws?: WebSocket;
@@ -33,6 +42,9 @@ export class World extends Eventify {
     viewY: number;
     private mirrorV: boolean;
     private mirrorH: boolean;
+    ownCells: Map<number, Cell> = new Map();
+    cells: Map<number, Cell> = new Map();
+    isPlay: boolean;
     get isAgar() {
         return this.ws?.url.includes('minic');
     }
@@ -42,6 +54,9 @@ export class World extends Eventify {
         this.app = app;
     }
     reset() {
+        this.isPlay = false;
+        this.ownCells.clear();
+        this.cells.clear();
         this.minimap = [];
         this.offsetX = 0;
         this.offsetY = 0;
@@ -49,7 +64,7 @@ export class World extends Eventify {
         this.borderY = 0;
         this.targetX = 0;
         this.targetY = 0;
-        this.myCellIds = [];
+        this.myCellIds.clear();
         this.decryptionKey = 0;
         this.mapOffsetFixed = false;
 
@@ -108,7 +123,7 @@ export class World extends Eventify {
         return output;
     }
     overWriteWS = (_target: WebSocket) => {
-        const target = _target as WebSocket & { _onopen: WebSocket['onopen']; _onmessage: WebSocket['onmessage'] };
+        const target = _target as WebSocket & { _send: WebSocket['send']; _onopen: WebSocket['onopen']; _onmessage: WebSocket['onmessage'] };
 
         this.ws = target;
         target._onopen = target.onopen;
@@ -134,7 +149,7 @@ export class World extends Eventify {
                     this.targetY = this.receiveY(playerY);
                     break;
                 case 32:
-                    this.myCellIds.push(view.getUint32(offset, true));
+                    this.myCellIds.add(view.getUint32(offset, true));
                     break;
                 case 69:
                     this.ghostCells(view, offset);
@@ -152,6 +167,26 @@ export class World extends Eventify {
             }
         };
     };
+    eatCellEvent(eater: Cell, victim: Cell) {
+        if (eater && victim) {
+            this.removeCell(victim);
+        } else {
+            this.removeCell(victim);
+        }
+    }
+    removeCell(cell: Cell) {
+        if (cell) {
+            this.cells.delete(cell.id);
+            this.ownCells.delete(cell.id);
+            const isMyCell = this.myCellIds.has(cell.id);
+            if (isMyCell) {
+                this.myCellIds.delete(cell.id);
+                if (this.isPlay && this.myCellIds.size === 0) {
+                    this.isPlay = false;
+                }
+            }
+        }
+    }
     handleMessages(message: Uint8Array) {
         let offset = 0;
         const view = new DataView(message.buffer);
@@ -161,7 +196,15 @@ export class World extends Eventify {
                 {
                     const eatRecordLength = view.getUint16(offset, true);
                     offset += 2;
-                    for (let i = 0; i < eatRecordLength; i++) offset += 8;
+                    for (let i = 0; i < eatRecordLength; i++) {
+                        const eaterID = view.getUint32(offset, true);
+                        offset += 4;
+                        const victimID = view.getUint32(offset, true);
+                        offset += 4;
+                        const eater = this.cells.get(eaterID);
+                        const victim = this.cells.get(victimID);
+                        this.eatCellEvent(eater, victim);
+                    }
                     while (true) {
                         const id = view.getUint32(offset, true);
                         offset += 4;
@@ -170,30 +213,48 @@ export class World extends Eventify {
                         offset += 4;
                         const targetY = this.receiveY(view.getInt32(offset, true));
                         offset += 4;
+                        const size = view.getUint32(offset, true);
                         offset += 2;
                         const flags = view.getUint8(offset++);
                         const extendedFlags = flags & 128 ? view.getUint8(offset++) : 0;
-                        if (flags & 2) offset += 3;
+                        const color =
+                            flags & 2
+                                ? view.getUint32(offset++, true) | (view.getUint32(offset++, true) << 8) | (view.getUint32(offset++, true) << 16)
+                                : null;
                         if (flags & 4)
                             while (view.getInt8(offset++) !== 0) {
                                 /* intentionally left empty */
                             }
-                        if (flags & 8)
-                            while (view.getInt8(offset++) !== 0) {
-                                /* intentionally left empty */
-                            }
-                        if (extendedFlags & 4) offset += 4;
-                        if (this.myCellIds.indexOf(id) !== -1) {
+                        const nameLength = flags & 8 ? World.strlen(view, offset) : 0;
+                        const name = nameLength ? World.decoder.decode(new Uint8Array(view.buffer, offset, nameLength - 1)) : null;
+                        offset += nameLength;
+                        const accountID = extendedFlags & 4 ? ((offset += 4), view.getUint32(offset - 4, true)) : 0;
+
+                        const isNew = !this.cells.has(id);
+                        const cell = this.cells.get(id) || this.cells.set(id, new Cell()).get(id)!;
+                        if (isNew) {
+                            cell.construct(id, color, accountID);
+                            name !== null && cell.setName(name);
+                            this.cells.set(id, cell);
+                        }
+                        name !== null && cell.setName(name);
+                        if (accountID !== 0) cell.accountID = accountID;
+                        if (this.myCellIds.has(id)) {
                             this.targetX = targetX;
                             this.targetY = targetY;
                         }
+                        if (this.myCellIds.has(id) && !this.ownCells.has(id)) {
+                            this.ownCells.set(id, cell);
+                            this.isPlay = true;
+                        }
+                        cell.setTarget(targetX, targetY, size);
                     }
                     const removeLength = view.getUint16(offset, true);
                     offset += 2;
                     for (let i = 0; i < removeLength; i++) {
                         const removedID = view.getUint32(offset, true);
                         offset += 4;
-                        if (this.myCellIds.includes(removedID)) this.myCellIds = this.myCellIds.filter((id) => id != removedID);
+                        this.removeCell(this.cells.get(removedID));
                     }
                 }
                 break;
@@ -358,12 +419,13 @@ export class World extends Eventify {
         y = this.unshrinkY(y);
         return y;
     }
-
-    drawMinimap(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, clear = true) {
+    texts: Map<number, string> = new Map();
+    drawMinimap(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, clear = true, users: Map<any, ServerPlayer>): number {
         function safe(number: number) {
             return number == 0 ? 1 : number;
         }
         if (clear) ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.globalAlpha = 0.5;
         this.minimap.forEach((cell) => {
             const x = (safe(cell.x + this.borderX / 2) / this.borderX) * canvas.width;
             const y = (safe(cell.y + this.borderY / 2) / this.borderY) * canvas.height;
@@ -373,12 +435,39 @@ export class World extends Eventify {
             ctx.arc(x, y, size, 0, Math.PI * 2);
             ctx.fill();
         });
+        ctx.globalAlpha = 1;
         const playerX = (safe(this.targetX + this.borderX / 2) / this.borderX) * canvas.width;
         const playerY = (safe(this.targetY + this.borderY / 2) / this.borderY) * canvas.height;
         ctx.fillStyle = '#00bfff';
         ctx.beginPath();
         ctx.arc(playerX, playerY, 5, 0, Math.PI * 2);
         ctx.fill();
+
+        users.forEach((player) => {
+            const spriteText = (player['spriteText'] ??= new TC()) as TC;
+            if (player.dirtyID !== spriteText.dirtyId) {
+                spriteText.setText(player.name);
+                spriteText.setDpr(devicePixelRatio);
+                spriteText.setStyle('#000000', '#ffffff', 1);
+                spriteText.setFont(13, 400, ' Arial, sans-serif');
+                spriteText.update(player.dirtyID);
+            }
+            player.animate();
+            const x = (safe(player.x + this.borderX / 2) / this.borderX) * canvas.width;
+            const y = (safe(player.y + this.borderY / 2) / this.borderY) * canvas.height;
+            const size = (200 / this.borderX) * canvas.width + 1;
+            ctx.fillStyle = '#ae00ff';
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, Math.PI * 2);
+            ctx.fill();
+
+            spriteText.x = x;
+            spriteText.y = y;
+            spriteText.originX = 0.5;
+            spriteText.originY = 1;
+            spriteText.draw(ctx);
+        });
+
         const sectorSizeX = canvas.width / 5;
         const sectorSizeY = canvas.height / 5;
         const sectorCol = Math.floor(playerX / sectorSizeX);

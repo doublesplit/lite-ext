@@ -41,18 +41,16 @@ export function EventMixin<
             listener: LISTENER;
         }> = [];
         blockRemovingListeners = false;
-        on<T = LISTENER>(...rest: [EventName<EventMap>, ...EventNames<EventMap>, T]): T {
+        on<FIRST_EVENT extends keyof EventMap, L = EventMap[FIRST_EVENT]>(...rest: [FIRST_EVENT, ...EventNames<EventMap>, L]): L {
             if (rest.length < 2) throw new Error('Eventify.on() need at least 2 arguments');
             const length = rest.length;
             const listener = rest[length - 1] as LISTENER;
             for (let i = 0; length - 1 > i; i++) {
                 const event = rest[i] as EventName<EventMap>;
-                if (typeof this.events[event] !== 'object') {
-                    this.events[event] = [];
-                }
+                this.events[event] ??= [];
                 this.events[event].push(listener);
             }
-            return listener as T;
+            return listener as L;
         }
 
         removeListener(event: EventName<EventMap>, listener: LISTENER) {
@@ -68,7 +66,7 @@ export function EventMixin<
         }
         emit<EventKey extends keyof EventMap>(event: EventKey, ...rest: Parameters<EventMap[EventKey]>) {
             // this.blockRemovingListeners = true;
-            if (typeof this.events[event] === 'object') {
+            if (this.events[event]) {
                 const listeners = this.events[event].slice();
 
                 for (const listener of listeners) {
@@ -191,10 +189,7 @@ export function EventMixin<
         ...args: ConstructorParameters<BaseClass>
     ) => EventifyBase<T> & InstanceType<BaseClass>;
 }
-class Eventify<DefaultEventMap extends _DefaultEventMap = _DefaultEventMap> extends EventMixin(class {})<DefaultEventMap> {}
-export { Eventify };
-// const es = new Eventify<{ lol: () => void }>();
-// es.on('lol', () => {});
+export class Eventify<DefaultEventMap extends _DefaultEventMap = _DefaultEventMap> extends EventMixin(class {})<DefaultEventMap> {}
 
 export type EventifyInstance = InstanceType<typeof Eventify<{}>>;
 /* LIB : EVENTIFY ANY OBJECT */

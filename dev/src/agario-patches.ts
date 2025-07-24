@@ -9,7 +9,7 @@ export function exposeHxClasses() {
                 delete Object.prototype[targetProperty];
                 this.ApplicationMain = value;
                 $hxClasses = value;
-                Object.assign(window, { $hxClasses: this });
+                Object.assign(window, { hx: this });
                 resolve(this);
             },
             get: function () {
@@ -34,6 +34,18 @@ export function coreUiPatch() {
 }
 
 export function coreAdsPatch() {
+    document.addEventListener('update_user_info', (e: CustomEvent) => {
+        if (e.detail.isPayingUser) return;
+        const detail = {
+            ...e.detail,
+            isPayingUser: true
+        };
+        const ev = new CustomEvent('update_user_info', { detail });
+
+        e.stopPropagation();
+        document.dispatchEvent(ev);
+    });
+    // window.hx.Core.user.userInfo.isPayingUser=true
     // Ads delete
     find_node(undefined, (child) => {
         return child.$vnode?.tag.includes('-ads');

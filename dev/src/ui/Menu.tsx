@@ -44,7 +44,7 @@ export function MenuButtons() {
 
 export const Menu = () => {
     return (
-        <div style={{ overflowY: 'scroll' }} onWheel={(e) => e.stopPropagation()}>
+        <div className="h-full" style={{ overflowY: 'scroll' }} onWheel={(e) => e.stopPropagation()}>
             <div className="mx-2">
                 <SettingsList array={Object.entries(settings.raw)} target={settings} />
             </div>

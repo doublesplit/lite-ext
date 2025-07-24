@@ -4,7 +4,7 @@ import { AppContext } from './Contexts';
 
 export function Minimap() {
     const app = useContext(AppContext);
-    const [minimapEnabled, setMinimapEnabled] = useState(settings.raw.Minimap);
+    const [minimapEnabled, setMinimapEnabled] = useState(settings.raw.Minimap.value);
     const $canvas = useRef<HTMLCanvasElement>(null);
     const $sectors = useRef<HTMLDivElement>(null);
     const $minimap = useRef<HTMLDivElement>(null);
@@ -16,7 +16,7 @@ export function Minimap() {
         let rafId: number;
 
         function render() {
-            const sectorId = app.world.drawMinimap(ctx, $canvas.current);
+            const sectorId = app.world.drawMinimap(ctx, $canvas.current, true, app.communication.stores.players);
             setSector(sectorId);
             rafId = requestAnimationFrame(render);
         }
