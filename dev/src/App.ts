@@ -16,7 +16,6 @@ export default class App {
     world: World;
     performance_now = 0; // for speedhack
     timer_mp = 1; // time multiplier
-    waitForSpawn = false; // respawn ways
     sector = 5;
     stopmovement = false;
     /*** camera zoom ****/
@@ -40,6 +39,8 @@ export default class App {
         play: false,
         pause: false,
         ws: '',
+        nextWs: '',
+        waitForSpawn: false,
         isLoggedIn: false
     });
     memory = EventObject({
@@ -123,27 +124,58 @@ export default class App {
 
     patchHxCore() {
         const onDc = () => {
-            this.connect('wss://imsolo.pro:2102');
+            if (!this.hx.Core.ui.network.connected) this.connect('wss://imsolo.pro:2102');
         };
         const core = this.hx.Core;
+        const state = this.state;
+        /** Patch disconnect dialog */
         overridePrototype(core.views, 'openView', function (o) {
-            return function () {
+            return function (this: never) {
                 const [targetView, options] = arguments;
                 targetView.allowDisableClose = false;
                 targetView.closeOnEscape = true;
                 targetView.debugui = true;
                 if (targetView.state === 'disconnected_dialog') {
                     options.allowClickClose = true;
-                    setTimeout(onDc, 1000);
+                    setTimeout(onDc, 5000);
                 }
                 return o.apply(this, arguments);
             };
         });
         /** Fix broken skin preview */
         overridePrototype(core.services.gameui, 'setUserSkin', function (o) {
-            return function () {
+            return function (this: never) {
                 const [targetSkin] = arguments;
                 arguments[0] = targetSkin ? targetSkin + '?' : targetSkin;
+                return o.apply(this, arguments);
+            };
+        });
+        /** Fix no servers response, or force server selection */
+        overridePrototype(core.ui.network, 'makeMasterRequest', function (o) {
+            return function (this: never) {
+                const nextServer = state.nextWs;
+                if (nextServer) {
+                    const response = {
+                        endpoints: {
+                            http: nextServer,
+                            https: nextServer
+                        },
+                        status: 'ok',
+                        count: 0
+                    };
+                    state.nextWs = '';
+                    return arguments[2](JSON.stringify(response));
+                }
+                return o.apply(this, arguments);
+            };
+        });
+        /** Disable menu appearing on respawn */
+        overridePrototype(core, 'dispatchDocumentEvent', function (o) {
+            return function (this: never) {
+                const [eventName, detail] = arguments;
+                if (eventName === 'game_over') {
+                    if (settings.proxy.AutoRespawn) return;
+                }
                 return o.apply(this, arguments);
             };
         });
@@ -525,9 +557,9 @@ export default class App {
         console.log('Connected', url);
         this.state.ws = url;
         //onconnect
-        if (this.waitForSpawn) {
+        if (this.state.waitForSpawn) {
             window['MC'].playGame();
-            this.waitForSpawn = false;
+            this.state.waitForSpawn = false;
         }
         // window['core'].setFadeout(false);
         // window['core'].setFadeout = () => {};
@@ -591,13 +623,14 @@ export default class App {
     respawn() {
         if (this.state.play) {
             this.connect(this.state.ws);
-            this.waitForSpawn = true;
+            this.state.waitForSpawn = true;
         } else {
             window['core'].setFadeout(false);
             window['core'].sendSpectate();
             window['MC'].playGame();
+            this.state.waitForSpawn = true;
             setTimeout(() => {
-                // MC.playGame()
+                // window['MC'].playGame();
                 // window['agarApp'].home.$children[0].$children[0].spectate()
                 // window['agarApp'].home.$children[0].$children[0].play()
                 // window['agarApp'].home.$children[0].onHideMainMenu()
@@ -607,6 +640,7 @@ export default class App {
     }
     onPlayerSpawn(...args: any[]) {
         this.state.play = true;
+        this.state.waitForSpawn = false;
     }
     onPlayerDeath(...args: any[]) {
         find_node(undefined, (child) => {
@@ -654,6 +688,14 @@ export default class App {
     }
     onDisconnect(obj) {
         console.log('disconnected', obj);
+        if (settings.proxy.AutoRespawn && this.state.waitForSpawn) {
+            this.state.nextWs = this.state.ws;
+        }
+        setTimeout(() => {
+            if (this.state.nextWs && this.hx.Core.ui.network.connecting === false && this.hx.Core.ui.network.connected === false) {
+                this.connect(this.state.nextWs);
+            }
+        });
     }
     onPlayerZoom(zoom: number) {
         return zoom;

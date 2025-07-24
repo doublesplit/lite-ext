@@ -455,6 +455,8 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.1.4 | MIT License |
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
     --spacing: 0.25rem;
+    --default-transition-duration: 150ms;
+    --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
   }
@@ -681,8 +683,14 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.1.4 | MIT License |
   .grid {
     display: grid !important;
   }
+  .hidden {
+    display: none !important;
+  }
   .inline {
     display: inline !important;
+  }
+  .table {
+    display: table !important;
   }
   .h-full {
     height: 100% !important;
@@ -693,8 +701,14 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.1.4 | MIT License |
   .w-full {
     width: 100% !important;
   }
+  .flex-grow {
+    flex-grow: 1 !important;
+  }
   .grow {
     flex-grow: 1 !important;
+  }
+  .border-collapse {
+    border-collapse: collapse !important;
   }
   .transform {
     transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,) !important;
@@ -705,14 +719,36 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.1.4 | MIT License |
   .flex-row {
     flex-direction: row !important;
   }
+  .flex-wrap {
+    flex-wrap: wrap !important;
+  }
   .gap-2 {
     gap: calc(var(--spacing) * 2) !important;
+  }
+  .border {
+    border-style: var(--tw-border-style) !important;
+    border-width: 1px !important;
   }
   .p-1 {
     padding: calc(var(--spacing) * 1) !important;
   }
   .text-left {
     text-align: left !important;
+  }
+  .underline {
+    text-decoration-line: underline !important;
+  }
+  .outline {
+    outline-style: var(--tw-outline-style) !important;
+    outline-width: 1px !important;
+  }
+  .filter {
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,) !important;
+  }
+  .transition {
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter !important;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function)) !important;
+    transition-duration: var(--tw-duration, var(--default-transition-duration)) !important;
   }
 }
 *,
@@ -1056,6 +1092,69 @@ input:where([type='button'], [type='reset'], [type='submit']),
   syntax: "*";
   inherits: false;
 }
+@property --tw-border-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-outline-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-blur {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-brightness {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-contrast {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-grayscale {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-hue-rotate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-invert {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-opacity {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-saturate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-sepia {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-drop-shadow-size {
+  syntax: "*";
+  inherits: false;
+}
 @layer properties {
   @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
@@ -1064,6 +1163,21 @@ input:where([type='button'], [type='reset'], [type='submit']),
       --tw-rotate-z: initial;
       --tw-skew-x: initial;
       --tw-skew-y: initial;
+      --tw-border-style: solid;
+      --tw-outline-style: solid;
+      --tw-blur: initial;
+      --tw-brightness: initial;
+      --tw-contrast: initial;
+      --tw-grayscale: initial;
+      --tw-hue-rotate: initial;
+      --tw-invert: initial;
+      --tw-opacity: initial;
+      --tw-saturate: initial;
+      --tw-sepia: initial;
+      --tw-drop-shadow: initial;
+      --tw-drop-shadow-color: initial;
+      --tw-drop-shadow-alpha: 100%;
+      --tw-drop-shadow-size: initial;
     }
   }
 }
@@ -3783,7 +3897,6 @@ class App {
     this.sampler = new Sampler();
     this.performance_now = 0; // for speedhack
     this.timer_mp = 1; // time multiplier
-    this.waitForSpawn = false; // respawn ways
     this.sector = 5;
     this.stopmovement = false;
     /*** camera zoom ****/
@@ -3807,6 +3920,8 @@ class App {
       play: false,
       pause: false,
       ws: '',
+      nextWs: '',
+      waitForSpawn: false,
       isLoggedIn: false
     });
     this.memory = (0,Eventify.EventObject)({
@@ -3902,9 +4017,11 @@ class App {
   }
   patchHxCore() {
     const onDc = () => {
-      this.connect('wss://imsolo.pro:2102');
+      if (!this.hx.Core.ui.network.connected) this.connect('wss://imsolo.pro:2102');
     };
     const core = this.hx.Core;
+    const state = this.state;
+    /** Patch disconnect dialog */
     overridePrototype(core.views, 'openView', function (o) {
       return function () {
         const [targetView, options] = arguments;
@@ -3913,7 +4030,7 @@ class App {
         targetView.debugui = true;
         if (targetView.state === 'disconnected_dialog') {
           options.allowClickClose = true;
-          setTimeout(onDc, 1000);
+          setTimeout(onDc, 5000);
         }
         return o.apply(this, arguments);
       };
@@ -3923,6 +4040,35 @@ class App {
       return function () {
         const [targetSkin] = arguments;
         arguments[0] = targetSkin ? targetSkin + '?' : targetSkin;
+        return o.apply(this, arguments);
+      };
+    });
+    /** Fix no servers response, or force server selection */
+    overridePrototype(core.ui.network, 'makeMasterRequest', function (o) {
+      return function () {
+        const nextServer = state.nextWs;
+        if (nextServer) {
+          const response = {
+            endpoints: {
+              http: nextServer,
+              https: nextServer
+            },
+            status: 'ok',
+            count: 0
+          };
+          state.nextWs = '';
+          return arguments[2](JSON.stringify(response));
+        }
+        return o.apply(this, arguments);
+      };
+    });
+    /** Disable menu appearing on respawn */
+    overridePrototype(core, 'dispatchDocumentEvent', function (o) {
+      return function () {
+        const [eventName, detail] = arguments;
+        if (eventName === 'game_over') {
+          if (settings.settings.proxy.AutoRespawn) return;
+        }
         return o.apply(this, arguments);
       };
     });
@@ -4217,9 +4363,9 @@ class App {
     console.log('Connected', url);
     this.state.ws = url;
     //onconnect
-    if (this.waitForSpawn) {
+    if (this.state.waitForSpawn) {
       window['MC'].playGame();
-      this.waitForSpawn = false;
+      this.state.waitForSpawn = false;
     }
     // window['core'].setFadeout(false);
     // window['core'].setFadeout = () => {};
@@ -4285,13 +4431,14 @@ class App {
   respawn() {
     if (this.state.play) {
       this.connect(this.state.ws);
-      this.waitForSpawn = true;
+      this.state.waitForSpawn = true;
     } else {
       window['core'].setFadeout(false);
       window['core'].sendSpectate();
       window['MC'].playGame();
+      this.state.waitForSpawn = true;
       setTimeout(() => {
-        // MC.playGame()
+        // window['MC'].playGame();
         // window['agarApp'].home.$children[0].$children[0].spectate()
         // window['agarApp'].home.$children[0].$children[0].play()
         // window['agarApp'].home.$children[0].onHideMainMenu()
@@ -4301,6 +4448,7 @@ class App {
   }
   onPlayerSpawn(...args) {
     this.state.play = true;
+    this.state.waitForSpawn = false;
   }
   onPlayerDeath(...args) {
     find_node(undefined, child => {
@@ -4344,6 +4492,14 @@ class App {
   }
   onDisconnect(obj) {
     console.log('disconnected', obj);
+    if (settings.settings.proxy.AutoRespawn && this.state.waitForSpawn) {
+      this.state.nextWs = this.state.ws;
+    }
+    setTimeout(() => {
+      if (this.state.nextWs && this.hx.Core.ui.network.connecting === false && this.hx.Core.ui.network.connected === false) {
+        this.connect(this.state.nextWs);
+      }
+    });
   }
   onPlayerZoom(zoom) {
     return zoom;
