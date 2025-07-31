@@ -10,7 +10,7 @@ export function applyPatch(u8: Uint8Array, operations: PatchOperation[], anyFail
     for (const { pattern, payload, type } of operations) {
         const index = findPattern(result, pattern);
         if (index === -1) {
-            console.warn(`Pattern not found: ${pattern.map((b) => b.toString(16)).join(' ')}`);
+            console.error(`Pattern not found: ${pattern.map((b) => b.toString(16)).join(' ')}`);
             anyFail();
             continue;
         }

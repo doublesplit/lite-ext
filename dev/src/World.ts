@@ -47,6 +47,21 @@ export class World extends Eventify {
     get isAgar() {
         return this.ws?.url.includes('minic');
     }
+    CLIENT_VERSION: string | null = null;
+    client_version_int = 0;
+    get clientVersion() {
+        if (this.client_version_int) return this.client_version_int;
+        if (window['MC'] && window['MC'].CLIENT_VERSION) {
+            this.CLIENT_VERSION = window['MC'].CLIENT_VERSION;
+        } else {
+            this.CLIENT_VERSION = '3.11.28';
+            alert('Failed to get CLIENT_VERSION, please report this issue');
+        }
+
+        const version2int = (x = '0') => x.split('.').reduce((n, c, i, a) => n + parseInt(c) * 100 ** (a.length - i - 1), 0);
+        this.client_version_int = version2int(this.CLIENT_VERSION);
+        return this.clientVersion;
+    }
     constructor(app: App) {
         super();
         this.reset();
@@ -135,7 +150,7 @@ export class World extends Eventify {
             target._onmessage(message);
             let offset = 0;
             let msg = message.data;
-            if (this.decryptionKey) msg = this.xorBuffer(msg, this.decryptionKey ^ 31122);
+            if (this.decryptionKey) msg = this.xorBuffer(msg, this.decryptionKey ^ this.clientVersion);
             const view = new DataView(msg);
             const opcode = view.getUint8(offset++);
             switch (opcode) {

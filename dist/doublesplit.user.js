@@ -18,7 +18,7 @@
 // @description:pl      Doublesplit - rozszerzenie do Agario z powiększeniem, minimapą, pomocnikami i blokadą reklam
 // @description:fr      Doublesplit - extension pour Agario avec zoom, mini-carte, assistants et bloqueur de publicité
 // @description:ar      دلتا - إضافة لـ Agario مع مانع إعلانات
-// @version             8.0.6
+// @version             8.0.7
 // @namespace           doublesplit.agar
 // @author              neo
 // @icon                https://deltav4.gitlab.io/favicon.ico
@@ -455,8 +455,6 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.1.4 | MIT License |
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
     --spacing: 0.25rem;
-    --default-transition-duration: 150ms;
-    --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
   }
@@ -662,9 +660,6 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.1.4 | MIT License |
   }
 }
 @layer utilities {
-  .collapse {
-    visibility: collapse !important;
-  }
   .absolute {
     position: absolute !important;
   }
@@ -686,14 +681,8 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.1.4 | MIT License |
   .grid {
     display: grid !important;
   }
-  .hidden {
-    display: none !important;
-  }
   .inline {
     display: inline !important;
-  }
-  .table {
-    display: table !important;
   }
   .h-full {
     height: 100% !important;
@@ -704,14 +693,8 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.1.4 | MIT License |
   .w-full {
     width: 100% !important;
   }
-  .flex-grow {
-    flex-grow: 1 !important;
-  }
   .grow {
     flex-grow: 1 !important;
-  }
-  .border-collapse {
-    border-collapse: collapse !important;
   }
   .transform {
     transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,) !important;
@@ -722,40 +705,14 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.1.4 | MIT License |
   .flex-row {
     flex-direction: row !important;
   }
-  .flex-wrap {
-    flex-wrap: wrap !important;
-  }
   .gap-2 {
     gap: calc(var(--spacing) * 2) !important;
-  }
-  .border {
-    border-style: var(--tw-border-style) !important;
-    border-width: 1px !important;
   }
   .p-1 {
     padding: calc(var(--spacing) * 1) !important;
   }
   .text-left {
     text-align: left !important;
-  }
-  .underline {
-    text-decoration-line: underline !important;
-  }
-  .outline {
-    outline-style: var(--tw-outline-style) !important;
-    outline-width: 1px !important;
-  }
-  .filter {
-    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,) !important;
-  }
-  .backdrop-filter {
-    -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,) !important;
-    backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,) !important;
-  }
-  .transition {
-    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter !important;
-    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function)) !important;
-    transition-duration: var(--tw-duration, var(--default-transition-duration)) !important;
   }
 }
 *,
@@ -1099,105 +1056,6 @@ input:where([type='button'], [type='reset'], [type='submit']),
   syntax: "*";
   inherits: false;
 }
-@property --tw-border-style {
-  syntax: "*";
-  inherits: false;
-  initial-value: solid;
-}
-@property --tw-outline-style {
-  syntax: "*";
-  inherits: false;
-  initial-value: solid;
-}
-@property --tw-blur {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-brightness {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-contrast {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-grayscale {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-hue-rotate {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-invert {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-opacity {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-saturate {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-sepia {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-drop-shadow {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-drop-shadow-color {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-drop-shadow-alpha {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 100%;
-}
-@property --tw-drop-shadow-size {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-backdrop-blur {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-backdrop-brightness {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-backdrop-contrast {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-backdrop-grayscale {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-backdrop-hue-rotate {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-backdrop-invert {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-backdrop-opacity {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-backdrop-saturate {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-backdrop-sepia {
-  syntax: "*";
-  inherits: false;
-}
 @layer properties {
   @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
@@ -1206,30 +1064,6 @@ input:where([type='button'], [type='reset'], [type='submit']),
       --tw-rotate-z: initial;
       --tw-skew-x: initial;
       --tw-skew-y: initial;
-      --tw-border-style: solid;
-      --tw-outline-style: solid;
-      --tw-blur: initial;
-      --tw-brightness: initial;
-      --tw-contrast: initial;
-      --tw-grayscale: initial;
-      --tw-hue-rotate: initial;
-      --tw-invert: initial;
-      --tw-opacity: initial;
-      --tw-saturate: initial;
-      --tw-sepia: initial;
-      --tw-drop-shadow: initial;
-      --tw-drop-shadow-color: initial;
-      --tw-drop-shadow-alpha: 100%;
-      --tw-drop-shadow-size: initial;
-      --tw-backdrop-blur: initial;
-      --tw-backdrop-brightness: initial;
-      --tw-backdrop-contrast: initial;
-      --tw-backdrop-grayscale: initial;
-      --tw-backdrop-hue-rotate: initial;
-      --tw-backdrop-invert: initial;
-      --tw-backdrop-opacity: initial;
-      --tw-backdrop-saturate: initial;
-      --tw-backdrop-sepia: initial;
     }
   }
 }
@@ -3402,7 +3236,7 @@ function applyPatch(u8, operations, anyFail) {
   } of operations) {
     const index = findPattern(result, pattern);
     if (index === -1) {
-      console.warn(`Pattern not found: ${pattern.map(b => b.toString(16)).join(' ')}`);
+      console.error(`Pattern not found: ${pattern.map(b => b.toString(16)).join(' ')}`);
       anyFail();
       continue;
     }
@@ -3492,11 +3326,25 @@ class World extends Eventify.Eventify {
     var _a;
     return (_a = this.ws) === null || _a === void 0 ? void 0 : _a.url.includes('minic');
   }
+  get clientVersion() {
+    if (this.client_version_int) return this.client_version_int;
+    if (window['MC'] && window['MC'].CLIENT_VERSION) {
+      this.CLIENT_VERSION = window['MC'].CLIENT_VERSION;
+    } else {
+      this.CLIENT_VERSION = '3.11.28';
+      alert('Failed to get CLIENT_VERSION, please report this issue');
+    }
+    const version2int = (x = '0') => x.split('.').reduce((n, c, i, a) => n + parseInt(c) * Math.pow(100, a.length - i - 1), 0);
+    this.client_version_int = version2int(this.CLIENT_VERSION);
+    return this.clientVersion;
+  }
   constructor(app) {
     super();
     this.myCellIds = new Set();
     this.ownCells = new Map();
     this.cells = new Map();
+    this.CLIENT_VERSION = null;
+    this.client_version_int = 0;
     this.xorBuffer = (buffer, key) => {
       const dataView = new DataView(buffer);
       for (let i = 0; i < dataView.byteLength; i++) {
@@ -3517,7 +3365,7 @@ class World extends Eventify.Eventify {
         target._onmessage(message);
         let offset = 0;
         let msg = message.data;
-        if (this.decryptionKey) msg = this.xorBuffer(msg, this.decryptionKey ^ 31122);
+        if (this.decryptionKey) msg = this.xorBuffer(msg, this.decryptionKey ^ this.clientVersion);
         const view = new DataView(msg);
         const opcode = view.getUint8(offset++);
         switch (opcode) {
@@ -4176,21 +4024,22 @@ class App {
   }
   patchWasm(u) {
     let anyFail = false;
+    const bytes = hex => hex.split(' ').map(b => parseInt(b, 16));
     const patchedUint8Array = applyPatch(new Uint8Array(u), [{
-      pattern: [0x45, 0x0d, 0x00, 0x20, 0x02, 0x10, 0x0f, 0x20, 0x01, 0x20, 0x02, 0x10, 0x1e, 0x21, 0x01],
-      payload: [0x20, 0x00, 0x28, 0x02, 0x1c, 0x45, 0x04, 0x40, 0x0f, 0x0b],
+      pattern: bytes('D4 01 2D 00 00 45 0D 00 20 02 10 0F 20 01 20 02 10 1E 21 01'),
+      payload: bytes('20 00 28 02 1C 45 04 40 0F 0B'),
       type: 'insertAfter'
     }, {
-      pattern: [0x81, 0x03, 0x84, 0x03, 0x10, 0x87, 0x03, 0x86, 0x03, 0x85, 0x03, 0x0a],
-      payload: [203],
+      pattern: bytes('03 82 03 83 03 10 FF 02 81 03 84 03 10 87 03 86 03 85 03 0A'),
+      payload: bytes('B4'),
       type: 'replaceAfter'
     }, {
-      pattern: [0x00, 0x20, 0x00, 0x20, 0x04, 0x37, 0x03, 0x08, 0x20, 0x03, 0x41, 0x10, 0x6a, 0x24, 0x00, 0x0b],
-      payload: [138],
+      pattern: bytes('00 0B 37 03 00 20 00 20 04 37 03 08 20 03 41 10 6A 24 00 0B'),
+      payload: bytes('8A'),
       type: 'replaceAfter'
     }, {
-      pattern: [0x01, 0x2d, 0x00, 0x07, 0x20, 0x02, 0x41, 0x1b, 0x6c, 0x41, 0x01, 0x6a, 0x73, 0x3a, 0x00, 0x07, 0x20, 0x1f, 0xbf, 0x44, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00],
-      payload: [0, 0],
+      pattern: bytes('41 1B 6C 41 01 6A 73 3A 00 07 20 1F BF 44 00 00 00 00 00 00'),
+      payload: bytes('00 00'),
       type: 'replaceAfter'
     }], () => anyFail = true);
     if (anyFail) return u;

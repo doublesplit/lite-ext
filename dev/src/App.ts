@@ -228,30 +228,28 @@ export default class App {
     }
     patchWasm(u: ArrayBuffer) {
         let anyFail = false;
+        const bytes = (hex: string) => hex.split(' ').map((b) => parseInt(b, 16));
         const patchedUint8Array = applyPatch(
             new Uint8Array(u),
             [
                 {
-                    pattern: [0x45, 0x0d, 0x00, 0x20, 0x02, 0x10, 0x0f, 0x20, 0x01, 0x20, 0x02, 0x10, 0x1e, 0x21, 0x01],
-                    payload: [0x20, 0x00, 0x28, 0x02, 0x1c, 0x45, 0x04, 0x40, 0x0f, 0x0b],
+                    pattern: bytes('D4 01 2D 00 00 45 0D 00 20 02 10 0F 20 01 20 02 10 1E 21 01'),
+                    payload: bytes('20 00 28 02 1C 45 04 40 0F 0B'),
                     type: 'insertAfter'
                 },
                 {
-                    pattern: [0x81, 0x03, 0x84, 0x03, 0x10, 0x87, 0x03, 0x86, 0x03, 0x85, 0x03, 0x0a],
-                    payload: [203],
+                    pattern: bytes('03 82 03 83 03 10 FF 02 81 03 84 03 10 87 03 86 03 85 03 0A'),
+                    payload: bytes('B4'),
                     type: 'replaceAfter'
                 },
                 {
-                    pattern: [0x00, 0x20, 0x00, 0x20, 0x04, 0x37, 0x03, 0x08, 0x20, 0x03, 0x41, 0x10, 0x6a, 0x24, 0x00, 0x0b],
-                    payload: [138],
+                    pattern: bytes('00 0B 37 03 00 20 00 20 04 37 03 08 20 03 41 10 6A 24 00 0B'),
+                    payload: bytes('8A'),
                     type: 'replaceAfter'
                 },
                 {
-                    pattern: [
-                        0x01, 0x2d, 0x00, 0x07, 0x20, 0x02, 0x41, 0x1b, 0x6c, 0x41, 0x01, 0x6a, 0x73, 0x3a, 0x00, 0x07, 0x20, 0x1f, 0xbf, 0x44, 0x00,
-                        0x00, 0x00, 0x00, 0x00, 0x00
-                    ],
-                    payload: [0, 0],
+                    pattern: bytes('41 1B 6C 41 01 6A 73 3A 00 07 20 1F BF 44 00 00 00 00 00 00'),
+                    payload: bytes('00 00'),
                     type: 'replaceAfter'
                 }
             ],
