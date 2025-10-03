@@ -604,19 +604,34 @@ export default class App {
         });
         this.emsc._ac_spectate();
     }
-    spetate() {
+    spectate() {
         find_node(undefined, (child) => child?.spectate)[0]?.spectate();
     }
+    integrityChecksEnable(isEnabled: boolean) {
+        window['core'].disableIntegrityChecks(!isEnabled);
+    }
+    // ws://localhost:8089?i
+    // ws://127.0.0.1:8089?i
     connect(url: string) {
-        window['core'].disableIntegrityChecks(!url.includes('minic'));
+        const isOfficial = url.includes('minic');
+        const integrityChecksEnabled = url.includes('?i');
+        this.integrityChecksEnable(isOfficial || integrityChecksEnabled);
 
         if (window['raga'] && url.indexOf('raga') > -1) {
             window['raga'].isSwitchingGameMode = true;
             window['raga'].gameMode = 'ragaffa-16x';
         }
-        window['core'].connect(url);
-        // window['core'].disconnect()
-        // window['MC'].reconnect(true)
+        const urlParsed = new URL(url);
+        const host = urlParsed.host + urlParsed.pathname + urlParsed.search;
+
+        // Hack to enable insecure ws connection
+        const isSecure = urlParsed.protocol === 'wss:';
+        // this.hx.Core.ui.network._integrityChecksActive = isSecure;
+        this.hx.Core.ui.network._isSecure = isSecure;
+
+        this.hx.Core.ui.network._host = host;
+        this.hx.Core.ui.network.onFindServerSuccess();
+        this.hx.Core.ui.network._isSecure = true;
     }
     respawn() {
         if (this.state.play) {

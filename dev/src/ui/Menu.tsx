@@ -23,7 +23,7 @@ export function MenuButtons() {
                 alignItems: 'center'
             }}
         >
-            <button style={{ width: '242px' }} type="submit" class="btn menu-button " onClick={() => app.spetate()}>
+            <button style={{ width: '242px' }} type="submit" class="btn menu-button " onClick={() => app.spectate()}>
                 Spectate
             </button>
             <div

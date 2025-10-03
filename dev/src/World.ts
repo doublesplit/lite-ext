@@ -170,6 +170,9 @@ export class World extends Eventify {
                     break;
                 case 241:
                     this.decryptionKey = view.getUint32(offset, true);
+                    offset += 4;
+                    const strlen = World.strlen(view, offset);
+                    const serverVersion = strlen ? World.decoder.decode(new Uint8Array(view.buffer, offset, strlen - 1)) : null;
                     break;
                 case 255:
                     this.handleMessages(

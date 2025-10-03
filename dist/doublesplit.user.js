@@ -18,7 +18,7 @@
 // @description:pl      Doublesplit - rozszerzenie do Agario z powiększeniem, minimapą, pomocnikami i blokadą reklam
 // @description:fr      Doublesplit - extension pour Agario avec zoom, mini-carte, assistants et bloqueur de publicité
 // @description:ar      دلتا - إضافة لـ Agario مع مانع إعلانات
-// @version             8.0.7
+// @version             8.0.8
 // @namespace           doublesplit.agar
 // @author              neo
 // @icon                https://deltav4.gitlab.io/favicon.ico
@@ -2962,7 +2962,7 @@ function MenuButtons() {
       },
       type: "submit",
       class: "btn menu-button ",
-      onClick: () => app.spetate(),
+      onClick: () => app.spectate(),
       children: "Spectate"
     }), (0,jsxRuntime_module.jsxs)("div", {
       style: {
@@ -3385,6 +3385,9 @@ class World extends Eventify.Eventify {
             break;
           case 241:
             this.decryptionKey = view.getUint32(offset, true);
+            offset += 4;
+            const strlen = World.strlen(view, offset);
+            const serverVersion = strlen ? World.decoder.decode(new Uint8Array(view.buffer, offset, strlen - 1)) : null;
             break;
           case 255:
             this.handleMessages(this.uncompressMessage(new Uint8Array(view.buffer.slice(5)), new Uint8Array(view.getUint32(offset, true))));
@@ -4315,19 +4318,32 @@ class App {
     });
     this.emsc._ac_spectate();
   }
-  spetate() {
+  spectate() {
     var _a;
     (_a = find_node(undefined, child => child === null || child === void 0 ? void 0 : child.spectate)[0]) === null || _a === void 0 ? void 0 : _a.spectate();
   }
+  integrityChecksEnable(isEnabled) {
+    window['core'].disableIntegrityChecks(!isEnabled);
+  }
+  // ws://localhost:8089?i
+  // ws://127.0.0.1:8089?i
   connect(url) {
-    window['core'].disableIntegrityChecks(!url.includes('minic'));
+    const isOfficial = url.includes('minic');
+    const integrityChecksEnabled = url.includes('?i');
+    this.integrityChecksEnable(isOfficial || integrityChecksEnabled);
     if (window['raga'] && url.indexOf('raga') > -1) {
       window['raga'].isSwitchingGameMode = true;
       window['raga'].gameMode = 'ragaffa-16x';
     }
-    window['core'].connect(url);
-    // window['core'].disconnect()
-    // window['MC'].reconnect(true)
+    const urlParsed = new URL(url);
+    const host = urlParsed.host + urlParsed.pathname + urlParsed.search;
+    // Hack to enable insecure ws connection
+    const isSecure = urlParsed.protocol === 'wss:';
+    // this.hx.Core.ui.network._integrityChecksActive = isSecure;
+    this.hx.Core.ui.network._isSecure = isSecure;
+    this.hx.Core.ui.network._host = host;
+    this.hx.Core.ui.network.onFindServerSuccess();
+    this.hx.Core.ui.network._isSecure = true;
   }
   respawn() {
     if (this.state.play) {
