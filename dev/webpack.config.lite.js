@@ -342,13 +342,16 @@ const common = {
         new webpack.BannerPlugin({
             raw: true,
             banner: userscriptHeaderString + `(function (window) {`,
-            stage: webpack.Compilation.PROCESS_ASSETS_STAGE_REPORT
+            stage: webpack.Compilation.PROCESS_ASSETS_STAGE_REPORT,
+            // Apply banner only to the main userscript bundle, not to all assets (avoid .wasm/.html/etc.)
+            test: /doublesplit\.user\.js$/
         }),
         new webpack.BannerPlugin({
             raw: true,
             banner: `})(typeof unsafeWindow !== 'undefined' ? unsafeWindow : window);`,
             stage: webpack.Compilation.PROCESS_ASSETS_STAGE_REPORT,
-            footer: true
+            footer: true,
+            test: /doublesplit\.user\.js$/
         }),
         new CleanWebpackPlugin({
             // @ts-ignore

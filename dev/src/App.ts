@@ -7,7 +7,7 @@ import { makeGLobal } from './utils/env';
 import { Sampler } from './utils/Sampler';
 import { storage } from './utils/storage';
 import { find_node, Methods, overrideMethod, overridePrototype } from './utils/utils';
-import { applyPatch } from './utils/wasmPatcher';
+import { applyPatch, autoFixCodeSectionSize } from './utils/wasmPatcher';
 import { World } from './World';
 
 export default class App {
@@ -182,6 +182,15 @@ export default class App {
     }
 
     async loadAndPatchCore(url: string, resolve: () => void) {
+        // Backup
+        // overrideMethod(window, 'fetch', function (o, args) {
+        //     if (typeof args[0] === 'string' && args[0].includes('.core.wasm')) {
+        //         args[0] = new URL('../../static/renamed.core.wasm', import.meta.url).toString();
+        //     }
+        //     const r = o.apply(this, args);
+        //     return r;
+        // });
+
         try {
             const request = new XMLHttpRequest();
             request.open('GET', url, false);
@@ -229,18 +238,14 @@ export default class App {
     patchWasm(u: ArrayBuffer) {
         let anyFail = false;
         const bytes = (hex: string) => hex.split(' ').map((b) => parseInt(b, 16));
+        const original = new Uint8Array(u);
         const patchedUint8Array = applyPatch(
-            new Uint8Array(u),
+            original,
             [
                 {
                     pattern: bytes('D4 01 2D 00 00 45 0D 00 20 02 10 0F 20 01 20 02 10 1E 21 01'),
                     payload: bytes('20 00 28 02 1C 45 04 40 0F 0B'),
                     type: 'insertAfter'
-                },
-                {
-                    pattern: bytes('03 82 03 83 03 10 FF 02 81 03 84 03 10 87 03 86 03 85 03 0A'),
-                    payload: bytes('B4'),
-                    type: 'replaceAfter'
                 },
                 {
                     pattern: bytes('00 0B 37 03 00 20 00 20 04 37 03 08 20 03 41 10 6A 24 00 0B'),
@@ -256,8 +261,8 @@ export default class App {
             () => (anyFail = true)
         );
         if (anyFail) return u;
-
-        return patchedUint8Array.buffer;
+        const fixed = autoFixCodeSectionSize(original, patchedUint8Array);
+        return fixed.buffer;
     }
 
     observerPatcher = (e: string) => {

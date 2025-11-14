@@ -18,7 +18,7 @@
 // @description:pl      Doublesplit - rozszerzenie do Agario z powiększeniem, minimapą, pomocnikami i blokadą reklam
 // @description:fr      Doublesplit - extension pour Agario avec zoom, mini-carte, assistants et bloqueur de publicité
 // @description:ar      دلتا - إضافة لـ Agario مع مانع إعلانات
-// @version             8.0.8
+// @version             8.0.9
 // @namespace           doublesplit.agar
 // @author              neo
 // @icon                https://deltav4.gitlab.io/favicon.ico
@@ -662,6 +662,9 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.1.4 | MIT License |
 @layer utilities {
   .absolute {
     position: absolute !important;
+  }
+  .fixed {
+    position: fixed !important;
   }
   .relative {
     position: relative !important;
@@ -3229,6 +3232,7 @@ const storage = new Storage();
 ;// ./dev/src/utils/wasmPatcher.ts
 function applyPatch(u8, operations, anyFail) {
   let result = u8;
+  const initialLength = u8.length;
   for (const {
     pattern,
     payload,
@@ -3253,6 +3257,21 @@ function applyPatch(u8, operations, anyFail) {
       const sliceBefore = result.slice(0, patchIndex);
       const sliceAfter = result.slice(index);
       result = concatUint8Arrays([sliceBefore, new Uint8Array(payload), sliceAfter]);
+      continue;
+    } else if (type === 'replaceUlebAfter') {
+      // Compute new ULEB value = old + deltaInserted
+      patchIndex = index + pattern.length;
+      const {
+        value: oldVal,
+        length: oldLen
+      } = readULEB(result, patchIndex);
+      const deltaInserted = result.length - initialLength; // growth from previous ops
+      const newVal = oldVal + deltaInserted;
+      const newBytes = writeULEB(newVal);
+      // Replace oldLen bytes with newBytes (may grow/shrink)
+      const sliceBefore = result.slice(0, patchIndex);
+      const sliceAfter = result.slice(patchIndex + oldLen);
+      result = concatUint8Arrays([sliceBefore, newBytes, sliceAfter]);
       continue;
     }
     // Default insert
@@ -3284,6 +3303,72 @@ function concatUint8Arrays(arrays) {
     offset += arr.length;
   }
   return result;
+}
+// ---- ULEB128 helpers ----
+function readULEB(buffer, offset) {
+  let result = 0 >>> 0;
+  let shift = 0;
+  let pos = offset;
+  while (pos < buffer.length) {
+    const byte = buffer[pos++];
+    result |= (byte & 0x7f) << shift >>> 0;
+    if ((byte & 0x80) === 0) break;
+    shift += 7;
+    if (shift > 35) throw new Error('ULEB128 value too large');
+  }
+  return {
+    value: result >>> 0,
+    length: pos - offset
+  };
+}
+function writeULEB(value) {
+  if (value < 0) throw new Error('ULEB128 cannot encode negative values');
+  const out = [];
+  let v = value >>> 0;
+  do {
+    let byte = v & 0x7f;
+    v >>>= 7;
+    if (v !== 0) byte |= 0x80;
+    out.push(byte);
+  } while (v !== 0);
+  return new Uint8Array(out);
+}
+// Public helpers to auto-fix section sizes without specifying a pattern
+function fixSectionSizeByDelta(u8, sectionId, delta) {
+  if (delta === 0) return u8;
+  // Validate header
+  if (u8.length < 8 || u8[0] !== 0x00 || u8[1] !== 0x61 || u8[2] !== 0x73 || u8[3] !== 0x6d) {
+    console.warn('[wasmPatcher] Not a wasm module (magic mismatch)');
+    return u8;
+  }
+  let i = 8; // skip version
+  while (i < u8.length) {
+    const sid = u8[i++];
+    const sizeInfo = readULEB(u8, i);
+    const sizeStart = i;
+    const sizeLen = sizeInfo.length;
+    const payloadSize = sizeInfo.value >>> 0;
+    const payloadStart = i + sizeLen;
+    if (sid === sectionId) {
+      const newSize = payloadSize + delta;
+      if (newSize < 0) {
+        console.error('[wasmPatcher] Negative section size after delta, skipping');
+        return u8;
+      }
+      const newSizeBytes = writeULEB(newSize);
+      const before = u8.slice(0, sizeStart);
+      const after = u8.slice(sizeStart + sizeLen);
+      return concatUint8Arrays([before, newSizeBytes, after]);
+    }
+    i = payloadStart + payloadSize; // jump to next section using declared size
+  }
+  console.warn(`[wasmPatcher] Section ${sectionId} not found, no size fixed`);
+  return u8;
+}
+function autoFixCodeSectionSize(u8Original, u8Patched) {
+  const delta = u8Patched.length - u8Original.length;
+  if (delta === 0) return u8Patched;
+  return fixSectionSizeByDelta(u8Patched, 0x0a, delta);
 }
 ;// ./dev/src/Cell.ts
 class Cell {
@@ -3978,6 +4063,14 @@ class App {
   }
   loadAndPatchCore(url, resolve) {
     return __awaiter(this, void 0, void 0, function* () {
+      // Backup
+      // overrideMethod(window, 'fetch', function (o, args) {
+      //     if (typeof args[0] === 'string' && args[0].includes('.core.wasm')) {
+      //         args[0] = new URL('../../static/renamed.core.wasm', import.meta.url).toString();
+      //     }
+      //     const r = o.apply(this, args);
+      //     return r;
+      // });
       try {
         const request = new XMLHttpRequest();
         request.open('GET', url, false);
@@ -4028,14 +4121,11 @@ class App {
   patchWasm(u) {
     let anyFail = false;
     const bytes = hex => hex.split(' ').map(b => parseInt(b, 16));
-    const patchedUint8Array = applyPatch(new Uint8Array(u), [{
+    const original = new Uint8Array(u);
+    const patchedUint8Array = applyPatch(original, [{
       pattern: bytes('D4 01 2D 00 00 45 0D 00 20 02 10 0F 20 01 20 02 10 1E 21 01'),
       payload: bytes('20 00 28 02 1C 45 04 40 0F 0B'),
       type: 'insertAfter'
-    }, {
-      pattern: bytes('03 82 03 83 03 10 FF 02 81 03 84 03 10 87 03 86 03 85 03 0A'),
-      payload: bytes('B4'),
-      type: 'replaceAfter'
     }, {
       pattern: bytes('00 0B 37 03 00 20 00 20 04 37 03 08 20 03 41 10 6A 24 00 0B'),
       payload: bytes('8A'),
@@ -4046,7 +4136,8 @@ class App {
       type: 'replaceAfter'
     }], () => anyFail = true);
     if (anyFail) return u;
-    return patchedUint8Array.buffer;
+    const fixed = autoFixCodeSectionSize(original, patchedUint8Array);
+    return fixed.buffer;
   }
   waitCore() {
     return __awaiter(this, void 0, void 0, function* () {
