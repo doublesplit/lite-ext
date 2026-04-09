@@ -18,7 +18,7 @@
 // @description:pl      Doublesplit - rozszerzenie do Agario z powiększeniem, minimapą, pomocnikami i blokadą reklam
 // @description:fr      Doublesplit - extension pour Agario avec zoom, mini-carte, assistants et bloqueur de publicité
 // @description:ar      دلتا - إضافة لـ Agario مع مانع إعلانات
-// @version             8.0.9
+// @version             8.1.0
 // @namespace           doublesplit.agar
 // @author              neo
 // @icon                https://deltav4.gitlab.io/favicon.ico
@@ -455,6 +455,8 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.1.4 | MIT License |
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
     --spacing: 0.25rem;
+    --default-transition-duration: 150ms;
+    --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
   }
@@ -684,8 +686,14 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.1.4 | MIT License |
   .grid {
     display: grid !important;
   }
+  .hidden {
+    display: none !important;
+  }
   .inline {
     display: inline !important;
+  }
+  .table {
+    display: table !important;
   }
   .h-full {
     height: 100% !important;
@@ -696,8 +704,14 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.1.4 | MIT License |
   .w-full {
     width: 100% !important;
   }
+  .flex-grow {
+    flex-grow: 1 !important;
+  }
   .grow {
     flex-grow: 1 !important;
+  }
+  .border-collapse {
+    border-collapse: collapse !important;
   }
   .transform {
     transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,) !important;
@@ -708,14 +722,36 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.1.4 | MIT License |
   .flex-row {
     flex-direction: row !important;
   }
+  .flex-wrap {
+    flex-wrap: wrap !important;
+  }
   .gap-2 {
     gap: calc(var(--spacing) * 2) !important;
+  }
+  .border {
+    border-style: var(--tw-border-style) !important;
+    border-width: 1px !important;
   }
   .p-1 {
     padding: calc(var(--spacing) * 1) !important;
   }
   .text-left {
     text-align: left !important;
+  }
+  .underline {
+    text-decoration-line: underline !important;
+  }
+  .outline {
+    outline-style: var(--tw-outline-style) !important;
+    outline-width: 1px !important;
+  }
+  .filter {
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,) !important;
+  }
+  .transition {
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter !important;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function)) !important;
+    transition-duration: var(--tw-duration, var(--default-transition-duration)) !important;
   }
 }
 *,
@@ -1059,6 +1095,69 @@ input:where([type='button'], [type='reset'], [type='submit']),
   syntax: "*";
   inherits: false;
 }
+@property --tw-border-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-outline-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-blur {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-brightness {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-contrast {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-grayscale {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-hue-rotate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-invert {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-opacity {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-saturate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-sepia {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-drop-shadow-size {
+  syntax: "*";
+  inherits: false;
+}
 @layer properties {
   @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
@@ -1067,6 +1166,21 @@ input:where([type='button'], [type='reset'], [type='submit']),
       --tw-rotate-z: initial;
       --tw-skew-x: initial;
       --tw-skew-y: initial;
+      --tw-border-style: solid;
+      --tw-outline-style: solid;
+      --tw-blur: initial;
+      --tw-brightness: initial;
+      --tw-contrast: initial;
+      --tw-grayscale: initial;
+      --tw-hue-rotate: initial;
+      --tw-invert: initial;
+      --tw-opacity: initial;
+      --tw-saturate: initial;
+      --tw-sepia: initial;
+      --tw-drop-shadow: initial;
+      --tw-drop-shadow-color: initial;
+      --tw-drop-shadow-alpha: 100%;
+      --tw-drop-shadow-size: initial;
     }
   }
 }
@@ -1899,6 +2013,12 @@ function EventMixin(Base) {
         const idx = this.events[event].indexOf(listener);
         if (idx > -1) {
           this.events[event].splice(idx, 1);
+        } else {
+          console.trace(`We have error in removeListener() - listener not found for event "${String(event)}"`, {
+            event,
+            listener,
+            listeners: this.events[event]
+          });
         }
         if (this.events[event].length === 0) {
           delete this.events[event];
@@ -1954,9 +2074,17 @@ function EventMixin(Base) {
     waitfor(event, reject_callback) {
       return new Promise((_resolve, _reject) => {
         let destroyCallbackCalled = false;
+        let resolved = false;
         const removeListener = () => {
+          if (resolved) return;
+          resolved = true;
           this.removeListener(event, resolver);
           this.removeListener(event, rejector);
+          for (let i = self.ev.length - 1; i >= 0; i--) {
+            if (self.ev[i].listener === resolver || self.ev[i].listener === rejector) {
+              self.ev.splice(i, 1);
+            }
+          }
           if (destroyCallbackCalled) return;
           destroyCallbackCalled = true;
           destroyRejectCallback();
@@ -2079,7 +2207,7 @@ function deferrify(params) {
     resolve = resolveFunc;
     reject = rejectFunc;
     if ((params === null || params === void 0 ? void 0 : params.signal) instanceof Promise) {
-      params.signal.catch(reject);
+      params.signal.catch((...args) => reject(...args));
     } else if ((_a = params === null || params === void 0 ? void 0 : params.signal) === null || _a === void 0 ? void 0 : _a.aborted) {
       reject();
     }
@@ -2091,13 +2219,29 @@ function deferrify(params) {
   };
 }
 class Promised extends Promise {
-  constructor(executor) {
+  constructor(executor, signal) {
+    let _resolve;
+    let _reject;
     super((resolve, reject) => {
-      this.resolve = resolve;
-      this.reject = reject;
-      // @ts-ignore
-      if (executor !== undefined) executor(resolve, reject);
+      _resolve = resolve;
+      _reject = reject;
     });
+    this.resolve = _resolve;
+    this.reject = _reject;
+    if (signal) {
+      if (signal instanceof Promise) {
+        signal.catch(_reject);
+      } else if (signal.aborted) {
+        _reject(new Error('Aborted'));
+      } else {
+        signal.addEventListener('abort', () => _reject(new Error('Aborted')));
+      }
+    }
+    // @ts-ignore
+    if (executor) executor(_resolve, _reject);
+  }
+  get promise() {
+    return this;
   }
 }
 const sleep = delay => function chainDelay(args) {

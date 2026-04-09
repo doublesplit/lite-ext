@@ -58,6 +58,12 @@ export function EventMixin<
                 const idx = this.events[event].indexOf(listener);
                 if (idx > -1) {
                     this.events[event].splice(idx, 1);
+                } else {
+                    console.trace(`We have error in removeListener() - listener not found for event "${String(event)}"`, {
+                        event,
+                        listener,
+                        listeners: this.events[event]
+                    });
                 }
                 if (this.events[event].length === 0) {
                     delete this.events[event];
@@ -90,6 +96,7 @@ export function EventMixin<
                     error.cause = 'timeout';
                     rejector(error);
                 }, timeout);
+
                 if (abortController) {
                     function abort() {
                         clearTimeout(timeoutId);
@@ -112,9 +119,17 @@ export function EventMixin<
         waitfor<V, T extends (resolve: (v: V) => void, reject: () => void) => () => void>(event: EventName<EventMap>, reject_callback: T) {
             return new Promise<V>((_resolve, _reject) => {
                 let destroyCallbackCalled = false;
+                let resolved = false;
                 const removeListener = () => {
+                    if (resolved) return;
+                    resolved = true;
                     this.removeListener(event, resolver);
                     this.removeListener(event, rejector);
+                    for (let i = self.ev.length - 1; i >= 0; i--) {
+                        if (self.ev[i].listener === resolver || self.ev[i].listener === rejector) {
+                            self.ev.splice(i, 1);
+                        }
+                    }
                     if (destroyCallbackCalled) return;
                     destroyCallbackCalled = true;
                     destroyRejectCallback();
@@ -185,9 +200,10 @@ export function EventMixin<
             }
         }
     }
-    return EventifyBase as unknown as new <T extends DefaultEventMap = DefaultEventMap>(
+    return EventifyBase as unknown as (new <T extends DefaultEventMap = DefaultEventMap>(
         ...args: ConstructorParameters<BaseClass>
-    ) => EventifyBase<T> & InstanceType<BaseClass>;
+    ) => EventifyBase<T> & InstanceType<BaseClass>) &
+        Omit<BaseClass, 'prototype'>;
 }
 export class Eventify<DefaultEventMap extends _DefaultEventMap = _DefaultEventMap> extends EventMixin(class {})<DefaultEventMap> {}
 
@@ -275,7 +291,7 @@ export function deferrify<T, R = unknown>(params?: { signal: AbortSignal | Promi
         resolve = resolveFunc;
         reject = rejectFunc;
         if (params?.signal instanceof Promise) {
-            params.signal.catch(reject);
+            params.signal.catch((...args) => reject(...args));
         } else if (params?.signal?.aborted) {
             reject();
         }
@@ -286,13 +302,34 @@ export function deferrify<T, R = unknown>(params?: { signal: AbortSignal | Promi
 export class Promised<T> extends Promise<T> {
     resolve!: (value: T | PromiseLike<T>) => void;
     reject!: (reason?: any) => void;
-    constructor(executor: ConstructorParameters<PromiseConstructor>['0']) {
+
+    constructor(executor?: ConstructorParameters<PromiseConstructor>[0], signal?: AbortSignal | Promise<unknown>) {
+        let _resolve!: (value: T | PromiseLike<T>) => void;
+        let _reject!: (reason?: any) => void;
+
         super((resolve, reject) => {
-            this.resolve = resolve;
-            this.reject = reject;
-            // @ts-ignore
-            if (executor !== undefined) executor(resolve, reject);
+            _resolve = resolve;
+            _reject = reject;
         });
+
+        this.resolve = _resolve;
+        this.reject = _reject;
+
+        if (signal) {
+            if (signal instanceof Promise) {
+                signal.catch(_reject);
+            } else if (signal.aborted) {
+                _reject(new Error('Aborted'));
+            } else {
+                signal.addEventListener('abort', () => _reject(new Error('Aborted')));
+            }
+        }
+        // @ts-ignore
+        if (executor) executor(_resolve, _reject);
+    }
+
+    get promise() {
+        return this;
     }
 }
 
@@ -303,10 +340,10 @@ export const sleep = (delay: number) =>
         });
     };
 
-/** Converts enum to EventMap */
+/** Переобразует enum в EventMap */
 export type EnumToEventMap<T extends Record<string, any>> = {
     [K in T[keyof T] as `${Extract<K, string>}`]?: any;
 };
-/** Converts interface to EventMap */
+/** Переобразует interface в EventMap */
 export type EventTypesToEventMap<T extends Record<string, any>> = { [K in keyof T as `${Extract<K, string>}`]: T[K] };
 export type EventTypesToEventMapStrict<T extends Record<string, any>> = { [K in keyof T as Extract<K, string>]: T[K] };
