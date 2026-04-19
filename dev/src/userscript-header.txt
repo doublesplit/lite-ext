@@ -32,6 +32,7 @@
 // @antifeature         ads
 // @source              https://github.com/doublesplit/lite-ext/
 // @supportURL          https://discord.gg/HHmyKW6
+// @require             https://cdnjs.cloudflare.com/ajax/libs/simple-peer/9.11.1/simplepeer.min.js
 // @require             https://cdnjs.cloudflare.com/ajax/libs/preact/10.21.0/preact.umd.min.js
 // @require             https://cdnjs.cloudflare.com/ajax/libs/preact/10.21.0/hooks.umd.min.js
 // @require             https://cdnjs.cloudflare.com/ajax/libs/preact/10.21.0/compat.umd.min.js

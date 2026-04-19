@@ -5,9 +5,28 @@ import { useEventify } from './componetns/hooks';
 import { AppContext } from './Contexts';
 import { SettingsList } from './SettingsList';
 
+const TRAINING_SERVER_URL = 'https://delt.io/v7/BrowserServer.html?gamemode=party';
+const TRAINING_SERVER_WINDOW_NAME = 'delta-training-server';
+
 export function MenuButtons() {
     const app = useContext(AppContext);
     const inputRef = useRef<HTMLInputElement>();
+    const trainingWindowRef = useRef<Window | null>(null);
+
+    const openTrainingServer = () => {
+        const openedWindow = trainingWindowRef.current;
+        if (openedWindow && !openedWindow.closed) {
+            openedWindow.focus();
+            return;
+        }
+
+        const newWindow = window.open(TRAINING_SERVER_URL, TRAINING_SERVER_WINDOW_NAME);
+        if (!newWindow) return;
+
+        trainingWindowRef.current = newWindow;
+        newWindow.focus();
+    };
+
     useEventify((e) => {
         e.listenTo(app.state, 'ws', () => {
             inputRef.current.value = app.state.ws;
@@ -39,6 +58,9 @@ export function MenuButtons() {
                     Connect
                 </button>
             </div>
+            <button style={{ width: '242px' }} type="submit" class="btn menu-button" onClick={openTrainingServer}>
+                Training server
+            </button>
         </div>
     );
 }

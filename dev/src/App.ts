@@ -1,5 +1,5 @@
 import { deferrify, EventObject } from '../../Shared/src/utils/Eventify';
-import { coreAdsPatch, coreInitPatch, coreUiPatch, exposeHxClasses } from './agario-patches';
+import { activateP2pWebSocket, coreAdsPatch, coreInitPatch, coreUiPatch, exposeHxClasses } from './agario-patches';
 import { Cell } from './Cell';
 import { settings } from './settings';
 import { initLiteui } from './ui';
@@ -354,6 +354,7 @@ export default class App {
         return deferred.promise;
     }
     handleCoreInit() {
+        activateP2pWebSocket();
         coreInitPatch();
         coreAdsPatch();
         // fixNoServers();

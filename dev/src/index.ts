@@ -1,3 +1,4 @@
+import { htmlPatches } from './agario-patches';
 import App from './App';
 import { enableFastCanvasView, enableVueDevtools } from './dev';
 import './ui/minimap.css';
@@ -17,6 +18,7 @@ if (window.location.href.includes('agar.io')) {
         registerMenuCommands();
         registerCheckUpdates();
     }
+    htmlPatches();
 } else {
     console.log('This script is intended to run on agar.io only.');
 }

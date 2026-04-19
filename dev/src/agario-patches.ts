@@ -1,4 +1,6 @@
+import { makeGLobal } from './utils/env';
 import { find_node, overrideMethod } from './utils/utils';
+import { WebSocket } from './WebP2pSocket';
 
 export function exposeHxClasses() {
     let $hxClasses: any;
@@ -162,6 +164,37 @@ export function coreAdsPatch() {
     } catch (e) {}
 }
 
+export function htmlPatches() {
+    const badScripts = [
+        'api.adinplay.com',
+        'connect.facebook.net/signals',
+        'renotifier.',
+        'apollo.',
+        'akamai.net',
+        'static.zdassets.com',
+        'google-analytics.com',
+        'cdn.applixir.com'
+    ];
+    const observer = new window.MutationObserver((mtRecs) => {
+        for (const mtRec of mtRecs) {
+            for (let i = 0; i < mtRec.addedNodes.length; i++) {
+                const elem = mtRec.addedNodes[i] as HTMLScriptElement;
+                if (elem.tagName === 'SCRIPT') {
+                    if (elem.src && badScripts.some((script) => elem.src.includes(script))) {
+                        elem.remove();
+                    }
+                }
+            }
+        }
+    });
+    if (document.head) {
+        observer.observe(document.head, {
+            childList: true,
+            subtree: true
+        });
+    }
+}
+
 /**
  * Endpoints for connecting to the Agar.io game server.
  */
@@ -237,4 +270,8 @@ export function fixNoServers() {
         }
     }
     window.XMLHttpRequest = HookXMLHttpRequest;
+}
+
+export function activateP2pWebSocket() {
+    makeGLobal('WebSocket', WebSocket);
 }

@@ -182,7 +182,8 @@ const common = {
         window: 'unsafeWindow',
         'preact/compat': 'preactCompat',
         'preact/hooks': 'preactHooks',
-        react: 'preactCompat'
+        react: 'preactCompat',
+        'simple-peer': 'SimplePeer'
     },
     experiments: {
         topLevelAwait: true
@@ -194,7 +195,7 @@ const common = {
         'doublesplit.user': path.resolve(srcDir, './src/index')
     },
     output: {
-        publicPath: undefined,
+        publicPath: mode !== 'development' ? 'https://raw.githack.com/doublesplit/lite-ext/main/dist/' : undefined,
         path: OUTPUT_DIR,
         filename: '[name].js',
         chunkFilename: '[id].[contenthash].js',
@@ -424,7 +425,7 @@ const development = {
         },
         historyApiFallback: true,
         compress: true,
-        port: 8080,
+        port: 8081,
         /** Files for immediatly reloading */
         watchFiles: {
             paths: ['./dev/src/**/*'], // include all files in /src

@@ -18,7 +18,7 @@
 // @description:pl      Doublesplit - rozszerzenie do Agario z powiększeniem, minimapą, pomocnikami i blokadą reklam
 // @description:fr      Doublesplit - extension pour Agario avec zoom, mini-carte, assistants et bloqueur de publicité
 // @description:ar      دلتا - إضافة لـ Agario مع مانع إعلانات
-// @version             8.1.0
+// @version             8.1.1
 // @namespace           doublesplit.agar
 // @author              neo
 // @icon                https://deltav4.gitlab.io/favicon.ico
@@ -32,6 +32,7 @@
 // @antifeature         ads
 // @source              https://github.com/doublesplit/lite-ext/
 // @supportURL          https://discord.gg/HHmyKW6
+// @require             https://cdnjs.cloudflare.com/ajax/libs/simple-peer/9.11.1/simplepeer.min.js
 // @require             https://cdnjs.cloudflare.com/ajax/libs/preact/10.21.0/preact.umd.min.js
 // @require             https://cdnjs.cloudflare.com/ajax/libs/preact/10.21.0/hooks.umd.min.js
 // @require             https://cdnjs.cloudflare.com/ajax/libs/preact/10.21.0/compat.umd.min.js
@@ -50,124 +51,8 @@
 /******/ // runtime can't be in strict mode because a global variable is assign and maybe created.
 /******/ var __webpack_modules__ = ({
 
-/***/ 32:
-/***/ ((module) => {
-
-"use strict";
-module.exports = preact;
-
-/***/ }),
-
-/***/ 56:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-
-/* istanbul ignore next  */
-function setAttributesWithoutAttributes(styleElement) {
-  var nonce =  true ? __webpack_require__.nc : 0;
-  if (nonce) {
-    styleElement.setAttribute("nonce", nonce);
-  }
-}
-module.exports = setAttributesWithoutAttributes;
-
-/***/ }),
-
-/***/ 72:
-/***/ ((module) => {
-
-"use strict";
-
-
-var stylesInDOM = [];
-function getIndexByIdentifier(identifier) {
-  var result = -1;
-  for (var i = 0; i < stylesInDOM.length; i++) {
-    if (stylesInDOM[i].identifier === identifier) {
-      result = i;
-      break;
-    }
-  }
-  return result;
-}
-function modulesToDom(list, options) {
-  var idCountMap = {};
-  var identifiers = [];
-  for (var i = 0; i < list.length; i++) {
-    var item = list[i];
-    var id = options.base ? item[0] + options.base : item[0];
-    var count = idCountMap[id] || 0;
-    var identifier = "".concat(id, " ").concat(count);
-    idCountMap[id] = count + 1;
-    var indexByIdentifier = getIndexByIdentifier(identifier);
-    var obj = {
-      css: item[1],
-      media: item[2],
-      sourceMap: item[3],
-      supports: item[4],
-      layer: item[5]
-    };
-    if (indexByIdentifier !== -1) {
-      stylesInDOM[indexByIdentifier].references++;
-      stylesInDOM[indexByIdentifier].updater(obj);
-    } else {
-      var updater = addElementStyle(obj, options);
-      options.byIndex = i;
-      stylesInDOM.splice(i, 0, {
-        identifier: identifier,
-        updater: updater,
-        references: 1
-      });
-    }
-    identifiers.push(identifier);
-  }
-  return identifiers;
-}
-function addElementStyle(obj, options) {
-  var api = options.domAPI(options);
-  api.update(obj);
-  var updater = function updater(newObj) {
-    if (newObj) {
-      if (newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap && newObj.supports === obj.supports && newObj.layer === obj.layer) {
-        return;
-      }
-      api.update(obj = newObj);
-    } else {
-      api.remove();
-    }
-  };
-  return updater;
-}
-module.exports = function (list, options) {
-  options = options || {};
-  list = list || [];
-  var lastIdentifiers = modulesToDom(list, options);
-  return function update(newList) {
-    newList = newList || [];
-    for (var i = 0; i < lastIdentifiers.length; i++) {
-      var identifier = lastIdentifiers[i];
-      var index = getIndexByIdentifier(identifier);
-      stylesInDOM[index].references--;
-    }
-    var newLastIdentifiers = modulesToDom(newList, options);
-    for (var _i = 0; _i < lastIdentifiers.length; _i++) {
-      var _identifier = lastIdentifiers[_i];
-      var _index = getIndexByIdentifier(_identifier);
-      if (stylesInDOM[_index].references === 0) {
-        stylesInDOM[_index].updater();
-        stylesInDOM.splice(_index, 1);
-      }
-    }
-    lastIdentifiers = newLastIdentifiers;
-  };
-};
-
-/***/ }),
-
-/***/ 102:
-/***/ ((module) => {
+/***/ 102
+(module) {
 
 "use strict";
 
@@ -256,181 +141,134 @@ module.exports = function (cssWithMappingToString) {
   return list;
 };
 
-/***/ }),
+/***/ },
 
-/***/ 113:
-/***/ ((module) => {
+/***/ 653
+(module) {
 
 "use strict";
 
 
-/* istanbul ignore next  */
-function styleTagTransform(css, styleElement) {
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = css;
-  } else {
-    while (styleElement.firstChild) {
-      styleElement.removeChild(styleElement.firstChild);
-    }
-    styleElement.appendChild(document.createTextNode(css));
-  }
-}
-module.exports = styleTagTransform;
+module.exports = function (i) {
+  return i[1];
+};
 
-/***/ }),
+/***/ },
 
-/***/ 390:
-/***/ ((module, __webpack_exports__, __webpack_require__) => {
+/***/ 557
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Minimap: () => (/* binding */ Minimap)
+/* harmony export */   Fragment: () => (/* reexport safe */ preact__WEBPACK_IMPORTED_MODULE_0__.Fragment),
+/* harmony export */   jsx: () => (/* binding */ u),
+/* harmony export */   jsxs: () => (/* binding */ u)
 /* harmony export */ });
-/* harmony import */ var preact_hooks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(632);
-/* harmony import */ var preact_hooks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(preact_hooks__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(701);
-/* harmony import */ var _Contexts__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(413);
-/* harmony import */ var preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(557);
-/* module decorator */ module = __webpack_require__.hmd(module);
+/* unused harmony exports jsxAttr, jsxDEV, jsxEscape, jsxTemplate */
+/* unused harmony import specifier */ var e;
+/* unused harmony import specifier */ var r;
+/* harmony import */ var preact__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(32);
+/* harmony import */ var preact__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(preact__WEBPACK_IMPORTED_MODULE_0__);
 
 
-
-
-function Minimap() {
-  const app = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_0__.useContext)(_Contexts__WEBPACK_IMPORTED_MODULE_2__.AppContext);
-  const [minimapEnabled, setMinimapEnabled] = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_0__.useState)(_settings__WEBPACK_IMPORTED_MODULE_1__.settings.raw.Minimap.value);
-  const $canvas = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const $sectors = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const $minimap = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  (0,preact_hooks__WEBPACK_IMPORTED_MODULE_0__.useLayoutEffect)(() => {
-    const ctx = $canvas.current.getContext('2d');
-    const sectors = $sectors.current.querySelectorAll('.sector');
-    let sectorIndex = -1;
-    let rafId;
-    function render() {
-      const sectorId = app.world.drawMinimap(ctx, $canvas.current, true);
-      setSector(sectorId);
-      rafId = requestAnimationFrame(render);
+var t = /["&<]/;
+function n(r) {
+  if (0 === r.length || !1 === t.test(r)) return r;
+  for (var e = 0, n = 0, o = "", f = ""; n < r.length; n++) {
+    switch (r.charCodeAt(n)) {
+      case 34:
+        f = "&quot;";
+        break;
+      case 38:
+        f = "&amp;";
+        break;
+      case 60:
+        f = "&lt;";
+        break;
+      default:
+        continue;
     }
-    function setSector(index) {
-      if (index === sectorIndex || index < 0) return;
-      index = Math.min(index, sectors.length - 1);
-      sectorIndex !== -1 && sectors[sectorIndex].classList.remove('active');
-      sectors[index].classList.add('active');
-      sectorIndex = index;
-    }
-    if (minimapEnabled) rafId = requestAnimationFrame(render);
-    $minimap.current.style.display = minimapEnabled ? '' : 'none';
-    const minimapListener = _settings__WEBPACK_IMPORTED_MODULE_1__.settings.on('Minimap', value => {
-      setMinimapEnabled(value);
-    });
-    return () => {
-      _settings__WEBPACK_IMPORTED_MODULE_1__.settings.removeListener('Minimap', minimapListener);
-      cancelAnimationFrame(rafId);
-    };
-  }, [minimapEnabled]);
-  return (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-    ref: $minimap,
-    id: "ds-minimap",
-    style: {
-      zIndex: 1000
-    },
-    children: [(0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-      class: "background",
-      ref: $sectors,
-      children: [(0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "A1"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "A2"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "A3"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "A4"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "A5"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "B1"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "B2"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "B3"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "B4"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "B5"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "C1"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "C2"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "C3"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "C4"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "C5"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "D1"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "D2"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "D3"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "D4"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "D5"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "E1"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "E2"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "E3"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "E4"
-      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        class: "sector",
-        children: "E5"
-      })]
-    }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("canvas", {
-      id: "minimap",
-      width: "200",
-      height: "200",
-      ref: $canvas
-    })]
+    n !== e && (o += r.slice(e, n)), o += f, e = n + 1;
+  }
+  return n !== e && (o += r.slice(e, n)), o;
+}
+var o = /acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i,
+  f = 0,
+  i = Array.isArray;
+function u(e, t, n, o, i, u) {
+  t || (t = {});
+  var a,
+    c,
+    p = t;
+  if ("ref" in p) for (c in p = {}, t) "ref" == c ? a = t[c] : p[c] = t[c];
+  var l = {
+    type: e,
+    props: p,
+    key: n,
+    ref: a,
+    __k: null,
+    __: null,
+    __b: 0,
+    __e: null,
+    __c: null,
+    constructor: void 0,
+    __v: --f,
+    __i: -1,
+    __u: 0,
+    __source: i,
+    __self: u
+  };
+  if ("function" == typeof e && (a = e.defaultProps)) for (c in a) void 0 === p[c] && (p[c] = a[c]);
+  return preact__WEBPACK_IMPORTED_MODULE_0__.options.vnode && preact__WEBPACK_IMPORTED_MODULE_0__.options.vnode(l), l;
+}
+function a(r) {
+  var t = u(e, {
+    tpl: r,
+    exprs: [].slice.call(arguments, 1)
   });
+  return t.key = t.__v, t;
 }
-if ('hot' in module) {
-  // @ts-ignore
-  module['hot'].accept();
+var c = {},
+  p = /[A-Z]/g;
+function l(e, t) {
+  if (r.attr) {
+    var f = r.attr(e, t);
+    if ("string" == typeof f) return f;
+  }
+  if (t = function (r) {
+    return null !== r && "object" == typeof r && "function" == typeof r.valueOf ? r.valueOf() : r;
+  }(t), "ref" === e || "key" === e) return "";
+  if ("style" === e && "object" == typeof t) {
+    var i = "";
+    for (var u in t) {
+      var a = t[u];
+      if (null != a && "" !== a) {
+        var l = "-" == u[0] ? u : c[u] || (c[u] = u.replace(p, "-$&").toLowerCase()),
+          s = ";";
+        "number" != typeof a || l.startsWith("--") || o.test(l) || (s = "px;"), i = i + l + ":" + a + s;
+      }
+    }
+    return e + '="' + n(i) + '"';
+  }
+  return null == t || !1 === t || "function" == typeof t || "object" == typeof t ? "" : !0 === t ? e : e + '="' + n("" + t) + '"';
+}
+function s(r) {
+  if (null == r || "boolean" == typeof r || "function" == typeof r) return null;
+  if ("object" == typeof r) {
+    if (void 0 === r.constructor) return r;
+    if (i(r)) {
+      for (var e = 0; e < r.length; e++) r[e] = s(r[e]);
+      return r;
+    }
+  }
+  return n("" + r);
 }
 
-/***/ }),
 
-/***/ 397:
-/***/ ((module, __webpack_exports__, __webpack_require__) => {
+/***/ },
+
+/***/ 767
+(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -445,7 +283,72 @@ if ('hot' in module) {
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.1.4 | MIT License | https://tailwindcss.com */
+___CSS_LOADER_EXPORT___.push([module.id, `#minimap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+#ds-minimap {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    width: 200px;
+    height: 200px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: rgba(20, 20, 20, 0.75);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+#ds-minimap .background {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    width: 100%;
+    height: 100%;
+}
+#ds-minimap .sector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ddd;
+    font-size: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition:
+        background-color 0.3s ease,
+        transform 0.2s ease;
+}
+#ds-minimap .sector.active {
+    background-color: rgba(0, 191, 255, 0.3);
+    border: 1px solid #00bfff;
+}
+`, ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ },
+
+/***/ 397
+(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(653);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(102);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
 @layer properties;
 @layer theme, base, components, utilities;
 @layer theme {
@@ -454,7 +357,13 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.1.4 | MIT License |
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --color-cyan-500: oklch(71.5% 0.143 215.221);
+    --color-blue-500: oklch(62.3% 0.214 259.815);
+    --color-black: #000;
+    --color-white: #fff;
     --spacing: 0.25rem;
+    --text-2xl: 1.5rem;
+    --text-2xl--line-height: calc(2 / 1.5);
     --default-transition-duration: 150ms;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
@@ -643,6 +552,9 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.1.4 | MIT License |
   ::-webkit-datetime-edit-meridiem-field {
     padding-block: 0;
   }
+  ::-webkit-calendar-picker-indicator {
+    line-height: 1;
+  }
   :-moz-ui-invalid {
     box-shadow: none;
   }
@@ -662,6 +574,9 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.1.4 | MIT License |
   }
 }
 @layer utilities {
+  .collapse {
+    visibility: collapse !important;
+  }
   .absolute {
     position: absolute !important;
   }
@@ -674,8 +589,17 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.1.4 | MIT License |
   .static {
     position: static !important;
   }
+  .start {
+    inset-inline-start: var(--spacing) !important;
+  }
+  .end {
+    inset-inline-end: var(--spacing) !important;
+  }
   .mx-2 {
     margin-inline: calc(var(--spacing) * 2) !important;
+  }
+  .my-auto {
+    margin-block: auto !important;
   }
   .contents {
     display: contents !important;
@@ -719,6 +643,9 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.1.4 | MIT License |
   .resize {
     resize: both !important;
   }
+  .flex-col {
+    flex-direction: column !important;
+  }
   .flex-row {
     flex-direction: row !important;
   }
@@ -728,15 +655,47 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.1.4 | MIT License |
   .gap-2 {
     gap: calc(var(--spacing) * 2) !important;
   }
+  .self-center {
+    align-self: center !important;
+  }
+  .rounded {
+    border-radius: 0.25rem !important;
+  }
   .border {
     border-style: var(--tw-border-style) !important;
     border-width: 1px !important;
   }
+  .border-2 {
+    border-style: var(--tw-border-style) !important;
+    border-width: 2px !important;
+  }
+  .border-blue-500 {
+    border-color: var(--color-blue-500) !important;
+  }
+  .bg-black {
+    background-color: var(--color-black) !important;
+  }
+  .bg-cover {
+    background-size: cover !important;
+  }
   .p-1 {
     padding: calc(var(--spacing) * 1) !important;
   }
+  .px-3 {
+    padding-inline: calc(var(--spacing) * 3) !important;
+  }
+  .py-1 {
+    padding-block: calc(var(--spacing) * 1) !important;
+  }
   .text-left {
     text-align: left !important;
+  }
+  .text-2xl {
+    font-size: var(--text-2xl) !important;
+    line-height: var(--tw-leading, var(--text-2xl--line-height)) !important;
+  }
+  .text-white {
+    color: var(--color-white) !important;
   }
   .underline {
     text-decoration-line: underline !important;
@@ -749,9 +708,18 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.1.4 | MIT License |
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,) !important;
   }
   .transition {
-    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter !important;
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, backdrop-filter, display, content-visibility, overlay, pointer-events !important;
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function)) !important;
     transition-duration: var(--tw-duration, var(--default-transition-duration)) !important;
+  }
+  .text-shadow-cyan-500 {
+    --tw-text-shadow-color: oklch(71.5% 0.143 215.221) !important;
+    @supports (color: color-mix(in lab, red, red)) {
+      --tw-text-shadow-color: color-mix(in oklab, var(--color-cyan-500) var(--tw-text-shadow-alpha), transparent) !important;
+    }
+  }
+  .text-shadow-lg {
+    text-shadow: 0px 1px 2px var(--tw-text-shadow-color, rgb(0 0 0 / 0.1)), 0px 3px 2px var(--tw-text-shadow-color, rgb(0 0 0 / 0.1)), 0px 4px 8px var(--tw-text-shadow-color, rgb(0 0 0 / 0.1)) !important;
   }
 }
 *,
@@ -934,6 +902,9 @@ textarea {
 ::-webkit-datetime-edit-millisecond-field,
 ::-webkit-datetime-edit-meridiem-field {
   padding-block: 0;
+}
+::-webkit-calendar-picker-indicator {
+  line-height: 1;
 }
 :-moz-ui-invalid {
   box-shadow: none;
@@ -1158,6 +1129,15 @@ input:where([type='button'], [type='reset'], [type='submit']),
   syntax: "*";
   inherits: false;
 }
+@property --tw-text-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-text-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
 @layer properties {
   @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
@@ -1181,6 +1161,8 @@ input:where([type='button'], [type='reset'], [type='submit']),
       --tw-drop-shadow-color: initial;
       --tw-drop-shadow-alpha: 100%;
       --tw-drop-shadow-size: initial;
+      --tw-text-shadow-color: initial;
+      --tw-text-shadow-alpha: 100%;
     }
   }
 }
@@ -1189,169 +1171,101 @@ input:where([type='button'], [type='reset'], [type='submit']),
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
 
-/***/ }),
+/***/ },
 
-/***/ 413:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   AppContext: () => (/* binding */ AppContext)
-/* harmony export */ });
-/* harmony import */ var preact__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(32);
-/* harmony import */ var preact__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(preact__WEBPACK_IMPORTED_MODULE_0__);
-
-const AppContext = (0,preact__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
-
-/***/ }),
-
-/***/ 540:
-/***/ ((module) => {
+/***/ 72
+(module) {
 
 "use strict";
 
 
-/* istanbul ignore next  */
-function insertStyleElement(options) {
-  var element = document.createElement("style");
-  options.setAttributes(element, options.attributes);
-  options.insert(element, options.options);
-  return element;
-}
-module.exports = insertStyleElement;
-
-/***/ }),
-
-/***/ 557:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Fragment: () => (/* reexport safe */ preact__WEBPACK_IMPORTED_MODULE_0__.Fragment),
-/* harmony export */   jsx: () => (/* binding */ u),
-/* harmony export */   jsxs: () => (/* binding */ u)
-/* harmony export */ });
-/* unused harmony exports jsxAttr, jsxDEV, jsxEscape, jsxTemplate */
-/* harmony import */ var preact__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(32);
-/* harmony import */ var preact__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(preact__WEBPACK_IMPORTED_MODULE_0__);
-
-
-var t = /["&<]/;
-function n(r) {
-  if (0 === r.length || !1 === t.test(r)) return r;
-  for (var e = 0, n = 0, o = "", f = ""; n < r.length; n++) {
-    switch (r.charCodeAt(n)) {
-      case 34:
-        f = "&quot;";
-        break;
-      case 38:
-        f = "&amp;";
-        break;
-      case 60:
-        f = "&lt;";
-        break;
-      default:
-        continue;
+var stylesInDOM = [];
+function getIndexByIdentifier(identifier) {
+  var result = -1;
+  for (var i = 0; i < stylesInDOM.length; i++) {
+    if (stylesInDOM[i].identifier === identifier) {
+      result = i;
+      break;
     }
-    n !== e && (o += r.slice(e, n)), o += f, e = n + 1;
   }
-  return n !== e && (o += r.slice(e, n)), o;
+  return result;
 }
-var o = /acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i,
-  f = 0,
-  i = Array.isArray;
-function u(e, t, n, o, i, u) {
-  t || (t = {});
-  var a,
-    c,
-    p = t;
-  if ("ref" in p) for (c in p = {}, t) "ref" == c ? a = t[c] : p[c] = t[c];
-  var l = {
-    type: e,
-    props: p,
-    key: n,
-    ref: a,
-    __k: null,
-    __: null,
-    __b: 0,
-    __e: null,
-    __c: null,
-    constructor: void 0,
-    __v: --f,
-    __i: -1,
-    __u: 0,
-    __source: i,
-    __self: u
+function modulesToDom(list, options) {
+  var idCountMap = {};
+  var identifiers = [];
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i];
+    var id = options.base ? item[0] + options.base : item[0];
+    var count = idCountMap[id] || 0;
+    var identifier = "".concat(id, " ").concat(count);
+    idCountMap[id] = count + 1;
+    var indexByIdentifier = getIndexByIdentifier(identifier);
+    var obj = {
+      css: item[1],
+      media: item[2],
+      sourceMap: item[3],
+      supports: item[4],
+      layer: item[5]
+    };
+    if (indexByIdentifier !== -1) {
+      stylesInDOM[indexByIdentifier].references++;
+      stylesInDOM[indexByIdentifier].updater(obj);
+    } else {
+      var updater = addElementStyle(obj, options);
+      options.byIndex = i;
+      stylesInDOM.splice(i, 0, {
+        identifier: identifier,
+        updater: updater,
+        references: 1
+      });
+    }
+    identifiers.push(identifier);
+  }
+  return identifiers;
+}
+function addElementStyle(obj, options) {
+  var api = options.domAPI(options);
+  api.update(obj);
+  var updater = function updater(newObj) {
+    if (newObj) {
+      if (newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap && newObj.supports === obj.supports && newObj.layer === obj.layer) {
+        return;
+      }
+      api.update(obj = newObj);
+    } else {
+      api.remove();
+    }
   };
-  if ("function" == typeof e && (a = e.defaultProps)) for (c in a) void 0 === p[c] && (p[c] = a[c]);
-  return preact__WEBPACK_IMPORTED_MODULE_0__.options.vnode && preact__WEBPACK_IMPORTED_MODULE_0__.options.vnode(l), l;
+  return updater;
 }
-function a(r) {
-  var t = u(e, {
-    tpl: r,
-    exprs: [].slice.call(arguments, 1)
-  });
-  return t.key = t.__v, t;
-}
-var c = {},
-  p = /[A-Z]/g;
-function l(e, t) {
-  if (r.attr) {
-    var f = r.attr(e, t);
-    if ("string" == typeof f) return f;
-  }
-  if ("ref" === e || "key" === e) return "";
-  if ("style" === e && "object" == typeof t) {
-    var i = "";
-    for (var u in t) {
-      var a = t[u];
-      if (null != a && "" !== a) {
-        var l = "-" == u[0] ? u : c[u] || (c[u] = u.replace(p, "-$&").toLowerCase()),
-          s = ";";
-        "number" != typeof a || l.startsWith("--") || o.test(l) || (s = "px;"), i = i + l + ":" + a + s;
+module.exports = function (list, options) {
+  options = options || {};
+  list = list || [];
+  var lastIdentifiers = modulesToDom(list, options);
+  return function update(newList) {
+    newList = newList || [];
+    for (var i = 0; i < lastIdentifiers.length; i++) {
+      var identifier = lastIdentifiers[i];
+      var index = getIndexByIdentifier(identifier);
+      stylesInDOM[index].references--;
+    }
+    var newLastIdentifiers = modulesToDom(newList, options);
+    for (var _i = 0; _i < lastIdentifiers.length; _i++) {
+      var _identifier = lastIdentifiers[_i];
+      var _index = getIndexByIdentifier(_identifier);
+      if (stylesInDOM[_index].references === 0) {
+        stylesInDOM[_index].updater();
+        stylesInDOM.splice(_index, 1);
       }
     }
-    return e + '="' + i + '"';
-  }
-  return null == t || !1 === t || "function" == typeof t || "object" == typeof t ? "" : !0 === t ? e : e + '="' + n(t) + '"';
-}
-function s(r) {
-  if (null == r || "boolean" == typeof r || "function" == typeof r) return null;
-  if ("object" == typeof r) {
-    if (void 0 === r.constructor) return r;
-    if (i(r)) {
-      for (var e = 0; e < r.length; e++) r[e] = s(r[e]);
-      return r;
-    }
-  }
-  return n("" + r);
-}
-
-
-/***/ }),
-
-/***/ 632:
-/***/ ((module) => {
-
-"use strict";
-module.exports = preactHooks;
-
-/***/ }),
-
-/***/ 653:
-/***/ ((module) => {
-
-"use strict";
-
-
-module.exports = function (i) {
-  return i[1];
+    lastIdentifiers = newLastIdentifiers;
+  };
 };
 
-/***/ }),
+/***/ },
 
-/***/ 659:
-/***/ ((module) => {
+/***/ 659
+(module) {
 
 "use strict";
 
@@ -1389,591 +1303,133 @@ function insertBySelector(insert, style) {
 }
 module.exports = insertBySelector;
 
-/***/ }),
+/***/ },
 
-/***/ 701:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ 540
+(module) {
 
 "use strict";
 
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, {
-  settings: () => (/* binding */ settings)
-});
 
-// EXTERNAL MODULE: ./Shared/src/utils/Eventify.ts
-var Eventify = __webpack_require__(714);
-;// ./dev/src/Settngs.ts
+/* istanbul ignore next  */
+function insertStyleElement(options) {
+  var element = document.createElement("style");
+  options.setAttributes(element, options.attributes);
+  options.insert(element, options.options);
+  return element;
+}
+module.exports = insertStyleElement;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-class BasicSetting {
-  constructor({
-    path = 'DEFAULT',
-    name = ''
-  }) {
-    this.exportable = true;
-    this.type = 'NONE';
-    this._value = null;
-    this.default = null;
-    this.path = path;
-    this.name = name;
-  }
-  get value() {
-    return this._value;
-  }
-  set value(data) {
-    this._value = data;
-  }
-  setter(data) {
-    this.value = data;
-  }
-  get export() {
-    return this.value;
-  }
-}
-class Settings extends Eventify.Eventify {
-  constructor(descriptions) {
-    super();
-    this.raw = descriptions;
-    const self = this;
-    this.proxy = new Proxy(this.raw, {
-      set: (target, prop, newValue) => {
-        const previous = target[prop].value;
-        self.emit('before*', prop, newValue); // before set
-        target[prop].setter(newValue);
-        try {
-          newValue !== previous && self.emit.call(this, prop, newValue, previous); // on set
-          newValue !== previous && self.emit('*', prop, newValue, previous); // on any
-        } catch (message) {
-          console.error(message);
-        }
-        return true;
-      },
-      get(target, prop) {
-        return target[prop].value;
-      }
-    });
-  }
-  import(object) {
-    if (!object) return;
-    for (const option in this.raw) {
-      if (this.raw.hasOwnProperty(option) && object.hasOwnProperty(option)) {
-        this.proxy[option] = object[option];
-      }
-    }
-  }
-  export() {
-    const export_data = {};
-    for (const option in this.raw) {
-      export_data[option] = this.raw[option].export;
-    }
-    return export_data;
-  }
-  restore() {
-    for (const opt in this.raw) {
-      const option = opt;
-      if (this.raw.hasOwnProperty(option)) {
-        this.proxy[option] = this.raw[option].default;
-      }
-    }
-  }
-}
-;// ./dev/src/utils/microColor.ts
-var _a;
-class MicroColor {
-  constructor(red = 255, green = 255, blue = 255, alpha = 255) {
-    this.r = red;
-    this.g = green;
-    this.b = blue;
-    this.a = alpha;
-    this.vector = new Float32Array(4);
-    this.bytes = new Uint8Array(4);
-    this.dataview = new DataView(this.bytes.buffer);
-    this.string = '#000000';
-    this.int = 0;
-    this.inta = 0;
-    this.updVector();
-    this.updString();
-    this.updInt();
-  }
-  updVector() {
-    this.vector[0] = this.r / 255;
-    this.vector[1] = this.g / 255;
-    this.vector[2] = this.b / 255;
-    this.vector[3] = this.a / 255;
-    this.bytes[0] = this.r;
-    this.bytes[1] = this.g;
-    this.bytes[2] = this.b;
-    this.bytes[3] = this.a;
-    this.float = this.dataview.getFloat32(0, true);
-    this.u32 = this.r | this.g << 8 | this.b << 16 | this.a << 24;
-    // for (let i = 0; i < 4; i++) {
-    //     this.u32 |= this.bytes[i] << (8 * i);
-    // }
-  }
-  updString() {
-    this.string = this.toRgb(true);
-  }
-  updInt() {
-    this.int = this.getInt();
-    this.inta = this.getInta();
-  }
-  cloneFrom(t) {
-    this.r = t.r;
-    this.g = t.g;
-    this.b = t.b;
-    this.a = t.a;
-    this.updVector();
-    this.updString();
-    return this;
-  }
-  fromHSL(h, s, l, a = 255) {
-    s /= 100;
-    l /= 100;
-    const c = (1 - Math.abs(2 * l - 1)) * s;
-    const x = c * (1 - Math.abs(h / 60 % 2 - 1));
-    const m = l - c / 2;
-    let r = 0;
-    let g = 0;
-    let b = 0;
-    if (0 <= h && h < 60) {
-      r = c, g = x, b = 0;
-    } else if (60 <= h && h < 120) {
-      r = x, g = c, b = 0;
-    } else if (120 <= h && h < 180) {
-      r = 0, g = c, b = x;
-    } else if (180 <= h && h < 240) {
-      r = 0, g = x, b = c;
-    } else if (240 <= h && h < 300) {
-      r = x, g = 0, b = c;
-    } else if (300 <= h && h < 360) {
-      r = c, g = 0, b = x;
-    }
-    // Having obtained RGB, convert channels to hex
-    this.r = Math.round((r + m) * 255);
-    this.g = Math.round((g + m) * 255);
-    this.b = Math.round((b + m) * 255);
-    this.a = a;
-    return this;
-  }
-  fromRGB(r, g, b, a = 255) {
-    this.r = r;
-    this.g = g;
-    this.b = b;
-    this.a = a;
-    this.updVector();
-    this.updString();
-    return this;
-  }
-  // fromINTA(int: number, alpha = 255) {
-  //     const a = (int >> 24) & alpha;
-  //     return this.fromINT(color);
-  // }
-  fromINT(int, reorder) {
-    this.a = (4278190080 & int) >>> 24;
-    this.r = (16711680 & int) >>> 16;
-    this.g = (65280 & int) >>> 8;
-    this.b = (255 & int) >>> 0;
-    if (reorder) Object.assign(this, {
-      r: this.a,
-      g: this.r,
-      b: this.g,
-      a: this.b
-    });
-    this.updVector();
-    this.updString();
-    return this;
-  }
-  fromHex(hex) {
-    const len = hex.length;
-    if (!hex || len !== 7 && len !== 9) return this;
-    let i = hex.length === 9 ? 32 : 24;
-    const n = parseInt(hex.slice(1), 16);
-    const r = n >> (i -= 8) & 255;
-    const g = n >> (i -= 8) & 255;
-    const b = n >> (i -= 8) & 255;
-    const a = i ? n >> i - 8 & 255 : 255;
-    return this.fromRGB(r, g, b, a);
-  }
-  get getNormalFromSecure() {
-    return _a.rgbToInt(Math.ceil(this.r / 0.9), Math.ceil(this.g / 0.9), Math.ceil(this.b / 0.9));
-  }
-  toRgb(useAlpha) {
-    return useAlpha ? `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a / 255})` : `rgb(${this.r}, ${this.g}, ${this.b})`;
-  }
-  getHEXA() {
-    let r = this.r.toString(16);
-    let g = this.g.toString(16);
-    let b = this.b.toString(16);
-    let a = this.a.toString(16);
-    if (r.length == 1) r = '0' + r;
-    if (g.length == 1) g = '0' + g;
-    if (b.length == 1) b = '0' + b;
-    if (a.length == 1) a = '0' + a;
-    return '#' + r + g + b + a;
-  }
-  getFloat() {
-    const bits = this.a << 24 | this.b << 16 | this.g << 8 | this.r;
-    return _a.pack(bits & 0xfeffffff);
-  }
-  getHEX() {
-    return '#' + (16777216 | this.getInt()).toString(16).substring(1);
-  }
-  getInt() {
-    return this.r << 16 | this.g << 8 | this.b;
-  }
-  getIntaShader(alpha) {
-    return this.r | this.g << 8 | this.b << 16 | (alpha < 0 ? this.a : alpha) << 24;
-  }
-  getIntShader() {
-    return this.r | this.g << 8 | this.b << 16;
-  }
-  getInta() {
-    return this.a << 24 | this.r << 16 | this.g << 8 | this.b;
-  }
-  getSecureHex() {
-    return _a.colorIntToHex(_a.rgbToInt(~~(this.r * 0.9), ~~(this.g * 0.9), ~~(this.b * 0.9)));
-  }
-  static rgbToInt(r, g, b) {
-    return r << 16 | g << 8 | b;
-  }
-  static colorIntToHex(int) {
-    let s = int.toString(16);
-    for (; s.length < 6;) {
-      s = '0' + s;
-    }
-    return '#' + s;
-  }
-  static inta2shader(int) {
-    const a = (0xff000000 & int) >>> 24;
-    const r = (0xff0000 & int) >>> 16;
-    const g = (0xff00 & int) >>> 8;
-    const b = (0xff & int) >>> 0;
-    return r | g << 8 | b << 16 | a << 24;
-  }
-  toHEX8() {
-    return `#${(16777216 | this.getInt()).toString(16).substring(1)}${this.a.toString(16).padStart(2, '0')}`;
-  }
-  static pack(i) {
-    _a.int32[0] = i;
-    return _a.float32[0];
-  }
-  static unpack(f) {
-    _a.float32[0] = f;
-    return _a.int32[0];
-  }
-  static darkenColor(color, percent) {
-    const num = typeof color == 'string' ? parseInt(color, 16) : color,
-      amt = Math.round(2.55 * percent),
-      R = (num >> 16) + amt,
-      B = (num >> 8 & 0x00ff) + amt,
-      G = (num & 0x0000ff) + amt;
-    return 255 << 24 | R << 16 | G << 8 | B;
-  }
-  static brighten(int, amount = 10) {
-    const a = (4278190080 & int) >>> 24;
-    let r = (16711680 & int) >>> 16;
-    let g = (65280 & int) >>> 8;
-    let b = (255 & int) >>> 0;
-    r = Math.max(0, Math.min(255, r - Math.round(255 * -(amount / 100))));
-    g = Math.max(0, Math.min(255, g - Math.round(255 * -(amount / 100))));
-    b = Math.max(0, Math.min(255, b - Math.round(255 * -(amount / 100))));
-    return a << 24 | r << 16 | g << 8 | b;
-  }
-  static multiplyAlpha(int, alpha) {
-    return ((int >>> 24) * alpha & 0xff) << 24 | int & 0x00ffffff;
-  }
-}
-_a = MicroColor;
-(() => {
-  _a.int8 = new Int8Array(4);
-  _a.int32 = new Int32Array(_a.int8.buffer, 0, 1);
-  _a.float32 = new Float32Array(_a.int8.buffer, 0, 1);
-})();
-MicroColor.temp = new _a();
-MicroColor.isValidHex = hex => /^#([A-Fa-f0-9]{3,4}){1,2}$/.test(hex);
-MicroColor.getChunksFromString = (st, chunkSize) => st.match(new RegExp(`.{${chunkSize}}`, 'g'));
-MicroColor.convertHexUnitTo256 = hexStr => parseInt(hexStr.repeat(2 / hexStr.length), 16);
-MicroColor.getAlphafloat = (a, alpha) => {
-  if (typeof a !== 'undefined') {
-    return a / 255;
-  }
-  if (typeof alpha != 'number' || alpha < 0 || alpha > 1) {
-    return 1;
-  }
-  return alpha;
-};
-MicroColor.hexToRGBA = hex => {
-  if (!_a.isValidHex(hex)) {
-    throw new Error('Invalid HEX');
-  }
-  const chunkSize = Math.floor((hex.length - 1) / 3);
-  const hexArr = _a.getChunksFromString(hex.slice(1), chunkSize);
-  return hexArr.map(_a.convertHexUnitTo256);
-};
-/* harmony default export */ const microColor = (MicroColor);
-;// ./dev/src/utils/microColorUtils.ts
-let canvas;
-let ctx;
-function parseColorToInta(input) {
-  if (!canvas) {
-    canvas = document.createElement('canvas');
-    canvas.width = canvas.height = 1;
-    ctx = canvas.getContext('2d');
-  }
-  if (!ctx) return 0;
-  ctx.clearRect(0, 0, 1, 1);
-  try {
-    ctx.fillStyle = input;
-  } catch (_a) {
-    return 0;
-  }
-  ctx.fillRect(0, 0, 1, 1);
-  const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
-  return a << 24 | r << 16 | g << 8 | b;
-}
-;// ./dev/src/Settings.entities.ts
+/***/ },
+
+/***/ 56
+(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
 
 
+/* istanbul ignore next  */
+function setAttributesWithoutAttributes(styleElement) {
+  var nonce =  true ? __webpack_require__.nc : 0;
+  if (nonce) {
+    styleElement.setAttribute("nonce", nonce);
+  }
+}
+module.exports = setAttributesWithoutAttributes;
 
-class Color extends BasicSetting {
-  constructor({
-    value = '#FF00FFFF',
-    useAlpha = false,
-    useCss = false,
-    path
-  }) {
-    super({
-      path
-    });
-    this.microcolor = new microColor();
-    this.string = '#FFFFFF'; // hex or rgba
-    this.type = 'COL';
-    this.value = 0;
-    // this.hexa = '#FF00FF66' // 8-Digit hex
-    // this.vector = new Float32Array(4)
-    // this.rgba = new Uint8Array(4)
-    this.alpha = useAlpha;
-    this.default = value;
-    this.useCss = useCss;
-    this.setter(value);
+/***/ },
+
+/***/ 825
+(module) {
+
+"use strict";
+
+
+/* istanbul ignore next  */
+function apply(styleElement, options, obj) {
+  var css = "";
+  if (obj.supports) {
+    css += "@supports (".concat(obj.supports, ") {");
   }
-  get export() {
-    return this.microcolor.toHEX8();
+  if (obj.media) {
+    css += "@media ".concat(obj.media, " {");
   }
-  toJSON() {
-    return this.export;
+  var needLayer = typeof obj.layer !== "undefined";
+  if (needLayer) {
+    css += "@layer".concat(obj.layer.length > 0 ? " ".concat(obj.layer) : "", " {");
   }
-  setter(string_or_number) {
-    let inta = 0;
-    if (typeof string_or_number === 'string') {
-      if (string_or_number[0] == '#' && (string_or_number.length == 7 || string_or_number.length == 9)) {
-        inta = microColor.temp.fromHex(string_or_number).getInta();
-      } else {
-        inta = parseColorToInta(string_or_number);
-      }
-    } else {
-      inta = string_or_number;
+  css += obj.css;
+  if (needLayer) {
+    css += "}";
+  }
+  if (obj.media) {
+    css += "}";
+  }
+  if (obj.supports) {
+    css += "}";
+  }
+  var sourceMap = obj.sourceMap;
+  if (sourceMap && typeof btoa !== "undefined") {
+    css += "\n/*# sourceMappingURL=data:application/json;base64,".concat(btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))), " */");
+  }
+
+  // For old IE
+  /* istanbul ignore if  */
+  options.styleTagTransform(css, styleElement, options.options);
+}
+function removeStyleElement(styleElement) {
+  // istanbul ignore if
+  if (styleElement.parentNode === null) {
+    return false;
+  }
+  styleElement.parentNode.removeChild(styleElement);
+}
+
+/* istanbul ignore next  */
+function domAPI(options) {
+  if (typeof document === "undefined") {
+    return {
+      update: function update() {},
+      remove: function remove() {}
+    };
+  }
+  var styleElement = options.insertStyleElement(options);
+  return {
+    update: function update(obj) {
+      apply(styleElement, options, obj);
+    },
+    remove: function remove() {
+      removeStyleElement(styleElement);
     }
-    this.microcolor.fromINT(inta);
-    this.value = inta;
-    this.string = this.alpha ? this.microcolor.fromINT(inta).toRgb(this.alpha) : this.microcolor.fromINT(inta).getHEX();
-  }
+  };
 }
-class Select extends BasicSetting {
-  constructor({
-    name,
-    options = {},
-    value,
-    path
-  }) {
-    super({
-      name,
-      path
-    });
-    this.type = 'SEL';
-    this.options = options;
-    this.value = value;
-    this.default = value;
-    this.setter(value);
-  }
-  get export() {
-    return this.value;
-  }
-  toJSON() {
-    return this.export;
-  }
-  setter(data) {
-    let isError = true;
-    for (const [, value] of Object.entries(this.options)) {
-      if (value === data) {
-        isError = false;
-      }
+module.exports = domAPI;
+
+/***/ },
+
+/***/ 113
+(module) {
+
+"use strict";
+
+
+/* istanbul ignore next  */
+function styleTagTransform(css, styleElement) {
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css;
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild);
     }
-    if (isError) {
-      console.error('Select: Invalid value ', data, ', fallback to default', this, this.default);
-      this.value = this.default;
-      return;
-    }
-    this.value = data;
+    styleElement.appendChild(document.createTextNode(css));
   }
 }
-class Slider extends BasicSetting {
-  constructor({
-    name,
-    min,
-    max,
-    step,
-    value,
-    useCss = false,
-    dim = '',
-    unit = '',
-    path
-  }) {
-    var _a;
-    super({
-      name,
-      path
-    });
-    this.type = 'SLD';
-    this.min = min;
-    this.max = max;
-    this.step = step;
-    this.value = value;
-    this.default = value;
-    this.useCss = useCss;
-    this.dim = dim;
-    this.unit = unit;
-    this.precision = ((_a = step.toString().split('.')[1]) === null || _a === void 0 ? void 0 : _a.length) || 0;
-    this.setter(value);
-  }
-  get export() {
-    return this.value;
-  }
-  toJSON() {
-    return this.export;
-  }
-  setter(data) {
-    if (typeof data !== 'number' || typeof data == 'undefined') data = this.default;
-    this.value = data;
-  }
-}
-class Option extends BasicSetting {
-  constructor({
-    name,
-    value,
-    path
-  }) {
-    super({
-      name,
-      path
-    });
-    this.type = 'OPT';
-    this.value = value;
-    this.default = value;
-    this.setter(value);
-  }
-  get export() {
-    return this.value;
-  }
-  toJSON() {
-    return this.export;
-  }
-  setter(data) {
-    this.value = data;
-  }
-}
-class Input extends BasicSetting {
-  constructor({
-    name,
-    value,
-    csshook = s => s,
-    path,
-    useCss = false,
-    options = {}
-  }) {
-    super({
-      name,
-      path
-    });
-    this.type = 'INP';
-    this.value = value;
-    this.default = value;
-    this.csshook = csshook;
-    this.useCss = useCss;
-    this.options = options;
-    this.setter(value);
-  }
-  get export() {
-    return this.value;
-  }
-  toJSON() {
-    return this.export;
-  }
-  setter(data) {
-    if (typeof data !== 'string' || typeof data == 'undefined') data = this.default;
-    this.value = String(data);
-  }
-  cssValue() {
-    return this.csshook ? this.csshook(this.value) : this.value;
-  }
-}
-;// ./dev/src/settings.ts
+module.exports = styleTagTransform;
 
+/***/ },
 
-var Group1;
-(function (Group1) {
-  Group1["s_game"] = "gameplayGroup";
-})(Group1 || (Group1 = {}));
-const settingsDescriptions = {
-  Minimap: new Option({
-    path: Group1.s_game,
-    value: true
-  }),
-  AutoRespawn: new Option({
-    path: Group1.s_game,
-    value: false
-  }),
-  LeaderboardTitle: new Input({
-    path: Group1.s_game,
-    value: 'Doublesplit',
-    options: {
-      Leaderboard: 'Leaderboard'
-    }
-  }),
-  MapBorder: new Option({
-    path: Group1.s_game,
-    value: true
-  }),
-  MapSectors: new Option({
-    path: Group1.s_game,
-    value: true
-  }),
-  MapSectorLabels: new Option({
-    path: Group1.s_game,
-    value: true
-  }),
-  AutoCollectCoins: new Option({
-    path: Group1.s_game,
-    value: true
-  }),
-  AcidMode: new Option({
-    path: Group1.s_game,
-    value: false
-  })
-  // label: new Color({ path: Group1.s_game, value: 0x1affa3ff }),
-  // miniblob: new Color({ path: Group1.s_game, value: 0x0000ffff }),
-  // transparent_cells: new Slider({ path: Group1.s_game, value: 1, min: 0.1, max: 1, step: 0.1 })
-};
-const settings = new Settings(settingsDescriptions);
-Object.assign(window, {
-  settings
-});
-
-/***/ }),
-
-/***/ 714:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ 714
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -1986,24 +1442,19 @@ Object.assign(window, {
 //https://github.com/microsoft/TypeScript/issues/24122
 function EventMixin(Base) {
   class EventifyBase extends Base {
-    constructor() {
-      super(...arguments);
-      /* Stores events */
-      this.events = {};
-      /* Stores delegated events */
-      // ev: Array<[EventifyBase, EventName<EventMap>, LISTENER]> = [];
-      this.ev = [];
-      this.blockRemovingListeners = false;
-    }
+    /* Stores events */
+    events = {};
+    /* Stores delegated events */
+    // ev: Array<[EventifyBase, EventName<EventMap>, LISTENER]> = [];
+    ev = [];
+    blockRemovingListeners = false;
     on(...rest) {
-      var _a;
-      var _b;
       if (rest.length < 2) throw new Error('Eventify.on() need at least 2 arguments');
       const length = rest.length;
       const listener = rest[length - 1];
       for (let i = 0; length - 1 > i; i++) {
         const event = rest[i];
-        (_a = (_b = this.events)[event]) !== null && _a !== void 0 ? _a : _b[event] = [];
+        this.events[event] ??= [];
         this.events[event].push(listener);
       }
       return listener;
@@ -2203,12 +1654,11 @@ function deferrify(params) {
   let resolve = null;
   let reject = null;
   const promise = new Promise((resolveFunc, rejectFunc) => {
-    var _a;
     resolve = resolveFunc;
     reject = rejectFunc;
-    if ((params === null || params === void 0 ? void 0 : params.signal) instanceof Promise) {
+    if (params?.signal instanceof Promise) {
       params.signal.catch((...args) => reject(...args));
-    } else if ((_a = params === null || params === void 0 ? void 0 : params.signal) === null || _a === void 0 ? void 0 : _a.aborted) {
+    } else if (params?.signal?.aborted) {
       reject();
     }
   });
@@ -2250,140 +1700,775 @@ const sleep = delay => function chainDelay(args) {
   });
 };
 
-/***/ }),
+/***/ },
 
-/***/ 767:
-/***/ ((module, __webpack_exports__, __webpack_require__) => {
+/***/ 701
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  settings: () => (/* binding */ settings)
+});
+
+// EXTERNAL MODULE: ./Shared/src/utils/Eventify.ts
+var Eventify = __webpack_require__(714);
+;// ./dev/src/Settngs.ts
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+class BasicSetting {
+  exportable = true;
+  type = 'NONE';
+  _value = null;
+  default = null;
+  constructor({
+    path = 'DEFAULT',
+    name = ''
+  }) {
+    this.path = path;
+    this.name = name;
+  }
+  get value() {
+    return this._value;
+  }
+  set value(data) {
+    this._value = data;
+  }
+  setter(data) {
+    this.value = data;
+  }
+  get export() {
+    return this.value;
+  }
+}
+class Settings extends Eventify.Eventify {
+  constructor(descriptions) {
+    super();
+    this.raw = descriptions;
+    const self = this;
+    this.proxy = new Proxy(this.raw, {
+      set: (target, prop, newValue) => {
+        const previous = target[prop].value;
+        self.emit('before*', prop, newValue); // before set
+        target[prop].setter(newValue);
+        try {
+          newValue !== previous && self.emit.call(this, prop, newValue, previous); // on set
+          newValue !== previous && self.emit('*', prop, newValue, previous); // on any
+        } catch (message) {
+          console.error(message);
+        }
+        return true;
+      },
+      get(target, prop) {
+        return target[prop].value;
+      }
+    });
+  }
+  import(object) {
+    if (!object) return;
+    for (const option in this.raw) {
+      if (this.raw.hasOwnProperty(option) && object.hasOwnProperty(option)) {
+        this.proxy[option] = object[option];
+      }
+    }
+  }
+  export() {
+    const export_data = {};
+    for (const option in this.raw) {
+      export_data[option] = this.raw[option].export;
+    }
+    return export_data;
+  }
+  restore() {
+    for (const opt in this.raw) {
+      const option = opt;
+      if (this.raw.hasOwnProperty(option)) {
+        this.proxy[option] = this.raw[option].default;
+      }
+    }
+  }
+}
+;// ./dev/src/utils/microColor.ts
+class MicroColor {
+  // representation rgba in float number
+
+  static {
+    this.int8 = new Int8Array(4);
+    this.int32 = new Int32Array(this.int8.buffer, 0, 1);
+    this.float32 = new Float32Array(this.int8.buffer, 0, 1);
+  }
+  static temp = new MicroColor();
+  constructor(red = 255, green = 255, blue = 255, alpha = 255) {
+    this.r = red;
+    this.g = green;
+    this.b = blue;
+    this.a = alpha;
+    this.vector = new Float32Array(4);
+    this.bytes = new Uint8Array(4);
+    this.dataview = new DataView(this.bytes.buffer);
+    this.string = '#000000';
+    this.int = 0;
+    this.inta = 0;
+    this.updVector();
+    this.updString();
+    this.updInt();
+  }
+  updVector() {
+    this.vector[0] = this.r / 255;
+    this.vector[1] = this.g / 255;
+    this.vector[2] = this.b / 255;
+    this.vector[3] = this.a / 255;
+    this.bytes[0] = this.r;
+    this.bytes[1] = this.g;
+    this.bytes[2] = this.b;
+    this.bytes[3] = this.a;
+    this.float = this.dataview.getFloat32(0, true);
+    this.u32 = this.r | this.g << 8 | this.b << 16 | this.a << 24;
+    // for (let i = 0; i < 4; i++) {
+    //     this.u32 |= this.bytes[i] << (8 * i);
+    // }
+  }
+  updString() {
+    this.string = this.toRgb(true);
+  }
+  updInt() {
+    this.int = this.getInt();
+    this.inta = this.getInta();
+  }
+  cloneFrom(t) {
+    this.r = t.r;
+    this.g = t.g;
+    this.b = t.b;
+    this.a = t.a;
+    this.updVector();
+    this.updString();
+    return this;
+  }
+  fromHSL(h, s, l, a = 255) {
+    s /= 100;
+    l /= 100;
+    const c = (1 - Math.abs(2 * l - 1)) * s;
+    const x = c * (1 - Math.abs(h / 60 % 2 - 1));
+    const m = l - c / 2;
+    let r = 0;
+    let g = 0;
+    let b = 0;
+    if (0 <= h && h < 60) {
+      r = c, g = x, b = 0;
+    } else if (60 <= h && h < 120) {
+      r = x, g = c, b = 0;
+    } else if (120 <= h && h < 180) {
+      r = 0, g = c, b = x;
+    } else if (180 <= h && h < 240) {
+      r = 0, g = x, b = c;
+    } else if (240 <= h && h < 300) {
+      r = x, g = 0, b = c;
+    } else if (300 <= h && h < 360) {
+      r = c, g = 0, b = x;
+    }
+    // Having obtained RGB, convert channels to hex
+    this.r = Math.round((r + m) * 255);
+    this.g = Math.round((g + m) * 255);
+    this.b = Math.round((b + m) * 255);
+    this.a = a;
+    return this;
+  }
+  fromRGB(r, g, b, a = 255) {
+    this.r = r;
+    this.g = g;
+    this.b = b;
+    this.a = a;
+    this.updVector();
+    this.updString();
+    return this;
+  }
+  // fromINTA(int: number, alpha = 255) {
+  //     const a = (int >> 24) & alpha;
+  //     return this.fromINT(color);
+  // }
+  fromINT(int, reorder) {
+    this.a = (4278190080 & int) >>> 24;
+    this.r = (16711680 & int) >>> 16;
+    this.g = (65280 & int) >>> 8;
+    this.b = (255 & int) >>> 0;
+    if (reorder) Object.assign(this, {
+      r: this.a,
+      g: this.r,
+      b: this.g,
+      a: this.b
+    });
+    this.updVector();
+    this.updString();
+    return this;
+  }
+  fromHex(hex) {
+    const len = hex.length;
+    if (!hex || len !== 7 && len !== 9) return this;
+    let i = hex.length === 9 ? 32 : 24;
+    const n = parseInt(hex.slice(1), 16);
+    const r = n >> (i -= 8) & 255;
+    const g = n >> (i -= 8) & 255;
+    const b = n >> (i -= 8) & 255;
+    const a = i ? n >> i - 8 & 255 : 255;
+    return this.fromRGB(r, g, b, a);
+  }
+  get getNormalFromSecure() {
+    return MicroColor.rgbToInt(Math.ceil(this.r / 0.9), Math.ceil(this.g / 0.9), Math.ceil(this.b / 0.9));
+  }
+  toRgb(useAlpha) {
+    return useAlpha ? `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a / 255})` : `rgb(${this.r}, ${this.g}, ${this.b})`;
+  }
+  getHEXA() {
+    let r = this.r.toString(16);
+    let g = this.g.toString(16);
+    let b = this.b.toString(16);
+    let a = this.a.toString(16);
+    if (r.length == 1) r = '0' + r;
+    if (g.length == 1) g = '0' + g;
+    if (b.length == 1) b = '0' + b;
+    if (a.length == 1) a = '0' + a;
+    return '#' + r + g + b + a;
+  }
+  getFloat() {
+    const bits = this.a << 24 | this.b << 16 | this.g << 8 | this.r;
+    return MicroColor.pack(bits & 0xfeffffff);
+  }
+  getHEX() {
+    return '#' + (16777216 | this.getInt()).toString(16).substring(1);
+  }
+  getInt() {
+    return this.r << 16 | this.g << 8 | this.b;
+  }
+  getIntaShader(alpha) {
+    return this.r | this.g << 8 | this.b << 16 | (alpha < 0 ? this.a : alpha) << 24;
+  }
+  getIntShader() {
+    return this.r | this.g << 8 | this.b << 16;
+  }
+  getInta() {
+    return this.a << 24 | this.r << 16 | this.g << 8 | this.b;
+  }
+  getSecureHex() {
+    return MicroColor.colorIntToHex(MicroColor.rgbToInt(~~(this.r * 0.9), ~~(this.g * 0.9), ~~(this.b * 0.9)));
+  }
+  static rgbToInt(r, g, b) {
+    return r << 16 | g << 8 | b;
+  }
+  static colorIntToHex(int) {
+    let s = int.toString(16);
+    for (; s.length < 6;) {
+      s = '0' + s;
+    }
+    return '#' + s;
+  }
+  static isValidHex = hex => /^#([A-Fa-f0-9]{3,4}){1,2}$/.test(hex);
+  static getChunksFromString = (st, chunkSize) => st.match(new RegExp(`.{${chunkSize}}`, 'g'));
+  static convertHexUnitTo256 = hexStr => parseInt(hexStr.repeat(2 / hexStr.length), 16);
+  static getAlphafloat = (a, alpha) => {
+    if (typeof a !== 'undefined') {
+      return a / 255;
+    }
+    if (typeof alpha != 'number' || alpha < 0 || alpha > 1) {
+      return 1;
+    }
+    return alpha;
+  };
+  static inta2shader(int) {
+    const a = (0xff000000 & int) >>> 24;
+    const r = (0xff0000 & int) >>> 16;
+    const g = (0xff00 & int) >>> 8;
+    const b = (0xff & int) >>> 0;
+    return r | g << 8 | b << 16 | a << 24;
+  }
+  static hexToRGBA = hex => {
+    if (!MicroColor.isValidHex(hex)) {
+      throw new Error('Invalid HEX');
+    }
+    const chunkSize = Math.floor((hex.length - 1) / 3);
+    const hexArr = MicroColor.getChunksFromString(hex.slice(1), chunkSize);
+    return hexArr.map(MicroColor.convertHexUnitTo256);
+  };
+  toHEX8() {
+    return `#${(16777216 | this.getInt()).toString(16).substring(1)}${this.a.toString(16).padStart(2, '0')}`;
+  }
+  static pack(i) {
+    MicroColor.int32[0] = i;
+    return MicroColor.float32[0];
+  }
+  static unpack(f) {
+    MicroColor.float32[0] = f;
+    return MicroColor.int32[0];
+  }
+  static darkenColor(color, percent) {
+    const num = typeof color == 'string' ? parseInt(color, 16) : color,
+      amt = Math.round(2.55 * percent),
+      R = (num >> 16) + amt,
+      B = (num >> 8 & 0x00ff) + amt,
+      G = (num & 0x0000ff) + amt;
+    return 255 << 24 | R << 16 | G << 8 | B;
+  }
+  static brighten(int, amount = 10) {
+    const a = (4278190080 & int) >>> 24;
+    let r = (16711680 & int) >>> 16;
+    let g = (65280 & int) >>> 8;
+    let b = (255 & int) >>> 0;
+    r = Math.max(0, Math.min(255, r - Math.round(255 * -(amount / 100))));
+    g = Math.max(0, Math.min(255, g - Math.round(255 * -(amount / 100))));
+    b = Math.max(0, Math.min(255, b - Math.round(255 * -(amount / 100))));
+    return a << 24 | r << 16 | g << 8 | b;
+  }
+  static multiplyAlpha(int, alpha) {
+    return ((int >>> 24) * alpha & 0xff) << 24 | int & 0x00ffffff;
+  }
+}
+;// ./dev/src/utils/microColorUtils.ts
+let canvas;
+let ctx;
+function parseColorToInta(input) {
+  if (!canvas) {
+    canvas = document.createElement('canvas');
+    canvas.width = canvas.height = 1;
+    ctx = canvas.getContext('2d');
+  }
+  if (!ctx) return 0;
+  ctx.clearRect(0, 0, 1, 1);
+  try {
+    ctx.fillStyle = input;
+  } catch {
+    return 0;
+  }
+  ctx.fillRect(0, 0, 1, 1);
+  const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
+  return a << 24 | r << 16 | g << 8 | b;
+}
+;// ./dev/src/Settings.entities.ts
+
+
+
+class Color extends BasicSetting {
+  microcolor = new MicroColor();
+  string = '#FFFFFF'; // hex or rgba
+
+  constructor({
+    value = '#FF00FFFF',
+    useAlpha = false,
+    useCss = false,
+    path
+  }) {
+    super({
+      path
+    });
+    this.type = 'COL';
+    this.value = 0;
+    // this.hexa = '#FF00FF66' // 8-Digit hex
+    // this.vector = new Float32Array(4)
+    // this.rgba = new Uint8Array(4)
+    this.alpha = useAlpha;
+    this.default = value;
+    this.useCss = useCss;
+    this.setter(value);
+  }
+  get export() {
+    return this.microcolor.toHEX8();
+  }
+  toJSON() {
+    return this.export;
+  }
+  setter(string_or_number) {
+    let inta = 0;
+    if (typeof string_or_number === 'string') {
+      if (string_or_number[0] == '#' && (string_or_number.length == 7 || string_or_number.length == 9)) {
+        inta = MicroColor.temp.fromHex(string_or_number).getInta();
+      } else {
+        inta = parseColorToInta(string_or_number);
+      }
+    } else {
+      inta = string_or_number;
+    }
+    this.microcolor.fromINT(inta);
+    this.value = inta;
+    this.string = this.alpha ? this.microcolor.fromINT(inta).toRgb(this.alpha) : this.microcolor.fromINT(inta).getHEX();
+  }
+}
+class Select extends BasicSetting {
+  constructor({
+    name,
+    options = {},
+    value,
+    path
+  }) {
+    super({
+      name,
+      path
+    });
+    this.type = 'SEL';
+    this.options = options;
+    this.value = value;
+    this.default = value;
+    this.setter(value);
+  }
+  get export() {
+    return this.value;
+  }
+  toJSON() {
+    return this.export;
+  }
+  setter(data) {
+    let isError = true;
+    for (const [, value] of Object.entries(this.options)) {
+      if (value === data) {
+        isError = false;
+      }
+    }
+    if (isError) {
+      console.error('Select: Invalid value ', data, ', fallback to default', this, this.default);
+      this.value = this.default;
+      return;
+    }
+    this.value = data;
+  }
+}
+class Slider extends BasicSetting {
+  constructor({
+    name,
+    min,
+    max,
+    step,
+    value,
+    useCss = false,
+    dim = '',
+    unit = '',
+    path
+  }) {
+    super({
+      name,
+      path
+    });
+    this.type = 'SLD';
+    this.min = min;
+    this.max = max;
+    this.step = step;
+    this.value = value;
+    this.default = value;
+    this.useCss = useCss;
+    this.dim = dim;
+    this.unit = unit;
+    this.precision = step.toString().split('.')[1]?.length || 0;
+    this.setter(value);
+  }
+  get export() {
+    return this.value;
+  }
+  toJSON() {
+    return this.export;
+  }
+  setter(data) {
+    if (typeof data !== 'number' || typeof data == 'undefined') data = this.default;
+    this.value = data;
+  }
+}
+class Option extends BasicSetting {
+  constructor({
+    name,
+    value,
+    path
+  }) {
+    super({
+      name,
+      path
+    });
+    this.type = 'OPT';
+    this.value = value;
+    this.default = value;
+    this.setter(value);
+  }
+  get export() {
+    return this.value;
+  }
+  toJSON() {
+    return this.export;
+  }
+  setter(data) {
+    this.value = data;
+  }
+}
+class Input extends BasicSetting {
+  constructor({
+    name,
+    value,
+    csshook = s => s,
+    path,
+    useCss = false,
+    options = {}
+  }) {
+    super({
+      name,
+      path
+    });
+    this.type = 'INP';
+    this.value = value;
+    this.default = value;
+    this.csshook = csshook;
+    this.useCss = useCss;
+    this.options = options;
+    this.setter(value);
+  }
+  get export() {
+    return this.value;
+  }
+  toJSON() {
+    return this.export;
+  }
+  setter(data) {
+    if (typeof data !== 'string' || typeof data == 'undefined') data = this.default;
+    this.value = String(data);
+  }
+  cssValue() {
+    return this.csshook ? this.csshook(this.value) : this.value;
+  }
+}
+;// ./dev/src/settings.ts
+
+
+var Group1;
+(function (Group1) {
+  Group1["s_game"] = "gameplayGroup";
+})(Group1 || (Group1 = {}));
+const settingsDescriptions = {
+  Minimap: new Option({
+    path: Group1.s_game,
+    value: true
+  }),
+  AutoRespawn: new Option({
+    path: Group1.s_game,
+    value: false
+  }),
+  LeaderboardTitle: new Input({
+    path: Group1.s_game,
+    value: 'Doublesplit',
+    options: {
+      Leaderboard: 'Leaderboard'
+    }
+  }),
+  MapBorder: new Option({
+    path: Group1.s_game,
+    value: true
+  }),
+  MapSectors: new Option({
+    path: Group1.s_game,
+    value: true
+  }),
+  MapSectorLabels: new Option({
+    path: Group1.s_game,
+    value: true
+  }),
+  AutoCollectCoins: new Option({
+    path: Group1.s_game,
+    value: true
+  }),
+  AcidMode: new Option({
+    path: Group1.s_game,
+    value: false
+  })
+  // label: new Color({ path: Group1.s_game, value: 0x1affa3ff }),
+  // miniblob: new Color({ path: Group1.s_game, value: 0x0000ffff }),
+  // transparent_cells: new Slider({ path: Group1.s_game, value: 1, min: 0.1, max: 1, step: 0.1 })
+};
+const settings = new Settings(settingsDescriptions);
+Object.assign(window, {
+  settings
+});
+
+/***/ },
+
+/***/ 413
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */   AppContext: () => (/* binding */ AppContext)
 /* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(653);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(102);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
-// Imports
+/* harmony import */ var preact__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(32);
+/* harmony import */ var preact__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(preact__WEBPACK_IMPORTED_MODULE_0__);
 
+const AppContext = (0,preact__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
 
-var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
-// Module
-___CSS_LOADER_EXPORT___.push([module.id, `#minimap {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-}
-#ds-minimap {
-    position: fixed;
-    bottom: 15px;
-    right: 15px;
-    width: 200px;
-    height: 200px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
-    overflow: hidden;
-    background-color: rgba(20, 20, 20, 0.75);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-}
-#ds-minimap .background {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(5, 1fr);
-    width: 100%;
-    height: 100%;
-}
-#ds-minimap .sector {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #ddd;
-    font-size: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition:
-        background-color 0.3s ease,
-        transform 0.2s ease;
-}
-#ds-minimap .sector.active {
-    background-color: rgba(0, 191, 255, 0.3);
-    border: 1px solid #00bfff;
-}
-`, ""]);
-// Exports
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+/***/ },
 
-
-/***/ }),
-
-/***/ 825:
-/***/ ((module) => {
+/***/ 390
+(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Minimap: () => (/* binding */ Minimap)
+/* harmony export */ });
+/* harmony import */ var preact_hooks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(632);
+/* harmony import */ var preact_hooks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(preact_hooks__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(701);
+/* harmony import */ var _Contexts__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(413);
+/* harmony import */ var preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(557);
+/* module decorator */ module = __webpack_require__.hmd(module);
 
 
-/* istanbul ignore next  */
-function apply(styleElement, options, obj) {
-  var css = "";
-  if (obj.supports) {
-    css += "@supports (".concat(obj.supports, ") {");
-  }
-  if (obj.media) {
-    css += "@media ".concat(obj.media, " {");
-  }
-  var needLayer = typeof obj.layer !== "undefined";
-  if (needLayer) {
-    css += "@layer".concat(obj.layer.length > 0 ? " ".concat(obj.layer) : "", " {");
-  }
-  css += obj.css;
-  if (needLayer) {
-    css += "}";
-  }
-  if (obj.media) {
-    css += "}";
-  }
-  if (obj.supports) {
-    css += "}";
-  }
-  var sourceMap = obj.sourceMap;
-  if (sourceMap && typeof btoa !== "undefined") {
-    css += "\n/*# sourceMappingURL=data:application/json;base64,".concat(btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))), " */");
-  }
 
-  // For old IE
-  /* istanbul ignore if  */
-  options.styleTagTransform(css, styleElement, options.options);
-}
-function removeStyleElement(styleElement) {
-  // istanbul ignore if
-  if (styleElement.parentNode === null) {
-    return false;
-  }
-  styleElement.parentNode.removeChild(styleElement);
-}
 
-/* istanbul ignore next  */
-function domAPI(options) {
-  if (typeof document === "undefined") {
-    return {
-      update: function update() {},
-      remove: function remove() {}
-    };
-  }
-  var styleElement = options.insertStyleElement(options);
-  return {
-    update: function update(obj) {
-      apply(styleElement, options, obj);
-    },
-    remove: function remove() {
-      removeStyleElement(styleElement);
+function Minimap() {
+  const app = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_0__.useContext)(_Contexts__WEBPACK_IMPORTED_MODULE_2__.AppContext);
+  const [minimapEnabled, setMinimapEnabled] = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_0__.useState)(_settings__WEBPACK_IMPORTED_MODULE_1__.settings.raw.Minimap.value);
+  const $canvas = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const $sectors = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const $minimap = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  (0,preact_hooks__WEBPACK_IMPORTED_MODULE_0__.useLayoutEffect)(() => {
+    const ctx = $canvas.current.getContext('2d');
+    const sectors = $sectors.current.querySelectorAll('.sector');
+    let sectorIndex = -1;
+    let rafId;
+    function render() {
+      const sectorId = app.world.drawMinimap(ctx, $canvas.current, true);
+      setSector(sectorId);
+      rafId = requestAnimationFrame(render);
     }
-  };
+    function setSector(index) {
+      if (index === sectorIndex || index < 0) return;
+      index = Math.min(index, sectors.length - 1);
+      sectorIndex !== -1 && sectors[sectorIndex].classList.remove('active');
+      sectors[index].classList.add('active');
+      sectorIndex = index;
+    }
+    if (minimapEnabled) rafId = requestAnimationFrame(render);
+    $minimap.current.style.display = minimapEnabled ? '' : 'none';
+    const minimapListener = _settings__WEBPACK_IMPORTED_MODULE_1__.settings.on('Minimap', value => {
+      setMinimapEnabled(value);
+    });
+    return () => {
+      _settings__WEBPACK_IMPORTED_MODULE_1__.settings.removeListener('Minimap', minimapListener);
+      cancelAnimationFrame(rafId);
+    };
+  }, [minimapEnabled]);
+  return (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+    ref: $minimap,
+    id: "ds-minimap",
+    style: {
+      zIndex: 1000
+    },
+    children: [(0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      class: "background",
+      ref: $sectors,
+      children: [(0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "A1"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "A2"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "A3"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "A4"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "A5"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "B1"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "B2"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "B3"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "B4"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "B5"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "C1"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "C2"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "C3"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "C4"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "C5"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "D1"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "D2"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "D3"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "D4"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "D5"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "E1"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "E2"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "E3"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "E4"
+      }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        class: "sector",
+        children: "E5"
+      })]
+    }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("canvas", {
+      id: "minimap",
+      width: "200",
+      height: "200",
+      ref: $canvas
+    })]
+  });
 }
-module.exports = domAPI;
+if ('hot' in module) {
+  // @ts-ignore
+  module['hot'].accept();
+}
 
-/***/ })
+/***/ },
+
+/***/ 274
+(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+module.exports = __webpack_require__.p + "b4a2f91a9e6101f42217.png";
+
+/***/ },
+
+/***/ 32
+(module) {
+
+"use strict";
+module.exports = preact;
+
+/***/ },
+
+/***/ 632
+(module) {
+
+"use strict";
+module.exports = preactHooks;
+
+/***/ }
 
 /******/ });
 /************************************************************************/
@@ -2413,6 +2498,9 @@ module.exports = domAPI;
 /******/ 	// Return the exports of the module
 /******/ 	return module.exports;
 /******/ }
+/******/ 
+/******/ // expose the modules object (__webpack_modules__)
+/******/ __webpack_require__.m = __webpack_modules__;
 /******/ 
 /************************************************************************/
 /******/ /* webpack/runtime/compat get default export */
@@ -2459,6 +2547,37 @@ module.exports = domAPI;
 /******/ 	__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ })();
 /******/ 
+/******/ /* webpack/runtime/publicPath */
+/******/ (() => {
+/******/ 	__webpack_require__.p = "https://raw.githack.com/doublesplit/lite-ext/main/dist/";
+/******/ })();
+/******/ 
+/******/ /* webpack/runtime/jsonp chunk loading */
+/******/ (() => {
+/******/ 	__webpack_require__.b = (typeof document !== 'undefined' && document.baseURI) || self.location.href;
+/******/ 	
+/******/ 	// object to store loaded and loading chunks
+/******/ 	// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 	// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
+/******/ 	var installedChunks = {
+/******/ 		903: 0
+/******/ 	};
+/******/ 	
+/******/ 	// no chunk on demand loading
+/******/ 	
+/******/ 	// no prefetching
+/******/ 	
+/******/ 	// no preloaded
+/******/ 	
+/******/ 	// no HMR
+/******/ 	
+/******/ 	// no HMR manifest
+/******/ 	
+/******/ 	// no on chunks loaded
+/******/ 	
+/******/ 	// no jsonp function
+/******/ })();
+/******/ 
 /******/ /* webpack/runtime/nonce */
 /******/ (() => {
 /******/ 	__webpack_require__.nc = undefined;
@@ -2470,8 +2589,11 @@ var __webpack_exports__ = {};
 (() => {
 "use strict";
 
-// EXTERNAL MODULE: ./Shared/src/utils/Eventify.ts
-var Eventify = __webpack_require__(714);
+;// ./dev/src/utils/env.ts
+function makeGLobal(name, value) {
+  window[name] = value;
+  return value;
+}
 ;// ./dev/src/utils/utils.ts
 /**
  * Finds all nodes in the given tree structure that match the specified condition.
@@ -2490,21 +2612,20 @@ function find_node(where = window['agarApp'].home, cond) {
     return results;
   };
   function each_children(child, depth) {
-    var _a, _b, _c, _d, _e, _f, _g;
     depth += 1;
     if (cond(child, depth)) results.push(child);
     child._staticTrees && find_static(child._staticTrees, cond);
     // console.log(depth, 'TAG:', child, child.$vnode?.tag)
-    (_a = child.$children) === null || _a === void 0 ? void 0 : _a.forEach(ch => {
+    child.$children?.forEach(ch => {
       each_children(ch, depth);
     });
-    (_b = child.children) === null || _b === void 0 ? void 0 : _b.forEach(ch => {
+    child.children?.forEach(ch => {
       each_children(ch, depth);
     });
-    (_d = (_c = child._vnode) === null || _c === void 0 ? void 0 : _c.children) === null || _d === void 0 ? void 0 : _d.forEach(ch => {
+    child._vnode?.children?.forEach(ch => {
       each_children(ch, depth);
     });
-    (_g = (_f = (_e = child._vnode) === null || _e === void 0 ? void 0 : _e.componentOptions) === null || _f === void 0 ? void 0 : _f.children) === null || _g === void 0 ? void 0 : _g.forEach(ch => {
+    child._vnode?.componentOptions?.children?.forEach(ch => {
       each_children(ch, depth);
     });
   }
@@ -2551,7 +2672,706 @@ function camelCaseToWords(s) {
   const result = s.replace(/([A-Z])/g, ' $1');
   return result.charAt(0).toUpperCase() + result.slice(1);
 }
+;// external "SimplePeer"
+const external_SimplePeer_namespaceObject = SimplePeer;
+var external_SimplePeer_default = /*#__PURE__*/__webpack_require__.n(external_SimplePeer_namespaceObject);
+;// ./Shared/src/utils/Debugger.ts
+function DebuggerMixin(Base) {
+  return class DebuggerBase extends Base {
+    bindings = {};
+    prefix = [];
+    proxyPrefix = false;
+    timeLogging = false;
+    _useProxy = false;
+    isLogging = true;
+    dummy() {}
+    proxy = () => {};
+    resetBindings() {
+      this.bindings = {};
+    }
+    set useProxy(value) {
+      this.resetBindings();
+      this._useProxy = value;
+    }
+    get useProxy() {
+      this.resetBindings();
+      return this._useProxy;
+    }
+    setPrefix(...prefix) {
+      this.resetBindings();
+      this.prefix = prefix;
+    }
+    getBindinng(method) {
+      if (!this.isLogging) return this.dummy;
+      const time = this.timeLogging ? new Date().toLocaleTimeString(undefined, {
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        hourCycle: 'h23'
+      }) : null;
+      if (time) this.bindings[method] = undefined;
+      if (!this.useProxy) {
+        this.bindings[method] ??= this.timeLogging ?
+        // @ts-ignore
+        console[method].bind(console, ...this.prefix, time) :
+        // @ts-ignore
+        console[method].bind(console, ...this.prefix);
+        return this.bindings[method];
+      } else {
+        return this.bindings[method] || (
+        // @ts-ignore
+        this.bindings[method] = new Proxy(console[method].bind(console[method]), {
+          apply: (target, thisArg, argumentsList) => {
+            if (this.proxyPrefix) this.proxy(method, [...this.prefix, ...argumentsList]);else this.proxy(method, argumentsList);
+            return Reflect.apply(target, thisArg, argumentsList);
+          }
+        }));
+      }
+    }
+    get info() {
+      return this.getBindinng('info');
+    }
+    get log() {
+      return this.getBindinng('log');
+    }
+    get warn() {
+      return this.getBindinng('warn');
+    }
+    get access() {
+      return this.getBindinng('warn');
+    }
+    get debug() {
+      return this.getBindinng('debug');
+    }
+    get error() {
+      return this.getBindinng('error');
+    }
+    get fatal() {
+      return this.getBindinng('error');
+    }
+    get print() {
+      return this.getBindinng('log');
+    }
+    get trace() {
+      return this.getBindinng('trace');
+    }
+    get groupCollapsed() {
+      return this.getBindinng('groupCollapsed');
+    }
+  };
+}
+class Debgr extends DebuggerMixin(class {}) {}
+
+// EXTERNAL MODULE: ./Shared/src/utils/Eventify.ts
+var Eventify = __webpack_require__(714);
+;// ./Shared/src/P2PWebSocket/MicroPeer.ts
+
+
+
+const randomid = () => Array(5).fill(0).map(() => Math.random().toString(36).substring(2, 6)).join('');
+function getHash(input = Math.random().toString(36), length = 20) {
+  function hash(str = '') {
+    let i = str.length,
+      h = 5381;
+    for (; i--;) h = h * 33 ^ str.charCodeAt(i);
+    return h >>> 0;
+  }
+  const result = [];
+  for (let len = 0; length > len;) {
+    const str = hash(result[result.length - 1] || input).toString(16);
+    len += str.length;
+    result.push(str);
+  }
+  return result.join('').slice(0, length);
+}
+const iceServers = [{
+  urls: ['stun:stun.l.google.com:19302', 'stun:global.stun.twilio.com:3478', 'stun:freeturn.net:3478', 'stun:freeturn.net:5349']
+}, {
+  urls: ['turn:freeturn.net:3478', 'turns:freeturn.net:5349'],
+  credential: 'free',
+  username: 'free'
+}
+// {
+//     urls: [
+//         'turn:159.69.83.64:3478?transport=tcp',
+//         'turn:159.69.83.64:3479?transport=tcp',
+//         'turn:159.69.83.64:3478?transport=udp',
+//         'turn:159.69.83.64:3479?transport=udp'
+//     ],
+//     username: 'test',
+//     credential: 'b2397c884a604e333d3e980da73f0a58'
+// }
+];
+class MicroPeer extends DebuggerMixin(Eventify.Eventify) {
+  id = randomid().substring(0, 20);
+  isLogging = true;
+  state = 'stopped';
+  destroyed = false;
+  reconnecting = false;
+  offers = new Map();
+  connected = new Map();
+  answers = new Map();
+  intervalAnnounce = 5;
+  timerAnnounce = null;
+  isGeneration = false;
+  constructor({
+    info_hash
+  }, socket, callbacks = {
+    connected: () => {},
+    data: () => {},
+    disconnected: () => {}
+  }) {
+    super();
+    this.callbacks = callbacks;
+    this.setPrefix('[Peer ' + this.id + ']:');
+    this.socket = socket;
+    this.info_hash = getHash(info_hash, 20);
+    this.initSocket();
+    this.start();
+  }
+  start() {
+    // Start interval
+    if (this.destroyed == true) return this.log('already destroyed');
+    this.setInterval();
+  }
+  destroy() {
+    // Destroying peer
+    if (this.destroyed == true) return this.log('already destroyed');
+    this.unlisten();
+    this.stop();
+    for (const [, peer] of this.offers) peer.destroy();
+    for (const [, peer] of this.connected) peer.destroy();
+    this.events = {};
+  }
+  stop() {
+    // Stopping announces
+    clearInterval(this.timerAnnounce);
+    this.socket.send(this.generateStopInfo());
+    // this.unlisten()
+  }
+  setInterval() {
+    clearInterval(this.timerAnnounce);
+    this.timerAnnounce = setInterval(() => {
+      this.emit('announceinterval');
+    }, this.intervalAnnounce * 1000);
+  }
+  async announce(opts = {}, callback) {
+    if (this.destroyed || this.reconnecting) return;
+    if (!this.socket.isOpened()) {
+      !this.socket.isConnecting && this.socket.connect();
+      this.socket.once('open', () => {
+        this.announce(opts);
+      });
+      return;
+    }
+    const params = Object.assign({
+      numwant: 0,
+      uploaded: 0,
+      downloaded: 0,
+      left: 0
+    }, opts, {
+      action: 'announce',
+      info_hash: this.info_hash,
+      peer_id: this.id,
+      offers: undefined
+    });
+    // if (this._trackerId) params.trackerid = this._trackerId
+    if (opts.event === 'stopped' || opts.event === 'completed') {
+      opts.event = this.state = 'stopped';
+      params.numwant = 0;
+      params.uploaded = 0;
+      params.downloaded = 0;
+      params.left = 0;
+      // Don't include offers with 'stopped' or 'completed' event
+      this.socket.send(params);
+      callback && callback();
+      return;
+    } else if (this.state != 'stopped' || opts.event == 'started') {
+      opts.event = this.state == 'started' ? 'update' : 'started';
+      if (this.isGeneration) return;
+      // Limit the number of offers that are generated, since it can be slow
+      const numwant = Math.min(opts.numwant, 10);
+      this.generateOffers(numwant).then(offers => {
+        params.numwant = offers.length;
+        Object.assign(params, {
+          offers
+        });
+        this.socket.send(params);
+        callback && callback();
+      });
+    }
+  }
+  async generateOffers(numwant) {
+    if (this.isGeneration) return;
+    this.isGeneration = true;
+    const result_offers = [];
+    const promises = [];
+    for (let targetWant = numwant - this.offers.size; targetWant--;) (() => {
+      const peer = new (external_SimplePeer_default())({
+        initiator: true,
+        trickle: false,
+        iceCompleteTimeout: 1000,
+        // @ts-ignore
+        wrtc: typeof wrtc !== 'undefined' ? wrtc : undefined,
+        config: {
+          iceServers
+        }
+      });
+      peer.once('error', e => {
+        this.error('Error', e);
+      });
+      peer['id'] = randomid().substring(0, 20);
+      const promised = new Promise((res, rej) => {
+        peer.once('error', rej);
+        peer.once('signal', res);
+      }).then(e => {
+        this.offers.set(peer['id'], peer);
+        peer.once('connect', () => {
+          this.emit('connect', peer);
+          this.connected.set(peer['id'], peer);
+          this.offers.delete(peer['id']);
+          removeUnnecessaryPeerEvents(peer);
+        });
+        peer.on('close', () => {
+          this.connected.delete(peer['id']);
+          this.offers.delete(peer['id']);
+          removeUnnecessaryPeerEvents(peer);
+        });
+        peer.on('error', () => {
+          this.offers.delete(peer['id']);
+          this.connected.delete(peer['id']);
+          removeUnnecessaryPeerEvents(peer);
+        });
+        return e;
+      }).catch(() => {
+        destroyPeer(peer);
+      });
+      promises.push(promised);
+    })();
+    await Promise.all(promises);
+    for (const [id, peer] of this.offers) {
+      result_offers.push({
+        offer: peer['_pc'].localDescription,
+        offer_id: peer['id']
+      });
+    }
+    this.isGeneration = false;
+    return result_offers;
+  }
+  initSocket() {
+    this.listenTo(this.socket, 'open', () => {});
+    this.listenTo(this.socket, 'message',
+    /**
+     * @param {MessageAnswer | MessageOffer | MessageStats} data
+     */
+    data => {
+      if ('complete' in data && 'incomplete' in data) {
+        // this.log({ hash: data.info_hash, 'have in': data.complete, 'not loaded in': data.incomplete });
+      }
+      // MessageOffer
+      if ('offer' in data) this.onOffer(data);
+      // MessageAnswer
+      if ('answer' in data) {
+        this.groupCollapsed('Answer is received, connecting to peer...');
+        this.log(data);
+        console.groupEnd();
+        const peer = this.offers.get(data.offer_id);
+        if (!peer) return this.error('Error: for this answer not found corresponding offer', data.offer_id);
+        // console.log('answer for',peer)
+        // peer.remotePeerId = data.peer_id
+        // peer.remoteOfferId = data.to_offer_id
+        peer.signal(data.answer);
+      }
+    });
+  }
+  onOffer(data) {
+    this.log('STEP 2: accept offer of remote peers', data);
+    const SP = (external_SimplePeer_default());
+    const peer = new SP({
+      initiator: false,
+      trickle: false,
+      iceCompleteTimeout: 1000,
+      // @ts-ignore
+      wrtc: typeof wrtc !== 'undefined' ? wrtc : undefined,
+      config: {
+        iceServers
+      }
+    });
+    peer['id'] = ('-' + randomid()).substring(0, 20);
+    peer.signal(data.offer);
+    const promised = new Promise((res, rej) => {
+      peer.once('error', rej);
+      peer.once('signal', res);
+    });
+    promised.then(() => {
+      const json = {
+        action: 'announce',
+        info_hash: this.info_hash,
+        peer_id: this.id,
+        to_peer_id: data.peer_id,
+        to_offer_id: peer['id'],
+        // this is not protocol specified, but it can be used
+        answer: peer['_pc'].localDescription,
+        offer_id: data.offer_id
+      };
+      this.socket.send(json);
+      let onConnect;
+      let onClose;
+      let onError;
+      peer.on('connect', onConnect = () => {
+        this.emit('connect', peer);
+        this.connected.set(peer['id'], peer);
+        console.log('Connected my answer');
+        removeUnnecessaryPeerEvents(peer);
+      });
+      peer.on('close', onClose = () => {
+        this.connected.delete(peer['id']);
+        removeUnnecessaryPeerEvents(peer);
+        removeListeners();
+      });
+      peer.on('error', onError = () => {
+        this.connected.delete(peer['id']);
+        removeUnnecessaryPeerEvents(peer);
+        removeListeners();
+      });
+      function removeListeners() {
+        peer.removeListener('connect', onConnect);
+        peer.removeListener('close', onClose);
+        peer.removeListener('error', onError);
+      }
+    });
+    promised.catch(error => {
+      this.error(error);
+      destroyPeer(peer);
+    });
+  }
+  generateStopInfo() {
+    const json = {
+      action: 'announce',
+      event: 'stopped',
+      numwant: 0,
+      uploaded: 0,
+      downloaded: 0,
+      left: 0,
+      info_hash: this.info_hash,
+      peer_id: this.id
+    };
+    return json;
+  }
+  async scrape() {
+    const json = {
+      action: 'scrape',
+      info_hash: null
+      // "info_hash": this.info_hash
+    };
+    this.socket.send(json);
+  }
+}
+function removeUnnecessaryPeerEvents(peer) {
+  peer.removeAllListeners('signal');
+}
+function destroyPeer(peer) {
+  removeUnnecessaryPeerEvents(peer);
+  peer.removeAllListeners('connect');
+  peer.removeAllListeners('data');
+  peer.removeAllListeners('close');
+  peer.removeAllListeners('error');
+  peer.destroy();
+}
+;// ./Shared/src/utils/throttle-debounce.ts
+const throttle = (f, t) => {
+  let lastCall;
+  return (...args) => {
+    const previousCall = lastCall;
+    lastCall = Date.now();
+    if (previousCall === undefined ||
+    // function is being called for the first time
+    lastCall - previousCall > t) {
+      f(...args);
+    }
+  };
+};
+const debounce = (f, t) => {
+  let lastCall;
+  let lastCallTimer;
+  return (...args) => {
+    const previousCall = lastCall;
+    lastCall = Date.now();
+    if (previousCall && lastCall - previousCall <= t) {
+      if (lastCallTimer) {
+        clearTimeout(lastCallTimer);
+      }
+    }
+    lastCallTimer = setTimeout(() => f(...args), t);
+  };
+};
+/**
+ * example usage:
+ * const throttled = throttleWithLimit(() => console.log('hello'), 1000, 5);
+ */
+function throttleWithLimit(handler, timeLimit, callLimit, handleError, passContext = true) {
+  const shtraf = 0;
+  let lastCallTime = 0;
+  let firstMsgCallTime = 0;
+  let maxQueue = 0;
+  return function () {
+    const now = performance.now();
+    const firstCallElapsed = now - firstMsgCallTime;
+    const lastCallElapsed = now - lastCallTime;
+    if (lastCallElapsed < timeLimit) {
+      maxQueue++;
+      if (firstCallElapsed < timeLimit) {} else {
+        lastCallTime += lastCallElapsed;
+      }
+    }
+    if (firstCallElapsed > timeLimit) {
+      firstMsgCallTime = now;
+      maxQueue = 0;
+    }
+    if (maxQueue > callLimit) {
+      firstMsgCallTime = now + shtraf;
+      if (handleError !== undefined) {
+        return passContext ? handleError.call(this, arguments) : handleError(arguments);
+      } else {
+        return;
+      }
+    }
+    lastCallTime = now;
+    // @ts-ignore
+    return handler.apply(this, arguments);
+  };
+}
+;// ./Shared/src/P2PWebSocket/WebTorrent.ts
+
+
+class WebTorrent extends Eventify.Eventify {
+  ws = null;
+  reconnectTimer = null;
+  constructor(url = 'wss://tracker.openwebtorrent.com') {
+    super();
+    this.url = url;
+    this.debounce_send = debounce(this.send.bind(this), 200);
+  }
+  send(data) {
+    if (this.isOpened()) this.ws.send(JSON.stringify(data));else console.error("Can't send: ws not opened");
+  }
+  isOpened() {
+    return this.ws && this.ws.readyState === this.ws.OPEN;
+  }
+  get isConnecting() {
+    return this.ws && this.ws.readyState == this.ws.CONNECTING;
+  }
+  connect() {
+    this.ws = new WebSocket(this.url);
+    this.ws.onopen = () => this.onOpen();
+    this.ws.onerror = () => {
+      this.emit('error');
+      this.onClose();
+    };
+    this.ws.onclose = () => this.onClose();
+    this.ws.onmessage = e => {
+      const data = JSON.parse(e.data);
+      this.emit('message', data);
+    };
+  }
+  reset() {
+    if (this.ws) {
+      this.ws.onopen = this.ws.onerror = this.ws.onclose = this.ws.onmessage = null;
+      this.ws.close();
+      this.ws = null;
+    }
+  }
+  onClose() {
+    this.reset();
+    this.emit('close');
+  }
+  onOpen() {
+    this.emit('open');
+  }
+}
+;// ./Shared/src/P2PWebSocket/P2PWebSocket.ts
+var _a;
+
+
+const ws = new WebTorrent('wss://tracker.openwebtorrent.com');
+const myPeer = new MicroPeer({
+  info_hash: 'null'
+}, ws);
+class P2PWebSocket extends EventTarget {
+  static CONNECTING = 0;
+  static OPEN = 1;
+  static CLOSING = 2;
+  static CLOSED = 3;
+  static isFake = true;
+  CONNECTING = _a.CONNECTING;
+  OPEN = _a.OPEN;
+  CLOSING = _a.CLOSING;
+  CLOSED = _a.CLOSED;
+  #_readyState = _a.CONNECTING;
+  #_binaryType = 'blob';
+  bufferedAmount = 0;
+  extensions = '';
+  get readyState() {
+    return this.#_readyState;
+  }
+  set binaryType(x) {
+    this.websocket && (this.websocket.binaryType = x);
+    this.#_binaryType = x;
+  }
+  get binaryType() {
+    return this.#_binaryType;
+  }
+  isFake = true;
+  protocol = '';
+  DcInitialized = false;
+
+  // myPeer: MicroPeer = myPeer;
+
+  #connect_handler = null;
+  onopen = () => {};
+  onmessage = () => {};
+  onclose = () => {};
+  onerror = () => {};
+  send = () => {};
+  constructor(url, protocol) {
+    super();
+    const hash = url.substring(7);
+    this.url = url;
+    if (protocol) this.protocol = protocol;
+    this.send = data => {
+      // @ts-ignore
+      this.Web.send(data);
+    };
+    this.timeoutError = setTimeout(() => {
+      this.onerror && this.onerror(new Event('timeout'));
+      this.close(undefined, 'timeout');
+      myPeer.stop();
+      // myPeer.socket.ws?.close()
+    }, 5000);
+    myPeer['info_hash'] = getHash(hash, 20);
+    const connect_handler = peer => {
+      // myPeer.removeListener('connect', this.connect_handler);
+      if (this.DcInitialized) return console.error('DC already initialized');
+      this.DcInitialized = true;
+      if (this.#connect_handler) {
+        myPeer.removeListener('connect', this.#connect_handler);
+        this.#connect_handler = null;
+      }
+      clearTimeout(this.timeoutError);
+      myPeer.stop();
+      myPeer.socket.ws?.close();
+      this.Web = peer;
+      this.#connect(peer);
+    };
+    this.#connect_handler = connect_handler;
+    myPeer.on('connect', connect_handler);
+    const opts = {
+      event: 'started',
+      numwant: 1,
+      uploaded: 0,
+      downloaded: 0
+      // left: null,
+      // complete: 0,
+    };
+    if (!ws.isOpened()) {
+      !ws.isConnecting && ws.connect();
+      ws.once('open', () => {
+        myPeer.announce(opts);
+      });
+      return;
+    }
+    myPeer.announce({
+      event: 'started',
+      numwant: 1,
+      uploaded: 0,
+      downloaded: 0
+      // left: null,
+      // complete: 0,
+    }, () => {});
+  }
+  #connect(peer) {
+    this.#_readyState = _a.OPEN;
+    const event_open = new Event('open');
+    this.onopen?.(event_open);
+    this.dispatchEvent(event_open);
+    peer.on('error', e => {
+      const event = new ErrorEvent(e.message);
+      this.dispatchEvent(event);
+      this.close();
+      this.onerror?.(event);
+    });
+    peer.on('data', e => {
+      const event = new MessageEvent('message', {
+        data: e.buffer
+      });
+      this.onmessage?.(event);
+      this.dispatchEvent(event);
+    });
+    peer.on('close', () => {
+      this.close(1006, 'close');
+      peer.removeAllListeners('error');
+      peer.removeAllListeners('data');
+      peer.removeAllListeners('close');
+    });
+  }
+  close(code, reason) {
+    if (this.#_readyState === _a.CLOSING || this.#_readyState === _a.CLOSED) {
+      return;
+    }
+    const event = new CloseEvent('close', {
+      code,
+      reason
+    });
+    clearTimeout(this.timeoutError);
+    if (this.Web && this.Web.destroyed == false) {
+      this.Web.destroy();
+    }
+    if (this.#connect_handler) {
+      myPeer.removeListener('connect', this.#connect_handler);
+      this.#connect_handler = null;
+    }
+    this.send = () => {};
+    this.#_readyState = _a.CLOSING;
+    this.onclose?.(event);
+    this.dispatchEvent(event);
+    this.#_readyState = _a.CLOSED;
+    Object.assign(this, {
+      Web: undefined
+    });
+  }
+}
+_a = P2PWebSocket;
+;// ./dev/src/WebP2pSocket.ts
+
+const OriginalWebSocket = window.WebSocket;
+const WebP2pSocket_WebSocket = new Proxy(OriginalWebSocket, {
+  construct(target, args, newTarget) {
+    const url = String(args[0]);
+    const protocols = args[1];
+    if (/[a-z0-9]{20}$/.test(url)) {
+      return new P2PWebSocket(url.replace(/^wss?:/, 'hash:'), protocols);
+    }
+    return Reflect.construct(target, args, newTarget);
+  },
+  get(target, prop, receiver) {
+    return Reflect.get(target, prop, receiver);
+  },
+  set(target, prop, value, receiver) {
+    return Reflect.set(target, prop, value, receiver);
+  },
+  has(target, prop) {
+    return Reflect.has(target, prop);
+  },
+  ownKeys(target) {
+    return Reflect.ownKeys(target);
+  },
+  getOwnPropertyDescriptor(target, prop) {
+    return Reflect.getOwnPropertyDescriptor(target, prop);
+  }
+});
 ;// ./dev/src/agario-patches.ts
+
+
 
 function exposeHxClasses() {
   let $hxClasses;
@@ -2586,12 +3406,12 @@ function coreUiPatch() {
   title.style.fontSize = '2.5em';
 }
 function coreAdsPatch() {
-  var _a, _b, _c, _d, _e;
   document.addEventListener('update_user_info', e => {
     if (e.detail.isPayingUser) return;
-    const detail = Object.assign(Object.assign({}, e.detail), {
+    const detail = {
+      ...e.detail,
       isPayingUser: true
-    });
+    };
     const ev = new CustomEvent('update_user_info', {
       detail
     });
@@ -2600,26 +3420,22 @@ function coreAdsPatch() {
   });
   // window.hx.Core.user.userInfo.isPayingUser=true
   // Ads delete
-  (_a = find_node(undefined, child => {
-    var _a;
-    return (_a = child.$vnode) === null || _a === void 0 ? void 0 : _a.tag.includes('-ads');
-  })[0]) === null || _a === void 0 ? void 0 : _a.$destroy();
-  (_b = find_node(undefined, child => {
-    var _a;
-    return (_a = child.$vnode) === null || _a === void 0 ? void 0 : _a.tag.includes('-promo');
-  })[0]) === null || _b === void 0 ? void 0 : _b.$destroy();
   find_node(undefined, child => {
-    var _a, _b;
-    return (_b = (_a = child.elm) === null || _a === void 0 ? void 0 : _a.id) === null || _b === void 0 ? void 0 : _b.includes('agar-io');
+    return child.$vnode?.tag.includes('-ads');
+  })[0]?.$destroy();
+  find_node(undefined, child => {
+    return child.$vnode?.tag.includes('-promo');
+  })[0]?.$destroy();
+  find_node(undefined, child => {
+    return child.elm?.id?.includes('agar-io');
   }).forEach(child => {
-    var _a;
-    (_a = child.elm.parentElement) === null || _a === void 0 ? void 0 : _a.removeChild(child.elm);
+    child.elm.parentElement?.removeChild(child.elm);
   });
   find_node(undefined, child => child.playVideoAd).forEach(elem => {
     elem.getVideoTimestamp = () => Date.now();
   });
   {
-    const vnode = (_c = find_node(undefined, child => Object.getPrototypeOf(child).hasOwnProperty('hasBottomAd'))) === null || _c === void 0 ? void 0 : _c[0];
+    const vnode = find_node(undefined, child => Object.getPrototypeOf(child).hasOwnProperty('hasBottomAd'))?.[0];
     if (vnode) {
       Object.defineProperties(vnode, {
         fastEntry: {
@@ -2631,8 +3447,7 @@ function coreAdsPatch() {
   // Youtube, FB buttons
   {
     const vnode = find_node(undefined, child => {
-      var _a;
-      if (((_a = child === null || child === void 0 ? void 0 : child.elm) === null || _a === void 0 ? void 0 : _a.id) == 'socialButtons') return true;
+      if (child?.elm?.id == 'socialButtons') return true;
     })[0];
     if (vnode) {
       vnode.elm.parentElement.removeChild(vnode.elm);
@@ -2640,14 +3455,11 @@ function coreAdsPatch() {
   }
   // Skin floating badge
   {
-    const bubble = find_node(undefined, child => {
-      var _a, _b;
-      return (_b = (_a = child.data) === null || _a === void 0 ? void 0 : _a.staticClass) === null || _b === void 0 ? void 0 : _b.includes('bubble');
-    })[0];
-    (_d = bubble === null || bubble === void 0 ? void 0 : bubble.elm) === null || _d === void 0 ? void 0 : _d.parentElement.removeChild(bubble === null || bubble === void 0 ? void 0 : bubble.elm);
+    const bubble = find_node(undefined, child => child.data?.staticClass?.includes('bubble'))[0];
+    bubble?.elm?.parentElement.removeChild(bubble?.elm);
   }
   {
-    const vnode = (_e = find_node(undefined, child => Object.getPrototypeOf(child).hasOwnProperty('hasBottomAd'))) === null || _e === void 0 ? void 0 : _e[0];
+    const vnode = find_node(undefined, child => Object.getPrototypeOf(child).hasOwnProperty('hasBottomAd'))?.[0];
     if (vnode) {
       ['hasBottomAd', 'hasSideAds'].map(prop => {
         vnode._computedWatchers[prop]['getter'] = () => false;
@@ -2678,9 +3490,7 @@ function coreAdsPatch() {
     }
   });
   function onAgarApp() {
-    var _a, _b, _c;
-    var _d;
-    (_a = (_d = window['agarApp']).ads) !== null && _a !== void 0 ? _a : _d.ads = {};
+    window['agarApp'].ads ??= {};
     Object.assign(window['agarApp'].ads, {
       requestAds() {},
       requestAd() {},
@@ -2701,14 +3511,35 @@ function coreAdsPatch() {
         }
       }
     });
-    if ((_b = window['agarApp']) === null || _b === void 0 ? void 0 : _b.main) ['sendEndSession', 'initDataDog', 'sendAnalyticsInitEvent', 'onGoliathReady', 'onGoliathUnload', 'initAnalytics', 'initGuestAnalytics', 'sendAnalyticsInitEvent', 'initBrowserId'].forEach(prop => {
+    if (window['agarApp']?.main) ['sendEndSession', 'initDataDog', 'sendAnalyticsInitEvent', 'onGoliathReady', 'onGoliathUnload', 'initAnalytics', 'initGuestAnalytics', 'sendAnalyticsInitEvent', 'initBrowserId'].forEach(prop => {
       window['agarApp'].main[prop] = () => {};
     });
-    if ((_c = window['agarApp']) === null || _c === void 0 ? void 0 : _c.MCSDK) ['sendMatchEvent'].forEach(prop => window['agarApp'].MCSDK[prop] = () => {});
+    if (window['agarApp']?.MCSDK) ['sendMatchEvent'].forEach(prop => window['agarApp'].MCSDK[prop] = () => {});
   }
   try {
     onAgarApp();
   } catch (e) {}
+}
+function htmlPatches() {
+  const badScripts = ['api.adinplay.com', 'connect.facebook.net/signals', 'renotifier.', 'apollo.', 'akamai.net', 'static.zdassets.com', 'google-analytics.com', 'cdn.applixir.com'];
+  const observer = new window.MutationObserver(mtRecs => {
+    for (const mtRec of mtRecs) {
+      for (let i = 0; i < mtRec.addedNodes.length; i++) {
+        const elem = mtRec.addedNodes[i];
+        if (elem.tagName === 'SCRIPT') {
+          if (elem.src && badScripts.some(script => elem.src.includes(script))) {
+            elem.remove();
+          }
+        }
+      }
+    }
+  });
+  if (document.head) {
+    observer.observe(document.head, {
+      childList: true,
+      subtree: true
+    });
+  }
 }
 function fixNoServers() {
   let AgarioEndpoints = null;
@@ -2739,7 +3570,8 @@ function fixNoServers() {
               window['MC'].setRegion(otherRegions[tryRegion], true);
             }, 0);
           }
-          if (false) {}
+          if (false) // removed by dead control flow
+{}
         });
       }
       super.open(method, url, async, username, password);
@@ -2747,10 +3579,31 @@ function fixNoServers() {
   }
   window.XMLHttpRequest = HookXMLHttpRequest;
 }
+function activateP2pWebSocket() {
+  makeGLobal('WebSocket', WebP2pSocket_WebSocket);
+}
 // EXTERNAL MODULE: ./dev/src/settings.ts + 4 modules
 var settings = __webpack_require__(701);
 // EXTERNAL MODULE: external "preact"
 var external_preact_ = __webpack_require__(32);
+// EXTERNAL MODULE: ./node_modules/preact/jsx-runtime/dist/jsxRuntime.module.js
+var jsxRuntime_module = __webpack_require__(557);
+;// ./dev/src/ui/AdsBlock.tsx
+
+function AdsBlock() {
+  const url = new URL(/* asset import */ __webpack_require__(274), __webpack_require__.b);
+  return (0,jsxRuntime_module.jsxs)("div", {
+    className: "flex flex-col bg-black h-full w-full",
+    children: [(0,jsxRuntime_module.jsx)("img", {
+      className: "bg-cover",
+      src: url.toString()
+    }), (0,jsxRuntime_module.jsx)("a", {
+      href: "https://delt.io",
+      className: "border-blue-500 border-2 rounded px-3 py-1  self-center text-white my-auto text-2xl text-shadow-cyan-500 text-shadow-lg",
+      children: "PLAY NOW"
+    })]
+  });
+}
 // EXTERNAL MODULE: ./dev/src/ui/Contexts.ts
 var Contexts = __webpack_require__(413);
 // EXTERNAL MODULE: external "preactHooks"
@@ -2809,8 +3662,6 @@ function useEventify(effect, deps) {
     };
   }, deps);
 }
-// EXTERNAL MODULE: ./node_modules/preact/jsx-runtime/dist/jsxRuntime.module.js
-var jsxRuntime_module = __webpack_require__(557);
 ;// ./dev/src/ui/componetns/Inputs.tsx
 
 
@@ -2983,7 +3834,6 @@ function UiInputbox({
   target,
   name
 }) {
-  var _a;
   function onValue(value) {
     // const { target, name } = this.props;
     target.proxy[name] = value;
@@ -3034,7 +3884,7 @@ function UiInputbox({
         }), typeof target.raw[name].default !== 'undefined' && (0,jsxRuntime_module.jsx)("option", {
           value: target.raw[name].default,
           children: "Default"
-        }), (_a = Object.entries(target.raw[name].options)) === null || _a === void 0 ? void 0 : _a.map(([key, val]) => (0,jsxRuntime_module.jsx)("option", {
+        }), Object.entries(target.raw[name].options)?.map(([key, val]) => (0,jsxRuntime_module.jsx)("option", {
           value: val,
           children: key
         }))]
@@ -3087,9 +3937,23 @@ function SettingsList({
 
 
 
+const TRAINING_SERVER_URL = 'https://delt.io/v7/BrowserServer.html?gamemode=party';
+const TRAINING_SERVER_WINDOW_NAME = 'delta-training-server';
 function MenuButtons() {
   const app = (0,external_preactHooks_.useContext)(Contexts.AppContext);
   const inputRef = (0,external_preactHooks_.useRef)();
+  const trainingWindowRef = (0,external_preactHooks_.useRef)(null);
+  const openTrainingServer = () => {
+    const openedWindow = trainingWindowRef.current;
+    if (openedWindow && !openedWindow.closed) {
+      openedWindow.focus();
+      return;
+    }
+    const newWindow = window.open(TRAINING_SERVER_URL, TRAINING_SERVER_WINDOW_NAME);
+    if (!newWindow) return;
+    trainingWindowRef.current = newWindow;
+    newWindow.focus();
+  };
   useEventify(e => {
     e.listenTo(app.state, 'ws', () => {
       inputRef.current.value = app.state.ws;
@@ -3128,6 +3992,14 @@ function MenuButtons() {
         onClick: () => app.connect(inputRef.current.value),
         children: "Connect"
       })]
+    }), (0,jsxRuntime_module.jsx)("button", {
+      style: {
+        width: '242px'
+      },
+      type: "submit",
+      class: "btn menu-button",
+      onClick: openTrainingServer,
+      children: "Training server"
     })]
   });
 }
@@ -3153,10 +4025,7 @@ var Minimap = __webpack_require__(390);
 
 
 class Portal extends external_preact_.Component {
-  constructor() {
-    super(...arguments);
-    this.isMounted = false;
-  }
+  isMounted = false;
   componentDidUpdate(props) {
     for (const i in props) {
       if (props[i] !== this.props[i]) {
@@ -3249,6 +4118,7 @@ function createRootFragment(parent, replaceNode) {
 
 
 
+
 // import './style.scss' with { type: 'cssfile' };
 
 function initLiteui(app) {
@@ -3278,11 +4148,14 @@ function initLiteui(app) {
   {
     const promoPanel = document.querySelector('#mainui-promo');
     const replacement = document.createElement('div');
-    replacement.style = 'width: 100%; height: 100%; background-color: #fff';
-    (0,external_preact_.render)((0,jsxRuntime_module.jsx)(Contexts.AppContext.Provider, {
-      value: app
-    }), replacement);
+    replacement.style = 'width: 100%; height: 100%;';
     promoPanel.insertAdjacentElement('afterbegin', replacement);
+    (0,external_preact_.render)((0,jsxRuntime_module.jsx)(jsxRuntime_module.Fragment, {
+      children: (0,jsxRuntime_module.jsx)(Contexts.AppContext.Provider, {
+        value: app,
+        children: (0,jsxRuntime_module.jsx)(AdsBlock, {})
+      })
+    }), replacement);
   }
   {
     const minimapElem = document.createElement('div');
@@ -3307,21 +4180,14 @@ function initLiteui(app) {
     });
   }
 }
-;// ./dev/src/utils/env.ts
-function makeGLobal(name, value) {
-  window[name] = value;
-  return value;
-}
 ;// ./dev/src/utils/Sampler.ts
 class Sampler {
-  constructor() {
-    this.samplerIndex = 0;
-    this.sampler = new Float32Array(30).fill(0);
-    this.averagePerSecond = 0;
-    this.renderedFrames = 0;
-    this.average = 0;
-    this.now = 0;
-  }
+  samplerIndex = 0;
+  sampler = new Float32Array(30).fill(0);
+  averagePerSecond = 0;
+  renderedFrames = 0;
+  average = 0;
+  now = 0;
   step() {
     const now = Date.now();
     const elapsed = now - this.now;
@@ -3342,20 +4208,12 @@ class Sampler {
   }
 }
 ;// ./dev/src/utils/storage.ts
-var __classPrivateFieldGet = undefined && undefined.__classPrivateFieldGet || function (receiver, state, kind, f) {
-  if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
-  if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
-  return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
-};
-var _Storage_namespace;
 class Storage {
-  constructor() {
-    _Storage_namespace.set(this, 'ds_');
-  }
-  set(key, object, namespace = __classPrivateFieldGet(this, _Storage_namespace, "f"), middleware = d => d) {
+  #namespace = 'ds_';
+  set(key, object, namespace = this.#namespace, middleware = d => d) {
     localStorage.setItem(namespace + key, middleware(JSON.stringify(object)));
   }
-  get(key, namespace = __classPrivateFieldGet(this, _Storage_namespace, "f"), middleware = d => d) {
+  get(key, namespace = this.#namespace, middleware = d => d) {
     let obj = {};
     const rawData = localStorage.getItem(namespace + key);
     if (typeof rawData === 'string') {
@@ -3367,11 +4225,10 @@ class Storage {
     }
     return obj;
   }
-  clear(key, namespace = __classPrivateFieldGet(this, _Storage_namespace, "f")) {
+  clear(key, namespace = this.#namespace) {
     return localStorage.removeItem(namespace + key);
   }
 }
-_Storage_namespace = new WeakMap();
 const storage = new Storage();
 ;// ./dev/src/utils/wasmPatcher.ts
 function applyPatch(u8, operations, anyFail) {
@@ -3516,10 +4373,6 @@ function autoFixCodeSectionSize(u8Original, u8Patched) {
 }
 ;// ./dev/src/Cell.ts
 class Cell {
-  constructor() {
-    this.accountID = null;
-    this.name = null;
-  }
   static size2squared(cell_size) {
     return cell_size * cell_size;
   }
@@ -3532,6 +4385,8 @@ class Cell {
   static mass2size(cell_mass) {
     return Math.sqrt(100 * cell_mass);
   }
+  accountID = null;
+  name = null;
   construct(id, colorInt, accountID) {
     this.id = id;
     this.colorInt = colorInt;
@@ -3551,10 +4406,20 @@ class Cell {
 
 // import { ServerPlayer } from './ui/Stores';
 class World extends Eventify.Eventify {
+  static decoder = new TextDecoder('utf-8');
+  static strlen = (view, offset) => {
+    let length = 0;
+    while (view.getUint8(offset + length++) !== 0) {}
+    return length;
+  };
+  myCellIds = new Set();
+  ownCells = new Map();
+  cells = new Map();
   get isAgar() {
-    var _a;
-    return (_a = this.ws) === null || _a === void 0 ? void 0 : _a.url.includes('minic');
+    return this.ws?.url.includes('minic');
   }
+  CLIENT_VERSION = null;
+  client_version_int = 0;
   get clientVersion() {
     if (this.client_version_int) return this.client_version_int;
     if (window['MC'] && window['MC'].CLIENT_VERSION) {
@@ -3563,71 +4428,12 @@ class World extends Eventify.Eventify {
       this.CLIENT_VERSION = '3.11.28';
       alert('Failed to get CLIENT_VERSION, please report this issue');
     }
-    const version2int = (x = '0') => x.split('.').reduce((n, c, i, a) => n + parseInt(c) * Math.pow(100, a.length - i - 1), 0);
+    const version2int = (x = '0') => x.split('.').reduce((n, c, i, a) => n + parseInt(c) * 100 ** (a.length - i - 1), 0);
     this.client_version_int = version2int(this.CLIENT_VERSION);
     return this.clientVersion;
   }
   constructor(app) {
     super();
-    this.myCellIds = new Set();
-    this.ownCells = new Map();
-    this.cells = new Map();
-    this.CLIENT_VERSION = null;
-    this.client_version_int = 0;
-    this.xorBuffer = (buffer, key) => {
-      const dataView = new DataView(buffer);
-      for (let i = 0; i < dataView.byteLength; i++) {
-        dataView.setUint8(i, dataView.getUint8(i) ^ key >>> i % 4 * 8 & 255);
-      }
-      return buffer;
-    };
-    this.overWriteWS = _target => {
-      const target = _target;
-      this.ws = target;
-      target._onopen = target.onopen;
-      target._onmessage = target.onmessage;
-      target.onopen = e => {
-        this.reset();
-        target._onopen(e);
-      };
-      target.onmessage = message => {
-        target._onmessage(message);
-        let offset = 0;
-        let msg = message.data;
-        if (this.decryptionKey) msg = this.xorBuffer(msg, this.decryptionKey ^ this.clientVersion);
-        const view = new DataView(msg);
-        const opcode = view.getUint8(offset++);
-        switch (opcode) {
-          case 17:
-            const playerX = view.getFloat32(offset, true);
-            offset += 4;
-            const playerY = view.getFloat32(offset, true);
-            offset += 4;
-            this.targetX = this.receiveX(playerX);
-            this.targetY = this.receiveY(playerY);
-            break;
-          case 32:
-            this.myCellIds.add(view.getUint32(offset, true));
-            break;
-          case 69:
-            this.ghostCells(view, offset);
-            break;
-          case 241:
-            this.decryptionKey = view.getUint32(offset, true);
-            offset += 4;
-            const strlen = World.strlen(view, offset);
-            const serverVersion = strlen ? World.decoder.decode(new Uint8Array(view.buffer, offset, strlen - 1)) : null;
-            break;
-          case 255:
-            this.handleMessages(this.uncompressMessage(new Uint8Array(view.buffer.slice(5)), new Uint8Array(view.getUint32(offset, true))));
-            break;
-          default:
-            this.handleMessages(new Uint8Array(msg));
-        }
-      };
-    };
-    this.texts = new Map();
-    this.websocketHooked = false;
     this.reset();
     this.app = app;
   }
@@ -3664,6 +4470,13 @@ class World extends Eventify.Eventify {
     this.mirrorV = false;
     this.mirrorH = false;
   }
+  xorBuffer = (buffer, key) => {
+    const dataView = new DataView(buffer);
+    for (let i = 0; i < dataView.byteLength; i++) {
+      dataView.setUint8(i, dataView.getUint8(i) ^ key >>> i % 4 * 8 & 255);
+    }
+    return buffer;
+  };
   uncompressMessage(input, output) {
     for (let i = 0, j = 0; i < input.length;) {
       const byte = input[i++];
@@ -3692,6 +4505,51 @@ class World extends Eventify.Eventify {
     }
     return output;
   }
+  overWriteWS = _target => {
+    const target = _target;
+    this.ws = target;
+    target._onopen = target.onopen;
+    target._onmessage = target.onmessage;
+    target.onopen = e => {
+      this.reset();
+      target._onopen(e);
+    };
+    target.onmessage = message => {
+      target._onmessage(message);
+      let offset = 0;
+      let msg = message.data;
+      if (this.decryptionKey) msg = this.xorBuffer(msg, this.decryptionKey ^ this.clientVersion);
+      const view = new DataView(msg);
+      const opcode = view.getUint8(offset++);
+      switch (opcode) {
+        case 17:
+          const playerX = view.getFloat32(offset, true);
+          offset += 4;
+          const playerY = view.getFloat32(offset, true);
+          offset += 4;
+          this.targetX = this.receiveX(playerX);
+          this.targetY = this.receiveY(playerY);
+          break;
+        case 32:
+          this.myCellIds.add(view.getUint32(offset, true));
+          break;
+        case 69:
+          this.ghostCells(view, offset);
+          break;
+        case 241:
+          this.decryptionKey = view.getUint32(offset, true);
+          offset += 4;
+          const strlen = World.strlen(view, offset);
+          const serverVersion = strlen ? World.decoder.decode(new Uint8Array(view.buffer, offset, strlen - 1)) : null;
+          break;
+        case 255:
+          this.handleMessages(this.uncompressMessage(new Uint8Array(view.buffer.slice(5)), new Uint8Array(view.getUint32(offset, true))));
+          break;
+        default:
+          this.handleMessages(new Uint8Array(msg));
+      }
+    };
+  };
   eatCellEvent(eater, victim) {
     if (eater && victim) {
       this.removeCell(victim);
@@ -3921,6 +4779,7 @@ class World extends Eventify.Eventify {
     y = this.unshrinkY(y);
     return y;
   }
+  texts = new Map();
   drawMinimap(ctx, canvas, clear = true) {
     function safe(number) {
       return number == 0 ? 1 : number;
@@ -3950,6 +4809,7 @@ class World extends Eventify.Eventify {
     const activeSectorIndex = sectorRow * 5 + sectorCol;
     return Number.isFinite(activeSectorIndex) ? activeSectorIndex : -1;
   }
+  websocketHooked = false;
   initialize() {
     if (this.websocketHooked) return console.error('Error: WebSocket already hooked');
     this.websocketHooked = true;
@@ -3967,45 +4827,12 @@ class World extends Eventify.Eventify {
         super(url, protocols);
         if (isAgar) Promise.resolve().then(() => self.overWriteWS(this));
       }
+      static injectedOnce = false;
     }
-    WS.injectedOnce = false;
     window.WebSocket = WS;
   }
 }
-World.decoder = new TextDecoder('utf-8');
-World.strlen = (view, offset) => {
-  let length = 0;
-  while (view.getUint8(offset + length++) !== 0) {}
-  return length;
-};
 ;// ./dev/src/App.ts
-var __awaiter = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
-  function adopt(value) {
-    return value instanceof P ? value : new P(function (resolve) {
-      resolve(value);
-    });
-  }
-  return new (P || (P = Promise))(function (resolve, reject) {
-    function fulfilled(value) {
-      try {
-        step(generator.next(value));
-      } catch (e) {
-        reject(e);
-      }
-    }
-    function rejected(value) {
-      try {
-        step(generator["throw"](value));
-      } catch (e) {
-        reject(e);
-      }
-    }
-    function step(result) {
-      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
-    }
-    step((generator = generator.apply(thisArg, _arguments || [])).next());
-  });
-};
 
 
 
@@ -4017,85 +4844,56 @@ var __awaiter = undefined && undefined.__awaiter || function (thisArg, _argument
 
 
 class App {
+  minimapPlayers = [];
+  sampler = new Sampler();
+  performance_now = 0; // for speedhack
+  timer_mp = 1; // time multiplier
+  sector = 5;
+  stopmovement = false;
+  /*** camera zoom ****/
+  scale = 1;
+  /** target cursor world */
+  mouse = {
+    x: 0,
+    y: 0
+  };
+  /** cursor on canvas display */
+  mouseDisplay = {
+    x: 0,
+    y: 0
+  };
+  /** world camera position */
+  camera = {
+    x: 0,
+    y: 0
+  };
+  state = (0,Eventify.EventObject)({
+    play: false,
+    pause: false,
+    ws: '',
+    nextWs: '',
+    waitForSpawn: false,
+    isLoggedIn: false
+  });
+  memory = (0,Eventify.EventObject)({
+    skinUrl: ''
+  });
+  /** vue ui */
+  mainui = null;
+  /** exposed emscripten module */
+  emsc = null;
+  /** exposed $hxClasses */
+  hx = null;
+  /** main game canvas */
+
   display_vue() {
     return find_node(window['agarApp'].home, (child, depth) => {
-      var _a;
-      console.log(child, (_a = child === null || child === void 0 ? void 0 : child.$vnode) === null || _a === void 0 ? void 0 : _a.tag);
+      console.log(child, child?.$vnode?.tag);
       return true;
     });
   }
+  userID = Math.random().toString(36).slice(2, 10);
   constructor() {
-    this.minimapPlayers = [];
-    this.sampler = new Sampler();
-    this.performance_now = 0; // for speedhack
-    this.timer_mp = 1; // time multiplier
-    this.sector = 5;
-    this.stopmovement = false;
-    /*** camera zoom ****/
-    this.scale = 1;
-    /** target cursor world */
-    this.mouse = {
-      x: 0,
-      y: 0
-    };
-    /** cursor on canvas display */
-    this.mouseDisplay = {
-      x: 0,
-      y: 0
-    };
-    /** world camera position */
-    this.camera = {
-      x: 0,
-      y: 0
-    };
-    this.state = (0,Eventify.EventObject)({
-      play: false,
-      pause: false,
-      ws: '',
-      nextWs: '',
-      waitForSpawn: false,
-      isLoggedIn: false
-    });
-    this.memory = (0,Eventify.EventObject)({
-      skinUrl: ''
-    });
-    /** vue ui */
-    this.mainui = null;
-    /** exposed emscripten module */
-    this.emsc = null;
-    /** exposed $hxClasses */
-    this.hx = null;
-    this.userID = Math.random().toString(36).slice(2, 10);
-    this.observerPatcher = e => {
-      const randomKey = 'app_' + Math.random().toString(36).slice(2, 10);
-      window[randomKey] = this;
-      const app = 'window.' + randomKey;
-      const replacements = {
-        registerSkin: [[/("\s?registerSkin\s?"\s?:\s?function\s?\(\s?(.+?)\s?,\s?(.+?)\s?,\s?(.+?)\s?,\s?(.+?)\s?,\s?(.+?)\s?\)\s?\{\s?)/i, `$1${app}.onRegisterSkin($2,$3,$4,$5,$6);`]],
-        onConnect: [[/(;..?\s?\.\s?onopen\s?=\s?function\s?\(\s?\)\s?\{\s?)/i, `$1${app}.onConnect(this.url, this);`]],
-        mobileData: [[/(\s?if\s?\(\s?window\s?\[\s?"\s?MC\s?"\s?]\s?&&\s?window\s?\[\s?"\s?MC\s?"\s?]\s?\[\s?"\s?onMobileData\s?"\s?]\s?\)\s?window\s?\[\s?"\s?MC\s?"\s?]\s?\[\s?"\s?onMobileData\s?"\s?]\s?\(\s?(.+?)\s?\))/i, `$2=${app}.onPacket($2);$1`]],
-        'Emscripten hook': [[/(\w+)\W+instantiateWasm/, `(${app}.onEmscripten($1)), $&`]],
-        'Mouse hook': [[/("\s?setTarget\s?"\s?:\s?function\s?\(\s?(.+?)\s?,\s?(.+?)\s?\)\s?\{\s?)/i, `$1 var [$2, $3] = ${app}.syncMouse($2, $3);`]],
-        'Player Zoom': [[/("\s?playerZoom\s?"\s?:\s?function\s?\(\s?(.+?)\s?\)\s?\{\s?)/i, `$1$2=${app}.onPlayerZoom($2);`]],
-        'WebSocket onclose': [[/(;..?\s?\.\s?onclose\s?=\s?function\s?\(\s?\)\s?\{\s?)/i, `$1${app}.onDisconnect(this);`]],
-        'WebSocket onerror': [[/(;..?\s?\.\s?onerror\s?=\s?function\s?\(\s?\)\s?\{\s?)/i, `$1${app}.onDisconnect(this);`]],
-        'Binary Patch': [[/(instantiate\(\s?)([^,]+)/, `$1${app}.patchWasm($2)`]],
-        something: [[/([a-z]{6}\s?[a-z|A-Z]{16}\s?\(\s?([a-z]{6})\s?,\s?[a-z|A-Z]{10}\s?,\s?[a-z|A-Z]{7}\s?,\s?[a-zA-Z]{8}\s?\)\s?\{\s?)/i, '$1$2=true;']]
-      };
-      for (const [name, array] of Object.entries(replacements)) {
-        let current = 0;
-        for (const [regexp, replacer] of array) {
-          if (regexp.test(e)) {
-            e = e.replace(regexp, replacer);
-            current++;
-          } else {
-            console.log(`[Not Found - ${current}]: `, name);
-          }
-        }
-      }
-      return e;
-    };
-    this.calls = [];
     this.world = new World(this);
     this.world.on('beforeConnect', this.beforeConnect.bind(this));
     setInterval(() => {
@@ -4105,7 +4903,10 @@ class App {
       const myCell = this.world.ownCells.values().next().value;
     }, 1000);
     const storageName = 'lite_settings';
-    settings.settings.import(Object.assign(Object.assign({}, settings.settings.export()), storage.get(storageName)));
+    settings.settings.import({
+      ...settings.settings.export(),
+      ...storage.get(storageName)
+    });
     settings.settings.on('*', _ => {
       storage.set(storageName, settings.settings.export());
     });
@@ -4142,8 +4943,7 @@ class App {
       });
     });
     overrideMethod(window.console, 'log', function (o, args) {
-      var _a, _b;
-      if ((_b = (_a = args[0]).startsWith) === null || _b === void 0 ? void 0 : _b.call(_a, '       ,,,,,')) return window.console.log = o;
+      if (args[0].startsWith?.('       ,,,,,')) return window.console.log = o;
       return o.apply(this, args);
     });
   }
@@ -4205,44 +5005,41 @@ class App {
       };
     });
   }
-  loadAndPatchCore(url, resolve) {
-    return __awaiter(this, void 0, void 0, function* () {
-      // Backup
-      // overrideMethod(window, 'fetch', function (o, args) {
-      //     if (typeof args[0] === 'string' && args[0].includes('.core.wasm')) {
-      //         args[0] = new URL('../../static/renamed.core.wasm', import.meta.url).toString();
-      //     }
-      //     const r = o.apply(this, args);
-      //     return r;
-      // });
-      try {
-        const request = new XMLHttpRequest();
-        request.open('GET', url, false);
-        request.onload = () => {
-          const patchedText = this.observerPatcher(request.responseText);
-          const blob = new Blob([patchedText], {
-            type: 'text/javascript'
-          });
-          const blobURL = URL.createObjectURL(blob);
-          const script = document.createElement('script');
-          script.id = 'agario.core.js';
-          script.src = blobURL;
-          script.onload = () => {
-            URL.revokeObjectURL(blobURL);
-            resolve();
-          };
-          document.body.appendChild(script);
+  async loadAndPatchCore(url, resolve) {
+    // Backup
+    // overrideMethod(window, 'fetch', function (o, args) {
+    //     if (typeof args[0] === 'string' && args[0].includes('.core.wasm')) {
+    //         args[0] = new URL('../../static/renamed.core.wasm', import.meta.url).toString();
+    //     }
+    //     const r = o.apply(this, args);
+    //     return r;
+    // });
+    try {
+      const request = new XMLHttpRequest();
+      request.open('GET', url, false);
+      request.onload = () => {
+        const patchedText = this.observerPatcher(request.responseText);
+        const blob = new Blob([patchedText], {
+          type: 'text/javascript'
+        });
+        const blobURL = URL.createObjectURL(blob);
+        const script = document.createElement('script');
+        script.id = 'agario.core.js';
+        script.src = blobURL;
+        script.onload = () => {
+          URL.revokeObjectURL(blobURL);
+          resolve();
         };
-        request.send();
-      } catch (error) {
-        console.error('[ERROR] Failed to load and patch core:', error);
-      }
-    });
+        document.body.appendChild(script);
+      };
+      request.send();
+    } catch (error) {
+      console.error('[ERROR] Failed to load and patch core:', error);
+    }
   }
   initObserver() {
     const deferred = (0,Eventify.deferrify)();
     const observer = new window.MutationObserver(mtRecs => {
-      var _a;
       for (const mtRec of mtRecs) {
         for (let i = 0; i < mtRec.addedNodes.length; i++) {
           const elem = mtRec.addedNodes[i];
@@ -4250,7 +5047,7 @@ class App {
           if (t) {
             observer.disconnect();
             elem.remove();
-            (_a = elem.parentNode) === null || _a === void 0 ? void 0 : _a.removeChild(elem);
+            elem.parentNode?.removeChild(elem);
             this.loadAndPatchCore(t, deferred.resolve);
           }
         }
@@ -4283,48 +5080,75 @@ class App {
     const fixed = autoFixCodeSectionSize(original, patchedUint8Array);
     return fixed.buffer;
   }
-  waitCore() {
-    return __awaiter(this, void 0, void 0, function* () {
-      const deferred = (0,Eventify.deferrify)();
-      addEventListener('core_init_complete', () => {
-        var _a;
-        if (!window['core']) {
-          // backup event
-          if ((_a = window['MC']) === null || _a === void 0 ? void 0 : _a['onAgarioCoreLoaded']) {
-            const old_loaded = window['MC']['onAgarioCoreLoaded'];
-            window['MC']['onAgarioCoreLoaded'] = function () {
-              deferred.resolve();
-              window['MC']['onAgarioCoreLoaded'] = old_loaded;
-              return old_loaded.apply(this, arguments);
-            };
-            return;
-          }
-          // deadline mode
-          Object.defineProperty(window, 'core', {
-            get: () => window['_core'],
-            set: value => (window['_core'] = value, deferred.resolve())
-          });
+  observerPatcher = e => {
+    const randomKey = 'app_' + Math.random().toString(36).slice(2, 10);
+    window[randomKey] = this;
+    const app = 'window.' + randomKey;
+    const replacements = {
+      registerSkin: [[/("\s?registerSkin\s?"\s?:\s?function\s?\(\s?(.+?)\s?,\s?(.+?)\s?,\s?(.+?)\s?,\s?(.+?)\s?,\s?(.+?)\s?\)\s?\{\s?)/i, `$1${app}.onRegisterSkin($2,$3,$4,$5,$6);`]],
+      onConnect: [[/(;..?\s?\.\s?onopen\s?=\s?function\s?\(\s?\)\s?\{\s?)/i, `$1${app}.onConnect(this.url, this);`]],
+      mobileData: [[/(\s?if\s?\(\s?window\s?\[\s?"\s?MC\s?"\s?]\s?&&\s?window\s?\[\s?"\s?MC\s?"\s?]\s?\[\s?"\s?onMobileData\s?"\s?]\s?\)\s?window\s?\[\s?"\s?MC\s?"\s?]\s?\[\s?"\s?onMobileData\s?"\s?]\s?\(\s?(.+?)\s?\))/i, `$2=${app}.onPacket($2);$1`]],
+      'Emscripten hook': [[/(\w+)\W+instantiateWasm/, `(${app}.onEmscripten($1)), $&`]],
+      'Mouse hook': [[/("\s?setTarget\s?"\s?:\s?function\s?\(\s?(.+?)\s?,\s?(.+?)\s?\)\s?\{\s?)/i, `$1 var [$2, $3] = ${app}.syncMouse($2, $3);`]],
+      'Player Zoom': [[/("\s?playerZoom\s?"\s?:\s?function\s?\(\s?(.+?)\s?\)\s?\{\s?)/i, `$1$2=${app}.onPlayerZoom($2);`]],
+      'WebSocket onclose': [[/(;..?\s?\.\s?onclose\s?=\s?function\s?\(\s?\)\s?\{\s?)/i, `$1${app}.onDisconnect(this);`]],
+      'WebSocket onerror': [[/(;..?\s?\.\s?onerror\s?=\s?function\s?\(\s?\)\s?\{\s?)/i, `$1${app}.onDisconnect(this);`]],
+      'Binary Patch': [[/(instantiate\(\s?)([^,]+)/, `$1${app}.patchWasm($2)`]],
+      something: [[/([a-z]{6}\s?[a-z|A-Z]{16}\s?\(\s?([a-z]{6})\s?,\s?[a-z|A-Z]{10}\s?,\s?[a-z|A-Z]{7}\s?,\s?[a-zA-Z]{8}\s?\)\s?\{\s?)/i, '$1$2=true;']]
+    };
+    for (const [name, array] of Object.entries(replacements)) {
+      let current = 0;
+      for (const [regexp, replacer] of array) {
+        if (regexp.test(e)) {
+          e = e.replace(regexp, replacer);
+          current++;
+        } else {
+          console.log(`[Not Found - ${current}]: `, name);
+        }
+      }
+    }
+    return e;
+  };
+  async waitCore() {
+    const deferred = (0,Eventify.deferrify)();
+    addEventListener('core_init_complete', () => {
+      if (!window['core']) {
+        // backup event
+        if (window['MC']?.['onAgarioCoreLoaded']) {
+          const old_loaded = window['MC']['onAgarioCoreLoaded'];
+          window['MC']['onAgarioCoreLoaded'] = function () {
+            deferred.resolve();
+            window['MC']['onAgarioCoreLoaded'] = old_loaded;
+            return old_loaded.apply(this, arguments);
+          };
           return;
         }
-        deferred.resolve();
-      });
-      addEventListener('event_regions_update', () => __awaiter(this, void 0, void 0, function* () {}));
-      // let rafRequest: any = null;
-      // function watchVue() {
-      //     rafRequest = requestAnimationFrame(() => {
-      //         if (window['agarApp']) cancelAnimationFrame(rafRequest);
-      //         coreAdsPatch();
-      //     });
-      // }
-      // watchVue();
-      // Object.defineProperty(window, 'mcReady', {
-      //     get: () => () => {},
-      //     set: () => {}
-      // });
-      return deferred.promise;
+        // deadline mode
+        Object.defineProperty(window, 'core', {
+          get: () => window['_core'],
+          set: value => (window['_core'] = value, deferred.resolve())
+        });
+        return;
+      }
+      deferred.resolve();
     });
+    addEventListener('event_regions_update', async () => {});
+    // let rafRequest: any = null;
+    // function watchVue() {
+    //     rafRequest = requestAnimationFrame(() => {
+    //         if (window['agarApp']) cancelAnimationFrame(rafRequest);
+    //         coreAdsPatch();
+    //     });
+    // }
+    // watchVue();
+    // Object.defineProperty(window, 'mcReady', {
+    //     get: () => () => {},
+    //     set: () => {}
+    // });
+    return deferred.promise;
   }
   handleCoreInit() {
+    activateP2pWebSocket();
     coreInitPatch();
     coreAdsPatch();
     // fixNoServers();
@@ -4377,8 +5201,8 @@ class App {
       onPlayerDeath(...args);
     });
   }
+  calls = [];
   onEmscripten(Module) {
-    var _a, _b;
     this.emsc = Module;
     makeGLobal('emsc', Module);
     console.log('emsc', Module);
@@ -4451,13 +5275,13 @@ class App {
       return o.apply(ctx, args);
     });
     /*** Before render ***/
-    (_a = Module['preMainLoop']) !== null && _a !== void 0 ? _a : Module['preMainLoop'] = () => {};
+    Module['preMainLoop'] ??= () => {};
     overrideMethod(Module, 'preMainLoop', (o, args) => {
       this.calls = [];
       o.apply(this, args);
     });
     /*** After render ***/
-    (_b = Module['postMainLoop']) !== null && _b !== void 0 ? _b : Module['postMainLoop'] = () => {};
+    Module['postMainLoop'] ??= () => {};
     overrideMethod(Module, 'postMainLoop', (o, args) => {
       this.sampler.step();
       callNumber = -1;
@@ -4490,10 +5314,7 @@ class App {
     }
   }
   get menuShow() {
-    if (!this.mainui) this.mainui = find_node(window['agarApp'].home, child => {
-      var _a, _b;
-      return (_b = (_a = child.$vnode) === null || _a === void 0 ? void 0 : _a.tag) === null || _b === void 0 ? void 0 : _b.toLowerCase().includes('mainui');
-    })[0];
+    if (!this.mainui) this.mainui = find_node(window['agarApp'].home, child => child.$vnode?.tag?.toLowerCase().includes('mainui'))[0];
     if (!this.mainui) return false;
     return this.mainui.menuShow;
   }
@@ -4554,8 +5375,7 @@ class App {
     this.emsc._ac_spectate();
   }
   spectate() {
-    var _a;
-    (_a = find_node(undefined, child => child === null || child === void 0 ? void 0 : child.spectate)[0]) === null || _a === void 0 ? void 0 : _a.spectate();
+    find_node(undefined, child => child?.spectate)[0]?.spectate();
   }
   integrityChecksEnable(isEnabled) {
     window['core'].disableIntegrityChecks(!isEnabled);
@@ -4741,45 +5561,8 @@ class App {
     // ctx.scale(this.zoomvalue, this.zoomvalue);
     return;
     /*** Mini Map ****/
-    if (false) {
-      const minimapWidth = 100;
-      const minimapHeight = 100;
-      const mapMinX = this.world.mapMinX;
-      const mapMinY = this.world.mapMinY;
-      const mapMaxX = this.world.mapMaxX;
-      const mapMaxY = this.world.mapMaxY;
-      const mapWidth = this.world.mapSizeH;
-      const mapHeight = this.world.mapSizeV;
-      const viewX = this.camera.x;
-      const viewY = this.camera.y;
-      const mw = minimapWidth / 5;
-      const blurrylines = 0;
-      let leftrate = (viewX - mapMinX) / mapWidth;
-      let toprate = (viewY - mapMinY) / mapHeight;
-      let minileft = Math.round(minimapWidth * leftrate * 100) / 100;
-      let minitop = Math.round(minimapHeight * toprate * 100) / 100;
-      ctx.beginPath();
-      ctx.clearRect(0, 0, minimapWidth, minimapHeight);
-      ctx.globalAlpha = 0.5;
-      ctx.lineWidth = 0.5;
-      ctx.strokeStyle = 'blue'; //settings.raw.border.string;
-      ctx.strokeRect(blurrylines + mw, blurrylines + mw, minimapWidth - mw * 2, minimapHeight - mw * 2);
-      ctx.strokeRect(blurrylines + mw * 2, blurrylines + mw * 2, minimapWidth - mw * 4, minimapHeight - mw * 4);
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = 'red'; //settings.raw.miniblob.string;
-      ctx.arc(minileft, minitop, 5, 0, 2 * Math.PI);
-      ctx.fill();
-      ctx.closePath();
-      ctx.beginPath();
-      ctx.fillStyle = 'red';
-      leftrate = minimapWidth / mapWidth;
-      toprate = minimapHeight / mapHeight;
-      minileft = Math.round((mapWidth / 2 + (this.mouse.x - offsetX)) * leftrate);
-      minitop = Math.round((mapHeight / 2 + (this.mouse.y - offsetY)) * toprate);
-      ctx.arc(minileft, minitop, 3, 0, 2 * Math.PI);
-      ctx.fill();
-      ctx.closePath();
-    }
+    // removed by dead control flow
+
   }
   drawHud(ctx) {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
@@ -4922,7 +5705,7 @@ function registerCheckUpdates() {
 function checkUpdates() {
   const url = GM.info.scriptUpdateURL;
   if (!url) return alert('⛔ Error:\nNo update URL found!');
-  const version2int = (x = '0') => x.split('.').reduce((n, c, i, a) => n + parseInt(c) * Math.pow(100, a.length - i - 1), 0);
+  const version2int = (x = '0') => x.split('.').reduce((n, c, i, a) => n + parseInt(c) * 100 ** (a.length - i - 1), 0);
   const req = new Promise(r => GM.xmlHttpRequest({
     method: 'GET',
     url: url,
@@ -4962,6 +5745,7 @@ function isGM() {
 
 
 
+
 if (window.location.href.includes('agar.io')) {
   enableVueDevtools();
   enableFastCanvasView();
@@ -4972,6 +5756,7 @@ if (window.location.href.includes('agar.io')) {
     registerMenuCommands();
     registerCheckUpdates();
   }
+  htmlPatches();
 } else {
   console.log('This script is intended to run on agar.io only.');
 }

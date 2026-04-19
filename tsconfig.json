@@ -1,19 +1,17 @@
 {
     "compilerOptions": {
-        "baseUrl": "./",
         // "rootDir": "./",
-        "module": "ESNext",
-        "moduleResolution": "Node",
+        "module": "preserve",
+        "moduleResolution": "bundler",
         // "outDir": "../built",
-
+        "noUncheckedSideEffectImports": false,
         "noEmit": true,
         "sourceMap": true,
         "declarationMap": false,
-        "target": "ES2015",
-        "lib": ["DOM", "ES2015", "ES2016", "ES2017", "es2021", "es2022"],
+        "target": "ES2022",
+        "lib": ["DOM", "ES2016", "ES2017", "es2021", "es2022"],
         "skipDefaultLibCheck": true,
         "skipLibCheck": true,
-        "downlevelIteration": true,
         "esModuleInterop": true,
         "strict": false,
         "composite": false,
@@ -47,7 +45,7 @@
         "plugins": []
     },
     "exclude": [],
-    "include": ["./dev/src/**/*", "./dev/src/**/*.json", "./dev/src/**/*.tsx"],
+    "include": ["./dev/src/**/*", "./dev/src/**/*.css", "./dev/src/**/*.json", "./dev/src/**/*.tsx", "./Shared/src/**/*.ts"],
     "typeAcquisition": {
         "exclude": []
     }

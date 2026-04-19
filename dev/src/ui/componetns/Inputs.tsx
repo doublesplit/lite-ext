@@ -1,6 +1,5 @@
-import { VNode } from 'preact';
+import { TargetedEvent, VNode } from 'preact';
 import { MutableRef, useRef, useState } from 'preact/hooks';
-import { JSXInternal } from 'preact/src/jsx';
 import { Input, Option, Select, Slider } from '../../Settings.entities';
 import { BasicSetting, Settings } from '../../Settngs';
 import { camelCaseToWords } from '../../utils/utils';
@@ -186,7 +185,7 @@ export function SelectboxRender({
                     name={Math.random().toString()}
                     className="selectbox"
                     value={value}
-                    onChange={(e: JSXInternal.TargetedEvent<HTMLSelectElement, Event & { target: HTMLSelectElement }>) =>
+                    onChange={(e: TargetedEvent<HTMLSelectElement, Event & { target: HTMLSelectElement }>) =>
                         onValue(isNaN(e.target.value as unknown as number) ? e.target.value : Number(e.target.value))
                     }
                 >
